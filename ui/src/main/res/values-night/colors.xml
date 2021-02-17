@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="statusBarColor">@color/Transparent</color>
+
+    <color name="colorPrimary">@color/primary_200</color>
+    <color name="colorPrimaryVariant">@color/primary_700</color>
+    <color name="colorOnPrimary">@color/RealBlack</color>
+
+    <color name="colorSecondary">@color/accent_200</color>
+    <color name="colorSecondaryVariant">@color/accent_700</color>
+    <color name="colorOnSecondary">@color/RealBlack</color>
+
+    <color name="colorBackground00">@color/Shark00</color>
+    <color name="colorBackground">@color/Shark</color>
+    <color name="colorOnBackground">@color/Westar</color>
+
+    <color name="colorSurface">@color/Shark</color>
+    <color name="colorSurface.Light">@color/RiverBed</color>
+    <color name="colorOnSurface">@color/Westar</color>
+
+    <color name="colorError">@color/Red</color>
+    <color name="colorOnError">@color/Shark</color>
+
+    <color name="colorPlaceholder">@color/LimedSpruce</color>
+</resources>

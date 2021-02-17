@@ -11,6 +11,7 @@ object Modules {
     const val app = ":app"
     const val domain = ":domain"
     const val data = ":data"
+    const val ui = ":ui"
 }
 
 object Versions {
@@ -64,19 +65,23 @@ object TestDeps {
 object Dependencies {
     val coreDependencies = arrayOf(
         Deps.kotlin,
-        Deps.kotlinCoroutineCore,
-        Deps.kotlinCoroutineAndroid,
 
         Deps.appCompat,
         Deps.coreKtx,
         Deps.material,
         Deps.constraintLayout,
 
-        Deps.navigation,
-        Deps.navigationFrag,
         Deps.koin,
+        Deps.koinScope,
         Deps.koinViewModel,
-        Deps.koinScope
+
+        Deps.kotlinCoroutineCore,
+        Deps.kotlinCoroutineAndroid
+    )
+
+    val appDependencies = arrayOf(
+        Deps.navigation,
+        Deps.navigationFrag
     )
 
     val testDependencies = arrayOf(

@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">MXH</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="action_on_boarding_done">Bắt đầu</string>
+    <string name="action_on_boarding_skip">Bỏ qua</string>
+
+    <string name="button_next">Tiếp tục</string>
+    <string name="button_back">Quay lại</string>
+
+    <string-array name="onboarding_text">
+        <item name="onboarding_text_1">Website Design</item>
+        <item name="onboarding_text_2">Design Searching</item>
+        <item name="onboarding_text_3">Time Managed</item>
+    </string-array>
+
+    <string-array name="onboarding_description">
+        <item name="onboarding_text_1">We are here to help with any website or any service</item>
+        <item name="onboarding_text_2">We are always here to support you no matter what</item>
+        <item name="onboarding_text_3">Our app will help you to stay energized all the time</item>
+    </string-array>
 </resources>

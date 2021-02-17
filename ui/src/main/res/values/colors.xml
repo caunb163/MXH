@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_200">#9FA8DA</color>
+    <color name="primary_500">#3F51B5</color>
+    <color name="primary_700">#303F9F</color>
+    <color name="accent_200">#CE93D8</color>
+    <color name="accent_700">#7B1FA2</color>
+
+    <color name="Transparent">#00000000</color>
+    <color name="LimedSpruce">#383C40</color>
+    <color name="Placeholder">#EBEDF0</color>
+    <color name="RealBlack">#FF000000</color>
+    <color name="RealWhite">#FFFFFF</color>
+    <color name="RealWhite00">#00FFFFFF</color>
+    <color name="Red">#b00020</color>
+    <color name="RiverBed">#43484D</color>
+    <color name="Shark00">#00272D33</color>
+    <color name="Shark">#272D33</color>
+    <color name="Westar">#DDE0E5</color>
+
+    <color name="statusBarColor">@color/Transparent</color>
+    <color name="colorPrimary">@color/primary_500</color>
+    <color name="colorPrimaryVariant">@color/primary_700</color>
+    <color name="colorOnPrimary">@color/RealWhite</color>
+
+    <color name="colorSecondary">@color/accent_200</color>
+    <color name="colorSecondaryVariant">@color/accent_700</color>
+    <color name="colorOnSecondary">@color/RealBlack</color>
+
+    <color name="colorBackground00">@color/RealWhite00</color>
+    <color name="colorBackground">@color/RealWhite</color>
+    <color name="colorOnBackground">@color/RealBlack</color>
+
+    <color name="colorSurface">@color/RealWhite</color>
+    <color name="colorSurface.Light">@color/RealWhite</color>
+    <color name="colorOnSurface">@color/RealBlack</color>
+
+    <color name="colorError">@color/Red</color>
+    <color name="colorOnError">@color/RealWhite</color>
+
+    <color name="colorPlaceholder">@color/Placeholder</color>
+</resources>
