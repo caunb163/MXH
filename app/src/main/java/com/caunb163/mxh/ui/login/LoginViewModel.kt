@@ -1,32 +1,33 @@
-package com.caunb163.mxh.ui.onboarding
+package com.caunb163.mxh.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.caunb163.domain.usecase.onboarding.OnBoardingUseCase
+import com.caunb163.domain.usecase.login.LoginUseCase
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class OnBoardingViewModel(
-    private val onBoardingUseCase: OnBoardingUseCase
+class LoginViewModel(
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     private val _state: MutableLiveData<State> = MutableLiveData()
 
     val state: LiveData<State> get() = _state
 
-    fun finishOnBoarding() {
+    fun loginWithEmailAndPassword(email: String, password: String) {
         viewModelScope.launch {
             _state.value = State.Loading
-
             try {
-                val onBoardingState = withContext(Dispatchers.IO) {
-                    return@withContext onBoardingUseCase()
+                val loginState = withContext(Dispatchers.IO) {
+                    return@withContext loginUseCase.loginWithEmailAndPassword(email, password)
                 }
-                _state.value = State.Success(onBoardingState)
+
+                _state.value = State.Success(loginState)
+
             } catch (e: Exception) {
                 e.printStackTrace()
                 _state.value = State.Failure("${e.message}")

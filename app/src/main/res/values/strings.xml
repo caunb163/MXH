@@ -20,4 +20,14 @@
         <item name="onboarding_text_2">We are always here to support you no matter what</item>
         <item name="onboarding_text_3">Our app will help you to stay energized all the time</item>
     </string-array>
+
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_sign_in">Sign in</string>
+    <string name="login_connect_with">Or Connect with</string>
+
+    <string name="login_dont_account">Don\'t have an Account?</string>
+    <string name="login_sign_up">Sign Up</string>
 </resources>

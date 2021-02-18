@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
-import com.caunb163.domain.state.State
+import com.caunb163.mxh.state.State
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.google.android.material.tabs.TabLayout

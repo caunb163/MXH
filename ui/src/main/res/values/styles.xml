@@ -29,4 +29,9 @@
         <item name="colorSecondaryVariant">@color/primary_700</item>
         <item name="colorOnSecondary">#1C3957</item>
     </style>
+
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#fff</item>
+        <item name="boxStrokeWidth">1dp</item>
+    </style>
 </resources>

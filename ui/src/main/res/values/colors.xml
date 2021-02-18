@@ -17,6 +17,10 @@
     <color name="Shark00">#00272D33</color>
     <color name="Shark">#272D33</color>
     <color name="Westar">#DDE0E5</color>
+    <color name="colorOverlay">#78393030</color>
+
+    <color name="colorButton">#80BD314D</color>
+
 
     <color name="statusBarColor">@color/Transparent</color>
     <color name="colorPrimary">@color/primary_500</color>

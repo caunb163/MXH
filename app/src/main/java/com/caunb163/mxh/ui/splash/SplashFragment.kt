@@ -1,10 +1,9 @@
 package com.caunb163.mxh.ui.splash
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.caunb163.domain.state.State
+import com.caunb163.mxh.state.State
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import org.koin.android.ext.android.inject

@@ -38,5 +38,7 @@ dependencies {
     androidTestImplementation Dependencies.testAndroidDependencies
 
     implementation project(Modules.domain)
-
+    implementation platform(Deps.firebaseBom)
+    implementation Deps.firebaseAuth
+    implementation Deps.firebaseAnalytics
 }

@@ -27,6 +27,9 @@ object Versions {
     const val glide = "4.11.0"
     const val paging = "3.0.0-alpha11"
 
+    const val firebase = "26.5.0"
+    const val blurview = "1.6.5"
+
 }
 
 object Deps {
@@ -35,6 +38,8 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     const val kotlinCoroutineAndroid =
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val kotlinCoroutinePlayServices =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
 
     const val koin = "org.koin:koin-android:${Versions.koin}"
     const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
@@ -54,6 +59,13 @@ object Deps {
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
 
     const val paging = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
+
+    const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"
+    const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
+    const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+
+    const val blurview = "com.eightbitlab:blurview:${Versions.blurview}"
+
 }
 
 object TestDeps {
@@ -76,7 +88,8 @@ object Dependencies {
         Deps.koinViewModel,
 
         Deps.kotlinCoroutineCore,
-        Deps.kotlinCoroutineAndroid
+        Deps.kotlinCoroutineAndroid,
+        Deps.kotlinCoroutinePlayServices
     )
 
     val appDependencies = arrayOf(

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "414592006695",
+    "project_id": "mxh-app",
+    "storage_bucket": "mxh-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414592006695:android:22d6f7afe48b4a00ca2c02",
+        "android_client_info": {
+          "package_name": "com.caunb163.mxh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "414592006695-lqdh99chohafmfif9d0uobt3dej3lj0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.caunb163.mxh",
+            "certificate_hash": "94eebc2a7cd1e242754dee5ed43a7f7e55197bfa"
+          }
+        },
+        {
+          "client_id": "414592006695-ubu630eherg4j2ju8obd9o588a1et8si.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANhGo8ZqmC1FOmNz7EsR566oA7bV0dofo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "414592006695-ubu630eherg4j2ju8obd9o588a1et8si.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

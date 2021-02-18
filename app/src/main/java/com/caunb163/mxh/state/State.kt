@@ -1,4 +1,4 @@
-package com.caunb163.domain.state
+package com.caunb163.mxh.state
 
 sealed class State {
     object Loading : State()

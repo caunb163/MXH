@@ -35,7 +35,6 @@ android {
 
 dependencies {
     implementation Dependencies.coreDependencies
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation Dependencies.testDependencies
     androidTestImplementation Dependencies.testAndroidDependencies
@@ -45,4 +44,12 @@ dependencies {
     implementation project(Modules.domain)
     implementation project(Modules.data)
     implementation project(Modules.ui)
+
+    implementation platform(Deps.firebaseBom)
+    implementation Deps.firebaseAuth
+    implementation Deps.firebaseAnalytics
+
+    implementation Deps.blurview
 }
+
+apply plugin: 'com.google.gms.google-services'
