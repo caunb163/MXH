@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.LoginFragment">
+    tools:context=".ui.register.RegisterFragment">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg1" />
+        android:background="@drawable/bg4" />
 
     <eightbitlab.com.blurview.BlurView
-        android:id="@+id/login_blurview"
+        android:id="@+id/register_blurview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:blurOverlayColor="@color/colorOverlay">
@@ -26,7 +26,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <View
                     android:id="@+id/view"
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="15dp"
-                    android:text="@string/login_signin"
+                    android:text="@string/register_signup"
                     android:textColor="@color/white"
                     android:textSize="30sp"
                     android:textStyle="bold"
@@ -49,37 +49,7 @@
                     app:layout_constraintVertical_bias="0.15" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/login_til1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/login_email"
-                    android:textColorHint="@color/white"
-                    app:boxStrokeColor="@color/white"
-                    app:counterTextColor="@color/white"
-                    app:hintTextColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@id/login_til2"
-                    app:layout_constraintEnd_toEndOf="@id/login_til2"
-                    app:layout_constraintStart_toStartOf="@id/login_til2"
-                    app:startIconDrawable="@android:drawable/ic_dialog_email"
-                    app:startIconTint="@color/white">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/login_edt_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:textColor="@color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/login_til2"
+                    android:id="@+id/register_til1"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -97,7 +67,7 @@
                     app:startIconTint="@color/white">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/login_edt_password"
+                        android:id="@+id/register_edt_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start|center"
@@ -109,58 +79,133 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/login_tv_forgot_password"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/register_til2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:paddingStart="10dp"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="10dp"
-                    android:text="@string/login_forgot_password"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/login_til2"
-                    app:layout_constraintTop_toBottomOf="@id/view" />
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/login_email"
+                    android:textColorHint="@color/white"
+                    app:boxStrokeColor="@color/white"
+                    app:hintTextColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@id/register_til1"
+                    app:layout_constraintEnd_toEndOf="@id/register_til1"
+                    app:layout_constraintStart_toStartOf="@id/register_til1"
+                    app:startIconDrawable="@android:drawable/ic_dialog_email"
+                    app:startIconTint="@color/white">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/register_edt_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textColor="@color/white" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/register_til3"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/register_name"
+                    android:textColorHint="@color/white"
+                    app:boxStrokeColor="@color/white"
+                    app:hintTextColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@id/register_til2"
+                    app:layout_constraintEnd_toEndOf="@id/register_til1"
+                    app:layout_constraintStart_toStartOf="@id/register_til1"
+                    app:startIconDrawable="@drawable/ic_user"
+                    app:startIconTint="@color/white">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/register_edt_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textColor="@color/white" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/register_til4"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/register_phone"
+                    android:textColorHint="@color/white"
+                    app:boxStrokeColor="@color/white"
+                    app:hintTextColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@id/register_til1"
+                    app:layout_constraintStart_toStartOf="@id/register_til1"
+                    app:layout_constraintTop_toBottomOf="@id/register_til1"
+                    app:startIconDrawable="@drawable/ic_phone_call"
+                    app:startIconTint="@color/white">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/register_edt_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:inputType="phone"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textColor="@color/white" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/login_btn_signin"
+                    android:id="@+id/register_btn_signup"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/colorButton"
                     android:padding="10dp"
-                    android:text="@string/login_sign_in"
+                    android:text="@string/login_sign_up"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     app:cornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@id/login_tv_or_connect"
+                    app:layout_constraintBottom_toTopOf="@id/register_tv_or_connect"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/login_tv_forgot_password"
+                    app:layout_constraintTop_toBottomOf="@id/register_til4"
                     app:layout_constraintWidth_percent="0.8" />
 
                 <TextView
-                    android:id="@+id/login_tv_or_connect"
+                    android:id="@+id/register_tv_or_connect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="@string/login_connect_with"
                     android:textColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@id/login_ll2"
-                    app:layout_constraintTop_toBottomOf="@id/login_btn_signin" />
+                    app:layout_constraintTop_toBottomOf="@id/register_btn_signup"
+                    app:layout_constraintBottom_toTopOf="@id/register_ll2"/>
 
                 <LinearLayout
-                    android:id="@+id/login_ll2"
+                    android:id="@+id/register_ll2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@id/login_ll1"
-                    app:layout_constraintEnd_toEndOf="@id/login_btn_signin"
-                    app:layout_constraintStart_toStartOf="@id/login_btn_signin"
-                    app:layout_constraintTop_toBottomOf="@id/login_tv_or_connect">
+                    app:layout_constraintBottom_toTopOf="@id/register_ll1"
+                    app:layout_constraintEnd_toEndOf="@id/register_btn_signup"
+                    app:layout_constraintStart_toStartOf="@id/register_btn_signup"
+                    app:layout_constraintTop_toBottomOf="@id/register_tv_or_connect">
 
                     <ImageView
                         android:layout_width="0dp"
@@ -183,7 +228,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/login_ll1"
+                    android:id="@+id/register_ll1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -197,24 +242,26 @@
                         android:layout_weight="3"
                         android:gravity="end"
                         android:padding="3dp"
-                        android:text="@string/login_dont_account"
+                        android:text="@string/register_have_account"
                         android:textColor="@color/white" />
 
                     <TextView
-                        android:id="@+id/login_tv_signup"
+                        android:id="@+id/register_tv_signin"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="start"
                         android:padding="3dp"
-                        android:text="@string/login_sign_up"
+                        android:text="@string/login_sign_in"
                         android:textColor="@color/accent_200" />
 
                 </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
     </eightbitlab.com.blurview.BlurView>
+
 
 </RelativeLayout>

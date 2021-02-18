@@ -20,9 +20,14 @@ class Auth {
 //
 //        }
 //        return user ?: throw FirebaseAuthException("firebase Auth exception", "")
-
         auth.signInWithEmailAndPassword(email, password).await()
         return auth.currentUser ?: throw FirebaseAuthException("firebase Auth exception", "")
     }
 
+    suspend fun createAccount(
+        username: String, email: String, password: String, phone: String
+    ): FirebaseUser {
+        auth.createUserWithEmailAndPassword(email, password).await()
+        return auth.currentUser ?: throw FirebaseAuthException("firebase Auth exception", "")
+    }
 }

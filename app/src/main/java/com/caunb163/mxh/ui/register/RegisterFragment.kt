@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.login
+package com.caunb163.mxh.ui.register
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -17,45 +17,51 @@ import eightbitlab.com.blurview.BlurView
 import eightbitlab.com.blurview.RenderScriptBlur
 import org.koin.android.ext.android.inject
 
-class LoginFragment : BaseFragment(R.layout.fragment_login) {
-    private val TAG = "LoginFragment"
+class RegisterFragment : BaseFragment(R.layout.fragment_register) {
+    private val TAG = "RegisterFragment"
 
     private lateinit var blurView: BlurView
+    private lateinit var usernameEdt: TextInputEditText
     private lateinit var emailEdt: TextInputEditText
     private lateinit var passwordEdt: TextInputEditText
-    private lateinit var forgotPassword: TextView
-    private lateinit var signin: MaterialButton
-    private lateinit var signup: TextView
+    private lateinit var phoneEdt: TextInputEditText
+    private lateinit var signup: MaterialButton
+    private lateinit var signin: TextView
 
-    private val viewModel: LoginViewModel by inject()
+    private val viewModel: RegisterViewModel by inject()
 
     @SuppressLint("SetTextI18n")
     override fun initView(view: View) {
-        blurView = view.findViewById(R.id.login_blurview)
+        blurView = view.findViewById(R.id.register_blurview)
         blurviewBackground()
 
-        emailEdt = view.findViewById(R.id.login_edt_email)
-        passwordEdt = view.findViewById(R.id.login_edt_password)
-        forgotPassword = view.findViewById(R.id.login_tv_forgot_password)
-        signin = view.findViewById(R.id.login_btn_signin)
-        signup = view.findViewById(R.id.login_tv_signup)
+        usernameEdt = view.findViewById(R.id.register_edt_name)
+        emailEdt = view.findViewById(R.id.register_edt_email)
+        passwordEdt = view.findViewById(R.id.register_edt_password)
+        phoneEdt = view.findViewById(R.id.register_edt_phone)
+        signup = view.findViewById(R.id.register_btn_signup)
+        signin = view.findViewById(R.id.register_tv_signin)
 
-        emailEdt.setText("test@gmail.com")
+        usernameEdt.setText("test")
         passwordEdt.setText("123456")
+        phoneEdt.setText("0987654321")
+
     }
 
     override fun initListener() {
-        signin.setOnClickListener {
+        signup.setOnClickListener {
+            val username = usernameEdt.text.toString().trim()
             val email = emailEdt.text.toString().trim()
             val password = passwordEdt.text.toString().trim()
-            //check empty
-            viewModel.loginWithEmailAndPassword(email, password)
+            val phone = phoneEdt.text.toString().trim()
+            //check empty show error
+
+            viewModel.createAccount(username, email, password, phone)
         }
 
-        signup.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        signin.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
-
     }
 
     override fun initObserve() {
@@ -72,7 +78,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private fun onSuccess(user: User) {
         Log.e(TAG, "onSuccess: ${user.toString()}")
-        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
 
     }
 
@@ -92,11 +98,4 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             .setBlurAutoUpdate(true)
             .setHasFixedTransformationMatrix(true)
     }
-
-//    private fun checkEmpty(text: String){
-//        if (text.isEmpty()){
-//
-//        }
-//    }
-
 }
