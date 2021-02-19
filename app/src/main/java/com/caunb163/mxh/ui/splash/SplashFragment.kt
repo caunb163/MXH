@@ -3,6 +3,7 @@ package com.caunb163.mxh.ui.splash
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.caunb163.domain.usecase.splash.SplashUseCase
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
@@ -21,7 +22,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as Boolean)
+                is State.Success<*> -> onSuccess(state.data as SplashUseCase.SplashState)
                 is State.Failure -> onFailure()
             }
         })
@@ -29,10 +30,15 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
     private fun onLoading() {}
 
-    private fun onSuccess(state: Boolean) {
-        if (state) {
-            findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
-        } else findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+    private fun onSuccess(state: SplashUseCase.SplashState) {
+//        if (state) {
+//            findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
+//        } else findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+        when (state) {
+            is SplashUseCase.SplashState.OpenLogin -> findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
+            is SplashUseCase.SplashState.OpenOnBoarding -> findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
+            is SplashUseCase.SplashState.OpenHome -> findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+        }
     }
 
     private fun onFailure() {}

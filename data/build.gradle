@@ -39,6 +39,5 @@ dependencies {
 
     implementation project(Modules.domain)
     implementation platform(Deps.firebaseBom)
-    implementation Deps.firebaseAuth
-    implementation Deps.firebaseAnalytics
+    implementation Dependencies.firebaseDependencies
 }

@@ -47,10 +47,10 @@ dependencies {
     implementation project(Modules.ui)
 
     implementation platform(Deps.firebaseBom)
-    implementation Deps.firebaseAuth
-    implementation Deps.firebaseAnalytics
+    implementation Dependencies.firebaseDependencies
 
     implementation Deps.blurview
+    implementation Deps.circleImgView
 }
 
 apply plugin: 'com.google.gms.google-services'

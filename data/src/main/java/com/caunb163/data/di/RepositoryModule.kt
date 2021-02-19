@@ -13,6 +13,6 @@ import org.koin.dsl.module
 val repositoryModule = module {
     factory<RepositorySplash> { RepositorySplashImpl(get()) }
     factory<RepositoryOnBoarding> { RepositoryOnBoardingImpl(get()) }
-    factory<RepositoryLogin> { RepositoryLoginImpl(get()) }
+    factory<RepositoryLogin> { RepositoryLoginImpl(get(), get()) }
     factory<RepositoryRegister> { RepositoryRegisterimpl(get()) }
 }

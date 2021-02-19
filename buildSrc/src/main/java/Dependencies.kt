@@ -26,9 +26,11 @@ object Versions {
     const val navigation = "2.3.2"
     const val glide = "4.11.0"
     const val paging = "3.0.0-alpha11"
+    const val gson = "2.8.6"
 
     const val firebase = "26.5.0"
     const val blurview = "1.6.5"
+    const val circleImgView = "3.1.0"
 
 }
 
@@ -59,12 +61,15 @@ object Deps {
     const val glideCompiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
 
     const val paging = "androidx.paging:paging-runtime-ktx:${Versions.paging}"
+    const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
     const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebase}"
     const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
+    const val firebaseFirestore = "com.google.firebase:firebase-firestore-ktx"
 
     const val blurview = "com.eightbitlab:blurview:${Versions.blurview}"
+    const val circleImgView = "de.hdodenhof:circleimageview:${Versions.circleImgView}"
 
 }
 
@@ -82,6 +87,7 @@ object Dependencies {
         Deps.coreKtx,
         Deps.material,
         Deps.constraintLayout,
+        Deps.gson,
 
         Deps.koin,
         Deps.koinScope,
@@ -95,6 +101,12 @@ object Dependencies {
     val appDependencies = arrayOf(
         Deps.navigation,
         Deps.navigationFrag
+    )
+
+    val firebaseDependencies = arrayOf(
+        Deps.firebaseAnalytics,
+        Deps.firebaseAuth,
+        Deps.firebaseFirestore
     )
 
     val testDependencies = arrayOf(

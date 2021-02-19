@@ -2,4 +2,6 @@
     <string name="common_error">Đã xảy ra lỗi, vui lòng thử lại!</string>
     <string name="loading">Đang tải dữ liệu…</string>
     <string name="retry">Thử lại</string>
+
+    <string name="app_name">MXH</string>
 </resources>

@@ -32,4 +32,11 @@
     <string name="register_phone">Phone</string>
     <string name="register_have_account">Already have an Account?</string>
 
+    <string name="menu_home">Trang chủ</string>
+    <string name="menu_youtube">Youtube</string>
+    <string name="menu_friend">Bạn bè</string>
+    <string name="menu_messenger">Nhắn tin</string>
+    <string name="menu_profile">Cá nhân</string>
+
+
 </resources>

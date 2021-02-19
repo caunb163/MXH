@@ -1,5 +1,6 @@
 package com.caunb163.mxh.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,6 @@ class LoginViewModel(
                 val loginState = withContext(Dispatchers.IO) {
                     return@withContext loginUseCase.loginWithEmailAndPassword(email, password)
                 }
-
                 _state.value = State.Success(loginState)
 
             } catch (e: Exception) {

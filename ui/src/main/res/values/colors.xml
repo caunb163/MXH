@@ -20,6 +20,7 @@
     <color name="colorOverlay">#78393030</color>
 
     <color name="colorButton">#80BD314D</color>
+    <color name="colorApp">#0154A4</color>
 
 
     <color name="statusBarColor">@color/Transparent</color>

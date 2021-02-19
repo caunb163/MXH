@@ -8,7 +8,7 @@ class RepositoryOnBoardingImpl(
 ) : RepositoryOnBoarding {
 
     override suspend fun finishOnBoarding(): Boolean {
-//        localStorage.firstOpened()
+        localStorage.firstOpened()
         return true
     }
 }

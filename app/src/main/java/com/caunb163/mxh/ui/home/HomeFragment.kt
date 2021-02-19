@@ -1,17 +1,23 @@
 package com.caunb163.mxh.ui.home
 
+import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
 import com.caunb163.mxh.R
-import com.caunb163.mxh.base.BaseFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class HomeFragment : BaseFragment(R.layout.fragment_home) {
-    override fun initView(view: View) {
-    }
+class HomeFragment : Fragment(R.layout.fragment_home) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val navView: BottomNavigationView = view.findViewById(R.id.bottom_navigation_view)
 
-    override fun initListener() {
-    }
-
-    override fun initObserve() {
+        val navHostFragment: NavHostFragment =
+            childFragmentManager.findFragmentById(R.id.nav_home_fragment) as NavHostFragment
+        val navController: NavController = navHostFragment.navController
+        NavigationUI.setupWithNavController(navView, navController)
     }
 
 }
