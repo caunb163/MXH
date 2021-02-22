@@ -4,7 +4,7 @@ import com.caunb163.data.firebase.Auth
 import com.caunb163.domain.model.User
 import com.caunb163.domain.usecase.register.RepositoryRegister
 
-class RepositoryRegisterimpl(
+class RepositoryRegisterImpl(
     private val auth: Auth
 ) : RepositoryRegister {
     override suspend fun register(

@@ -1,6 +1,7 @@
 package com.caunb163.mxh.di
 
 import com.caunb163.mxh.ui.login.LoginViewModel
+import com.caunb163.mxh.ui.main.home.HomeViewModel
 import com.caunb163.mxh.ui.onboarding.OnBoardingViewModel
 import com.caunb163.mxh.ui.register.RegisterViewModel
 import com.caunb163.mxh.ui.splash.SplashViewModel
@@ -12,4 +13,5 @@ val viewModelModule = module {
     viewModel<OnBoardingViewModel> { OnBoardingViewModel(get()) }
     viewModel<LoginViewModel> { LoginViewModel(get()) }
     viewModel<RegisterViewModel> { RegisterViewModel(get()) }
+    viewModel<HomeViewModel> { HomeViewModel(get()) }
 }

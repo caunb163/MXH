@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.home.profile
+package com.caunb163.mxh.ui.main.profile
 
 import android.view.View
 import com.caunb163.mxh.R

@@ -7,23 +7,23 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.caunb163.mxh.ui.home.main.MainFragment"
+        android:name="com.caunb163.mxh.ui.main.home.HomeFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/messengerFragment"
-        android:name="com.caunb163.mxh.ui.home.messenger.MessengerFragment"
+        android:name="com.caunb163.mxh.ui.main.messenger.MessengerFragment"
         android:label="fragment_messenger"
         tools:layout="@layout/fragment_messenger" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.caunb163.mxh.ui.home.profile.ProfileFragment"
+        android:name="com.caunb163.mxh.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/youtubeFragment"
-        android:name="com.caunb163.mxh.ui.home.youtube.YoutubeFragment"
+        android:name="com.caunb163.mxh.ui.main.youtube.YoutubeFragment"
         android:label="fragment_youtube"
         tools:layout="@layout/fragment_youtube" />
 </navigation>

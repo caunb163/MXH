@@ -58,9 +58,9 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.caunb163.mxh.ui.home.HomeFragment"
+        android:name="com.caunb163.mxh.ui.main.MainFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_main" />
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.caunb163.mxh.ui.register.RegisterFragment"

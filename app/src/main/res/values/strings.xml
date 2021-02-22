@@ -38,5 +38,10 @@
     <string name="menu_messenger">Nhắn tin</string>
     <string name="menu_profile">Cá nhân</string>
 
+    <string name="create_post">Bạn đang nghĩ gì?</string>
+
+    <string name="post_like">Thích</string>
+    <string name="post_comment">Bình luận</string>
+    <string name="post_share">Chia sẻ</string>
 
 </resources>

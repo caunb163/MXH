@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.home
+package com.caunb163.mxh.ui.main
 
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,7 @@ import androidx.navigation.ui.NavigationUI
 import com.caunb163.mxh.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navView: BottomNavigationView = view.findViewById(R.id.bottom_navigation_view)

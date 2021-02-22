@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.home.messenger
+package com.caunb163.mxh.ui.main.messenger
 
 import android.view.View
 import com.caunb163.mxh.R

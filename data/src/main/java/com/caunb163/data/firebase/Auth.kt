@@ -46,4 +46,5 @@ class Auth {
         }
         return auth.currentUser ?: throw FirebaseAuthException("firebase Auth exception", "")
     }
+
 }
