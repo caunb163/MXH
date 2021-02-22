@@ -51,6 +51,8 @@ dependencies {
 
     implementation Deps.blurview
     implementation Deps.circleImgView
+    implementation Deps.glide
+    implementation Deps.glideCompiler
 }
 
 apply plugin: 'com.google.gms.google-services'
