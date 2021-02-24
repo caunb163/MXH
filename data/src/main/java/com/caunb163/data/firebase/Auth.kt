@@ -18,13 +18,6 @@ class Auth {
     suspend fun authWithEmailAndPassword(
         email: String, password: String
     ): FirebaseUser {
-//        var user = auth.currentUser
-//        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-//            user = if (task.isSuccessful) auth.currentUser!!
-//             else null
-//
-//        }
-//        return user ?: throw FirebaseAuthException("firebase Auth exception", "")
         auth.signInWithEmailAndPassword(email, password).await()
         return auth.currentUser ?: throw FirebaseAuthException("firebase Auth exception", "")
     }
@@ -36,10 +29,11 @@ class Auth {
         val result = auth.currentUser
         result?.let {
             val user = User(
-                it.uid,
-                username,
-                it.email ?: "",
-                it.photoUrl?.toString() ?: ""
+                username = username,
+                email = it.email ?: "",
+                photoUrl = it.photoUrl?.toString() ?: "",
+                arrPostId = mutableListOf(),
+                userId = it.uid
             )
 
             db.collection("Users").document(it.uid).set(user)

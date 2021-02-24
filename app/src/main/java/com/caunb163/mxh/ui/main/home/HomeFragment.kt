@@ -3,6 +3,7 @@ package com.caunb163.mxh.ui.main.home
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -10,13 +11,16 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.Post
+import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 
+@InternalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
-class HomeFragment : BaseFragment(R.layout.fragment_home) {
+class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private val TAG = "HomeFragment"
 
     private lateinit var recyclerView: RecyclerView
@@ -25,6 +29,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private val list = mutableListOf<Any>()
     private lateinit var glide: RequestManager
     private lateinit var homeAdapter: HomeAdapter
+    private lateinit var user: User
 
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.home_recycleview)
@@ -32,11 +37,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
             RequestOptions()
-                .placeholder(R.drawable.bg1)
-                .error(R.drawable.bg1)
+                .placeholder(R.drawable.image_default)
+                .error(R.drawable.image_default)
         )
-
-        homeAdapter = HomeAdapter(glide)
+        user = localStorage.getAccount()!!
+        homeAdapter = HomeAdapter(glide, this, user)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -48,7 +53,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     }
 
     override fun initObserve() {
-        viewModel.getAllPost()
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
@@ -58,10 +62,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         })
     }
 
-    private fun onLoading() {}
+    private fun onLoading() {
+    }
 
     private fun onSuccess(listPost: MutableList<Post>) {
-        Log.e(TAG, "onSuccess: $listPost")
+        list.clear()
         localStorage.getAccount()?.let { list.add(it) }
         list.addAll(listPost)
         homeAdapter.updateData(list)
@@ -70,4 +75,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
     private fun onFailure(message: String) {
         Log.e(TAG, "onFailure: $message")
     }
+
+    override fun createPostClick() {
+        findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
+    }
+
 }

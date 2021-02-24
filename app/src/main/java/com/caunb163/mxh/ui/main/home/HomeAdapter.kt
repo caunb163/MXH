@@ -1,7 +1,6 @@
 package com.caunb163.mxh.ui.main.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +15,13 @@ import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeAdapter(
-    private val glide: RequestManager
+    private val glide: RequestManager,
+    private val homeOnClick: HomeOnClick,
+    private val user: User
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_CREATE_POST = 0
@@ -32,9 +35,6 @@ class HomeAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        val view =
-//            LayoutInflater.from(parent.context).inflate(R.layout.layout_post_default, parent, false)
-//        return HomeViewHolder(view)
         return if (viewType == TYPE_CREATE_POST) {
             CreatePostViewHolder(
                 LayoutInflater.from(parent.context)
@@ -47,9 +47,9 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == TYPE_POST) {
-            (holder as HomeViewHolder).bind(glide, list[position] as Post)
+            (holder as HomeViewHolder).bind(glide, list[position] as Post, user)
         } else {
-            (holder as CreatePostViewHolder).bind(glide, list[position] as User)
+            (holder as CreatePostViewHolder).bind(glide, list[position] as User, homeOnClick)
         }
     }
 
@@ -63,6 +63,7 @@ class HomeAdapter(
 
     class HomeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private var imgAvatar: CircleImageView = view.findViewById(R.id.post_imv_avatar)
+        private var imvMenu: ImageView = view.findViewById(R.id.post_imv_menu)
         private var username: TextView = view.findViewById(R.id.post_tv_user)
         private var createDate: TextView = view.findViewById(R.id.post_tv_date)
         private var content: TextView = view.findViewById(R.id.post_tv_content)
@@ -100,16 +101,19 @@ class HomeAdapter(
         private var tvImgNumber: TextView = view.findViewById(R.id.post_tv_img_number)
 
         @SuppressLint("SetTextI18n")
-        fun bind(glide: RequestManager, post: Post) {
+        fun bind(glide: RequestManager, post: Post, user: User) {
             username.text = post.userName
-            createDate.text = post.createDate
+            createDate.text = getDate(post.createDate, "dd/MM/yyyy")
             content.text = post.content
             likeNumber.text = post.likeNumber.toString()
             commentNumber.text = "${post.commentNumber} bình luận"
 
             glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
-            Log.e("TAG", "bind: ${post.images.size}")
             when (post.images.size) {
+                0 -> {
+                    showImage(0)
+                }
+
                 1 -> {
                     showImage(1)
                     glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[0])
@@ -146,7 +150,7 @@ class HomeAdapter(
                         .into(img44)
                 }
 
-                5 -> {
+                else -> {
                     showImage(5)
                     glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[0])
                         .into(img51)
@@ -160,10 +164,17 @@ class HomeAdapter(
                         .into(img55)
                     tvImgNumber.text = "+${post.images.size - 5}"
                 }
-                else -> {
-                    showImage(0)
-                }
             }
+
+            if (user.userId == post.userId) imvMenu.visibility = View.VISIBLE
+            else imvMenu.visibility = View.INVISIBLE
+        }
+
+        fun getDate(milliSeconds: Long, dateFormat: String?): String? {
+            val formatter = SimpleDateFormat(dateFormat, Locale.ENGLISH)
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = milliSeconds
+            return formatter.format(calendar.time)
         }
 
         fun showImage(size: Int) {
@@ -197,9 +208,13 @@ class HomeAdapter(
 
     class CreatePostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private var imgAvatar: CircleImageView = view.findViewById(R.id.createpost_avatar)
+        private var tvCreatePost: TextView = view.findViewById(R.id.createpost_textview)
 
-        fun bind(glide: RequestManager, user: User) {
+        fun bind(glide: RequestManager, user: User, onClick: HomeOnClick) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl).into(imgAvatar)
+            tvCreatePost.setOnClickListener {
+                onClick.createPostClick()
+            }
         }
     }
 }

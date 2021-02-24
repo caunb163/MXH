@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/createpost_textview"
         android:padding="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

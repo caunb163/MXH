@@ -1,36 +1,26 @@
 package com.caunb163.mxh.ui.main.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.caunb163.domain.usecase.home.HomeUseCase
+import androidx.lifecycle.liveData
+import com.caunb163.data.repository.RepositoryHomeImpl
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 
+@ExperimentalCoroutinesApi
 class HomeViewModel(
-    private val homeUseCase: HomeUseCase
+    private val repositoryHomeImpl: RepositoryHomeImpl
 ) : ViewModel() {
-
-    private val _state: MutableLiveData<State> = MutableLiveData()
-
-    val state: LiveData<State> get() = _state
-
-    fun getAllPost() {
-        viewModelScope.launch {
-            _state.value = State.Loading
-            try {
-                val homeState = withContext(Dispatchers.IO) {
-                    return@withContext homeUseCase.getAllPost()
-                }
-                _state.value = State.Success(homeState)
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _state.value = State.Failure("${e.message}")
+    val state: LiveData<State> = liveData(Dispatchers.IO) {
+        emit(State.Loading)
+        try {
+            repositoryHomeImpl.getAllPost().collect {
+                emit(State.Success(it))
             }
+        } catch (e: Exception) {
+            emit(State.Failure("${e.message}"))
         }
     }
 }

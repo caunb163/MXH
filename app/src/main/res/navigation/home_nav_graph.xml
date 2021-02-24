@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/homeFragment"
         android:name="com.caunb163.mxh.ui.main.home.HomeFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/messengerFragment"
@@ -26,4 +30,9 @@
         android:name="com.caunb163.mxh.ui.main.youtube.YoutubeFragment"
         android:label="fragment_youtube"
         tools:layout="@layout/fragment_youtube" />
+    <dialog
+        android:id="@+id/createPostFragment"
+        android:name="com.caunb163.mxh.ui.main.home.create_post.CreatePostFragment"
+        android:label="fragment_create_post"
+        tools:layout="@layout/fragment_create_post" />
 </navigation>

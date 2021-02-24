@@ -43,5 +43,7 @@
     <string name="post_like">Thích</string>
     <string name="post_comment">Bình luận</string>
     <string name="post_share">Chia sẻ</string>
+    <string name="create_new_post">Tạo bài viết</string>
+    <string name="create_post_send">Đăng</string>
 
 </resources>

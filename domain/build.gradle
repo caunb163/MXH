@@ -11,4 +11,7 @@ java {
 dependencies {
     implementation Deps.kotlin
     implementation Deps.koin
+    implementation Deps.kotlinCoroutineCore
+    implementation Deps.kotlinCoroutineAndroid
+    implementation Deps.kotlinCoroutinePlayServices
 }

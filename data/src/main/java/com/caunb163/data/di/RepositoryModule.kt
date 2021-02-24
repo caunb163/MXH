@@ -1,7 +1,7 @@
 package com.caunb163.data.di
 
 import com.caunb163.data.repository.*
-import com.caunb163.domain.usecase.home.RepositoryHome
+import com.caunb163.domain.usecase.home.create_post.RepositoryCreatePost
 import com.caunb163.domain.usecase.login.RepositoryLogin
 import com.caunb163.domain.usecase.onboarding.RepositoryOnBoarding
 import com.caunb163.domain.usecase.register.RepositoryRegister
@@ -13,5 +13,6 @@ val repositoryModule = module {
     factory<RepositoryOnBoarding> { RepositoryOnBoardingImpl(get()) }
     factory<RepositoryLogin> { RepositoryLoginImpl(get(), get()) }
     factory<RepositoryRegister> { RepositoryRegisterImpl(get()) }
-    factory<RepositoryHome> { RepositoryHomeImpl() }
+    factory<RepositoryHomeImpl> { RepositoryHomeImpl() }
+    factory<RepositoryCreatePost> { RepositoryCreatePostImpl() }
 }

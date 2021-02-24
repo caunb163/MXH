@@ -15,11 +15,11 @@ class RepositoryRegisterImpl(
     ): User {
         val result = auth.createAccount(username, email, password, phone)
         return User(
-            result.uid,
-            result.displayName ?: "",
-            result.email ?: "",
-            result.photoUrl?.toString() ?: ""
+            username = result.displayName ?: "",
+            email = result.email ?: "",
+            photoUrl = result.photoUrl?.toString() ?: "",
+            arrPostId = mutableListOf(),
+            userId = result.uid
         )
     }
-
 }

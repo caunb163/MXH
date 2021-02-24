@@ -31,6 +31,7 @@ object Versions {
     const val firebase = "26.5.0"
     const val blurview = "1.6.5"
     const val circleImgView = "3.1.0"
+    const val lifecycle = "2.3.0"
 
 }
 
@@ -70,6 +71,7 @@ object Deps {
 
     const val blurview = "com.eightbitlab:blurview:${Versions.blurview}"
     const val circleImgView = "de.hdodenhof:circleimageview:${Versions.circleImgView}"
+    const val lifecycle = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
 
 }
 

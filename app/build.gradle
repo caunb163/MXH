@@ -53,6 +53,7 @@ dependencies {
     implementation Deps.circleImgView
     implementation Deps.glide
     implementation Deps.glideCompiler
+    implementation Deps.lifecycle
 }
 
 apply plugin: 'com.google.gms.google-services'
