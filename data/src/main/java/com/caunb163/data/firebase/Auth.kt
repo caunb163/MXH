@@ -33,7 +33,12 @@ class Auth {
                 email = it.email ?: "",
                 photoUrl = it.photoUrl?.toString() ?: "",
                 arrPostId = mutableListOf(),
-                userId = it.uid
+                userId = it.uid,
+                phone = phone,
+                photoBackground = "",
+                birthDay = "",
+                address = "",
+                intro = "",
             )
 
             db.collection("Users").document(it.uid).set(user)

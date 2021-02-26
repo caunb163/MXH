@@ -38,6 +38,8 @@
     <string name="menu_messenger">Nhắn tin</string>
     <string name="menu_profile">Cá nhân</string>
 
+    <string name="menu_logout">Đăng xuất</string>
+
     <string name="create_post">Bạn đang nghĩ gì?</string>
 
     <string name="post_like">Thích</string>
@@ -45,5 +47,12 @@
     <string name="post_share">Chia sẻ</string>
     <string name="create_new_post">Tạo bài viết</string>
     <string name="create_post_send">Đăng</string>
+
+    <string name="profile_username">Guest</string>
+    <string name="profile_intro">Nếu ai cũng có thể hiểu bạn, vậy bạn phải bình thường tới mức nào đây?</string>
+    <string name="profile_adress">Hà Nội</string>
+    <string name="profile_birthday">22/02/2002</string>
+    <string name="profile_phone">0987654321</string>
+    <string name="profile_post">Bài viết</string>
 
 </resources>

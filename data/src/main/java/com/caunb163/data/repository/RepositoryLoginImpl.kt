@@ -12,14 +12,12 @@ class RepositoryLoginImpl(
     private val auth: Auth,
     private val localStorage: LocalStorage
 ) : RepositoryLogin {
-    override suspend fun loginWithEmailAndPassword(email: String, password: String): User? {
+    override suspend fun loginWithEmailAndPassword(email: String, password: String) {
         val result = auth.authWithEmailAndPassword(email, password)
         val db = Firebase.firestore
 
         val data = db.collection("Users").document(result.uid).get().await()
         val user = data.toObject(User::class.java)
         localStorage.saveAccount(user)
-
-        return user
     }
 }

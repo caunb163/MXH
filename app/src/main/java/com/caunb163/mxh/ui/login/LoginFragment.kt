@@ -62,7 +62,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as User)
+                is State.Success<*> -> onSuccess()
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -70,8 +70,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private fun onLoading() {}
 
-    private fun onSuccess(user: User) {
-        Log.e(TAG, "onSuccess: ${user.toString()}")
+    private fun onSuccess() {
+        showToat("Success")
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
 
     }

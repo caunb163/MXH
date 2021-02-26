@@ -32,7 +32,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/bg1"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/view" />
 

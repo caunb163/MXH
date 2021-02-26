@@ -192,8 +192,6 @@ class CreatePostFragment : BottomSheetDialogFragment() {
             if (content.text.isNotEmpty()) {
                 viewModel.createPost(
                     user.userId,
-                    user.username,
-                    user.photoUrl,
                     0,
                     false,
                     timenow,

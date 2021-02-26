@@ -68,6 +68,7 @@ object Deps {
     const val firebaseAuth = "com.google.firebase:firebase-auth-ktx"
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
     const val firebaseFirestore = "com.google.firebase:firebase-firestore-ktx"
+    const val firebaseStorage = "com.google.firebase:firebase-storage-ktx"
 
     const val blurview = "com.eightbitlab:blurview:${Versions.blurview}"
     const val circleImgView = "de.hdodenhof:circleimageview:${Versions.circleImgView}"
@@ -108,7 +109,8 @@ object Dependencies {
     val firebaseDependencies = arrayOf(
         Deps.firebaseAnalytics,
         Deps.firebaseAuth,
-        Deps.firebaseFirestore
+        Deps.firebaseFirestore,
+        Deps.firebaseStorage
     )
 
     val testDependencies = arrayOf(

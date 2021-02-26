@@ -5,8 +5,6 @@ class CreatePostUseCase(
 ) {
     suspend fun createPost(
         userId: String,
-        userName: String,
-        userAvatar: String,
         likeNumber: Int,
         like: Boolean,
         createDate: Long,
@@ -16,8 +14,6 @@ class CreatePostUseCase(
     ) {
         repositotyCreatePost.createPost(
             userId,
-            userName,
-            userAvatar,
             likeNumber,
             like,
             createDate,

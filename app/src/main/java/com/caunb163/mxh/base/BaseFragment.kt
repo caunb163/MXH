@@ -2,6 +2,7 @@ package com.caunb163.mxh.base
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 
@@ -27,4 +28,8 @@ abstract class BaseFragment : Fragment {
     abstract fun initListener()
 
     abstract fun initObserve()
+
+    fun showToat(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
 }

@@ -20,8 +20,6 @@ class CreatePostViewModel(
 
     fun createPost(
         userId: String,
-        userName: String,
-        userAvatar: String,
         likeNumber: Int,
         like: Boolean,
         createDate: Long,
@@ -35,8 +33,6 @@ class CreatePostViewModel(
                 val createPostUseCase = withContext(Dispatchers.IO) {
                     return@withContext createPostUseCase.createPost(
                         userId,
-                        userName,
-                        userAvatar,
                         likeNumber,
                         like,
                         createDate,

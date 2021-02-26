@@ -5,9 +5,9 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
@@ -68,7 +68,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as User)
+                is State.Success<*> -> onSuccess()
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -76,8 +76,8 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
 
     private fun onLoading() {}
 
-    private fun onSuccess(user: User) {
-        Log.e(TAG, "onSuccess: ${user.toString()}")
+    private fun onSuccess() {
+        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
 
     }

@@ -10,15 +10,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.Post
+import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
-import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 
-@InternalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private val TAG = "HomeFragment"
@@ -53,10 +51,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     override fun initObserve() {
-        viewModel.state.observe(this, Observer { state ->
+        viewModel.getAllPost()
+        viewModel.statePost.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as MutableList<Post>)
+                is State.Success<*> -> onSuccess(state.data as MutableList<PostEntity>)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -65,9 +64,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private fun onLoading() {
     }
 
-    private fun onSuccess(listPost: MutableList<Post>) {
+    private fun onSuccess(listPost: MutableList<PostEntity>) {
         list.clear()
-        localStorage.getAccount()?.let { list.add(it) }
+        list.add(user)
         list.addAll(listPost)
         homeAdapter.updateData(list)
     }
