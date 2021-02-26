@@ -9,11 +9,11 @@ class ProfileUseCase(
         return repositoryProfile.getProfilePost()
     }
 
-    suspend fun updateAvatar(uri: String) {
+    suspend fun updateAvatar(uri: String): String {
         return repositoryProfile.updateAvatar(uri)
     }
 
-    suspend fun updateBackground(uri: String) {
+    suspend fun updateBackground(uri: String): String {
         return repositoryProfile.updateBackground(uri)
     }
 }

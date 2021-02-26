@@ -15,6 +15,10 @@ class Auth {
 
     private val db = Firebase.firestore
 
+    fun getUser(): FirebaseUser {
+        return auth.currentUser ?: throw FirebaseAuthException("firebase Auth exception", "")
+    }
+
     suspend fun authWithEmailAndPassword(
         email: String, password: String
     ): FirebaseUser {

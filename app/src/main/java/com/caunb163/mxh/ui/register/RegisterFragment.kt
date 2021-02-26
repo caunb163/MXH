@@ -1,9 +1,9 @@
 package com.caunb163.mxh.ui.register
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -27,6 +27,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
     private lateinit var phoneEdt: TextInputEditText
     private lateinit var signup: MaterialButton
     private lateinit var signin: TextView
+    private lateinit var progressBar: ProgressBar
 
     private val viewModel: RegisterViewModel by inject()
 
@@ -41,6 +42,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
         phoneEdt = view.findViewById(R.id.register_edt_phone)
         signup = view.findViewById(R.id.register_btn_signup)
         signin = view.findViewById(R.id.register_tv_signin)
+        progressBar = view.findViewById(R.id.register_progressbar)
 
         usernameEdt.setText("test")
         passwordEdt.setText("123456")
@@ -74,16 +76,23 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
         })
     }
 
-    private fun onLoading() {}
+    private fun onLoading() {
+        progressBar.visibility = View.VISIBLE
+        signup.visibility = View.INVISIBLE
+    }
 
     private fun onSuccess() {
+        progressBar.visibility = View.INVISIBLE
+        signup.visibility = View.VISIBLE
         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
 
     }
 
     private fun onFailure(message: String) {
-        Log.e(TAG, "onFailure: $message")
+        progressBar.visibility = View.INVISIBLE
+        signup.visibility = View.VISIBLE
+        showToat(message)
     }
 
     private fun blurviewBackground() {

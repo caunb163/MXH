@@ -25,10 +25,8 @@ class RepositoryProfileImpl(
     override suspend fun getProfilePost(): List<PostEntity> {
         val list = mutableListOf<PostEntity>()
         for (postId in user.arrPostId) {
-            Log.e(TAG, "getProfilePost: $postId")
             val data = db.collection("Posts").document(postId).get().await()
             val post = data.toObject(Post::class.java)
-            Log.e(TAG, "getProfilePost: $post")
             db.collection("Users").document(post!!.userId).get().addOnCompleteListener { task ->
                 val user = task.result?.toObject(User::class.java)
                 val postEntity =
@@ -40,10 +38,11 @@ class RepositoryProfileImpl(
         return list
     }
 
-    override suspend fun updateAvatar(uri: String) {
+    override suspend fun updateAvatar(uri: String): String {
         val uriPath = Uri.parse(uri)
         val storageRef = Firebase.storage.reference.child("avatar/" + uriPath.lastPathSegment)
         val uploadTask: UploadTask = storageRef.putFile(uriPath)
+        var stringPath = ""
         uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {
                 task.exception?.let { throw  it }
@@ -51,16 +50,19 @@ class RepositoryProfileImpl(
             storageRef.downloadUrl
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val download = task.result.toString()
-                db.collection("Users").document(user.userId).update("photoUrl", download)
+                stringPath = task.result.toString()
+                db.collection("Users").document(user.userId).update("photoUrl", stringPath)
             }
-        }
+        }.await()
+
+        return stringPath
     }
 
-    override suspend fun updateBackground(uri: String) {
+    override suspend fun updateBackground(uri: String): String {
         val uriPath = Uri.parse(uri)
         val storageRef = Firebase.storage.reference.child("background/" + uriPath.lastPathSegment)
         val uploadTask: UploadTask = storageRef.putFile(uriPath)
+        var stringPath = ""
         uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {
                 task.exception?.let { throw  it }
@@ -68,9 +70,11 @@ class RepositoryProfileImpl(
             storageRef.downloadUrl
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val download = task.result.toString()
-                db.collection("Users").document(user.userId).update("photoBackground", download)
+                stringPath = task.result.toString()
+                db.collection("Users").document(user.userId).update("photoBackground", stringPath)
             }
-        }
+        }.await()
+
+        return stringPath
     }
 }

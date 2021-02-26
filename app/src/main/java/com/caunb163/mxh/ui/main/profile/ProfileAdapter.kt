@@ -25,9 +25,15 @@ class ProfileAdapter(
     private val TYPE_POST = 1
 
     private var list: MutableList<Any> = mutableListOf()
+    private var userLocal = user
 
     fun updateData(datas: MutableList<Any>) {
         list = datas
+        notifyDataSetChanged()
+    }
+
+    fun updateUser(userChange: User) {
+        userLocal = userChange
         notifyDataSetChanged()
     }
 
@@ -44,7 +50,7 @@ class ProfileAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == TYPE_POST) {
-            (holder as PostViewHolder).bind(glide, list[position] as PostEntity, user)
+            (holder as PostViewHolder).bind(glide, list[position] as PostEntity, userLocal)
         } else {
             (holder as ProfileViewHolder).bind(glide, list[position] as User, onClick)
         }
@@ -103,7 +109,7 @@ class ProfileAdapter(
         private fun addListener(onClick: ProfileOnClick) {
             imvCameraAvatar.setOnClickListener { onClick.avatarClick() }
 
-            imvBackground.setOnClickListener { onClick.backgroundClick() }
+            imvCameraBackground.setOnClickListener { onClick.backgroundClick() }
         }
     }
 }

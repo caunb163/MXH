@@ -6,7 +6,7 @@ import com.caunb163.domain.model.PostEntity
 interface RepositoryProfile {
     suspend fun getProfilePost(): List<PostEntity>
 
-    suspend fun updateAvatar(uri: String)
+    suspend fun updateAvatar(uri: String): String
 
-    suspend fun updateBackground(uri: String)
+    suspend fun updateBackground(uri: String): String
 }

@@ -1,20 +1,23 @@
 package com.caunb163.mxh.ui.main.home.create_post
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ClipData
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -33,6 +36,9 @@ import java.util.*
 
 class CreatePostFragment : BottomSheetDialogFragment() {
     private val TAG = "CreatePostFragment"
+
+    private val REQUEST_INTENT_CODE_MULTIPLE = 1234
+
     private lateinit var toolbar: Toolbar
     private lateinit var btnpost: Button
     private lateinit var imgAvatar: CircleImageView
@@ -62,6 +68,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private lateinit var img54: ImageView
     private lateinit var img55: ImageView
     private lateinit var tvImgNumber: TextView
+    private lateinit var imvAddImage: ImageView
+    private lateinit var progressBar: ProgressBar
 
     private val localStorage: LocalStorage by inject()
     private lateinit var glide: RequestManager
@@ -69,6 +77,9 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private val viewModel: CreatePostViewModel by inject()
     private val listImages = mutableListOf<String>()
     private var timenow: Long = 0
+
+    private var listPermission = mutableListOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE)
+    private var uriList: MutableList<Uri> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -151,17 +162,19 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         img54 = view.findViewById(R.id.createpost_5_img4)
         img55 = view.findViewById(R.id.createpost_5_img5)
         tvImgNumber = view.findViewById(R.id.createpost_tv_img_number)
+        imvAddImage = view.findViewById(R.id.createpost_addimage)
+        progressBar = view.findViewById(R.id.createpost_progressbar)
     }
 
     private fun fillInfomation() {
         glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl)
             .into(imgAvatar)
         username.text = user.username
-        createDate.text = getDate(timenow, "dd/MM/yyyy")
+        createDate.text = getDate(timenow)
     }
 
-    fun getDate(milliSeconds: Long, dateFormat: String?): String? {
-        val formatter = SimpleDateFormat(dateFormat, Locale.ENGLISH)
+    fun getDate(milliSeconds: Long): String? {
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = milliSeconds
         return formatter.format(calendar.time)
@@ -201,6 +214,38 @@ class CreatePostFragment : BottomSheetDialogFragment() {
                 )
             }
         }
+
+        imvAddImage.setOnClickListener { ensurePermission(REQUEST_INTENT_CODE_MULTIPLE) }
+    }
+
+    private fun ensurePermission(requestCode: Int) {
+        if (checkPermission(listPermission)) {
+            openLibrary(requestCode)
+        } else
+            requestPermissions(listPermission.toTypedArray(), requestCode)
+    }
+
+    private fun checkPermission(listPermission: MutableList<String>): Boolean {
+        if (listPermission.isNullOrEmpty()) {
+            for (permission in listPermission) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                )
+                    return false
+            }
+        }
+
+        return true
+    }
+
+    private fun openLibrary(requestCode: Int) {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Select picture"), requestCode)
     }
 
     private fun initObserver() {
@@ -213,15 +258,157 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         })
     }
 
-    private fun onLoading() {}
+    private fun onLoading() {
+        btnpost.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
 
     private fun onSuccess() {
+        btnpost.visibility = View.VISIBLE
+        progressBar.visibility = View.INVISIBLE
         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         dialog?.dismiss()
 
     }
 
     private fun onFailure(message: String) {
-        Log.e(TAG, "onFailure: $message")
+        btnpost.visibility = View.VISIBLE
+        progressBar.visibility = View.INVISIBLE
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_INTENT_CODE_MULTIPLE) {
+            if (checkPermission(listPermission)) {
+                openLibrary(requestCode)
+            } else Toast.makeText(context, "Yêu cầu bị từ chối", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_INTENT_CODE_MULTIPLE -> {
+                data?.let {
+                    val clipData: ClipData? = it.clipData
+                    clipData?.let {
+                        listImages.clear()
+                        for (item in 0 until it.itemCount) {
+                            listImages.add(it.getItemAt(item).uri.toString())
+                        }
+                        updateImage()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateImage(){
+        when (listImages.size) {
+            0 -> {
+                showImage(0)
+            }
+
+            1 -> {
+                showImage(1)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[0])
+                    .into(img1)
+            }
+
+            2 -> {
+                showImage(2)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[0])
+                    .into(img21)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[1])
+                    .into(img22)
+            }
+
+            3 -> {
+                showImage(3)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[0])
+                    .into(img31)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[1])
+                    .into(img32)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[2])
+                    .into(img33)
+            }
+
+            4 -> {
+                showImage(4)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[0])
+                    .into(img41)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[1])
+                    .into(img42)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[2])
+                    .into(img43)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[3])
+                    .into(img44)
+            }
+
+            else -> {
+                showImage(5)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[0])
+                    .into(img51)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[1])
+                    .into(img52)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[2])
+                    .into(img53)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[3])
+                    .into(img54)
+                glide.applyDefaultRequestOptions(RequestOptions())
+                    .load(listImages[4])
+                    .into(img55)
+                tvImgNumber.text = "+${listImages.size - 5}"
+            }
+        }
+    }
+
+    private fun showImage(size: Int) {
+        ctl1.visibility = View.GONE
+        ctl2.visibility = View.GONE
+        ctl3.visibility = View.GONE
+        ctl4.visibility = View.GONE
+        ctl5.visibility = View.GONE
+
+        when (size) {
+            1 -> {
+                ctl1.visibility = View.VISIBLE
+            }
+            2 -> {
+                ctl2.visibility = View.VISIBLE
+            }
+            3 -> {
+                ctl3.visibility = View.VISIBLE
+            }
+            4 -> {
+                ctl4.visibility = View.VISIBLE
+            }
+            5 -> {
+                ctl5.visibility = View.VISIBLE
+            }
+            else -> {
+            }
+        }
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.caunb163.mxh.ui.main.home
 
-import android.util.Log
 import android.view.View
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +22,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private val TAG = "HomeFragment"
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private val viewModel: HomeViewModel by inject()
     private val localStorage: LocalStorage by inject()
     private val list = mutableListOf<Any>()
@@ -31,6 +32,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
 
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.home_recycleview)
+        progressBar = view.findViewById(R.id.home_progressbar)
 
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
@@ -62,9 +64,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     private fun onLoading() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.INVISIBLE
     }
 
     private fun onSuccess(listPost: MutableList<PostEntity>) {
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
         list.clear()
         list.add(user)
         list.addAll(listPost)
@@ -72,7 +78,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     private fun onFailure(message: String) {
-        Log.e(TAG, "onFailure: $message")
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
+        showToat(message)
     }
 
     override fun createPostClick() {

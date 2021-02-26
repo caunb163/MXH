@@ -3,7 +3,7 @@ package com.caunb163.domain.model
 data class PostEntity(
     val userId: String = "",
     val userName: String = "",
-    val userAvatar: String = "",
+    var userAvatar: String = "",
     val content: String = "",
     val createDate: Long = 1614164557887,
     val like: Boolean = false,

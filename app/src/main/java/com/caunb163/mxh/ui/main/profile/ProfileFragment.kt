@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.View
+import android.widget.ProgressBar
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
+import com.caunb163.mxh.ultis.CustomProgressBar
 import org.koin.android.ext.android.inject
 
 @Suppress("UNCHECKED_CAST")
@@ -27,6 +29,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick 
     private val REQUEST_BACKGROUND_CODE = 333
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     private val viewModel: ProfileViewModel by inject()
     private val localStorage: LocalStorage by inject()
@@ -34,12 +37,15 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick 
     private lateinit var glide: RequestManager
     private lateinit var profileAdapter: ProfileAdapter
     private lateinit var user: User
+    private lateinit var customProgressBar: CustomProgressBar
 
     private var listPermission = mutableListOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE)
     private lateinit var uri: Uri
 
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.profile_recyclerview)
+        progressBar = view.findViewById(R.id.profile_progressbar)
+        customProgressBar = CustomProgressBar(requireContext())
 
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
@@ -72,27 +78,61 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick 
 
         viewModel.stateAvatar.observe(this, Observer { state ->
             when (state) {
-                is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess()
+                is State.Loading -> onLoadingAvatar()
+                is State.Success<*> -> onSuccess(state.data as String)
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+
+        viewModel.stateBackground.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoadingAvatar()
+                is State.Success<*> -> onSuccessBackground(state.data as String)
                 is State.Failure -> onFailure(state.message)
             }
         })
     }
 
-    private fun onLoading() {}
+    private fun onLoading() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.INVISIBLE
+    }
+
+    private fun onLoadingAvatar() {
+        customProgressBar.show()
+    }
 
     private fun onSuccess(listPost: MutableList<PostEntity>) {
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
         list.clear()
         list.add(user)
         list.addAll(listPost)
         profileAdapter.updateData(list)
     }
 
-    private fun onSuccess() {
-        showToat("Success")
+    private fun onSuccess(uri: String) {
+        customProgressBar.dismiss()
+        for (obj in list) {
+            if (obj is PostEntity) {
+                obj.userAvatar = uri
+            } else if (obj is User) {
+                obj.photoUrl = uri
+            }
+        }
+        profileAdapter.notifyDataSetChanged()
+    }
+
+    private fun onSuccessBackground(uri: String) {
+        customProgressBar.dismiss()
+        (list[0] as User).photoBackground = uri
+        profileAdapter.notifyItemChanged(0)
     }
 
     private fun onFailure(message: String) {
+        customProgressBar.dismiss()
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
         showToat(message)
     }
 

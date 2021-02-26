@@ -8,8 +8,10 @@ import com.caunb163.domain.usecase.onboarding.RepositoryOnBoarding
 import com.caunb163.domain.usecase.profile.RepositoryProfile
 import com.caunb163.domain.usecase.register.RepositoryRegister
 import com.caunb163.domain.usecase.splash.RepositorySplash
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.dsl.module
 
+@ExperimentalCoroutinesApi
 val repositoryModule = module {
     factory<RepositorySplash> { RepositorySplashImpl(get()) }
     factory<RepositoryOnBoarding> { RepositoryOnBoardingImpl(get()) }
@@ -18,4 +20,5 @@ val repositoryModule = module {
     factory<RepositoryHome> { RepositoryHomeImpl(get()) }
     factory<RepositoryCreatePost> { RepositoryCreatePostImpl(get()) }
     factory<RepositoryProfile> { RepositoryProfileImpl(get(), get()) }
+    factory<RepositoryMainImpl> { RepositoryMainImpl(get()) }
 }

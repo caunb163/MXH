@@ -19,6 +19,9 @@ class ProfileViewModel(
     private val _stateAvatar: MutableLiveData<State> = MutableLiveData()
     val stateAvatar: LiveData<State> get() = _stateAvatar
 
+    private val _stateBackground: MutableLiveData<State> = MutableLiveData()
+    val stateBackground: LiveData<State> get() = _stateBackground
+
     fun getProfilePost() {
         viewModelScope.launch {
             _statePost.value = State.Loading
@@ -55,17 +58,17 @@ class ProfileViewModel(
 
     fun uploadBackground(uri: String) {
         viewModelScope.launch {
-            _stateAvatar.value = State.Loading
+            _stateBackground.value = State.Loading
             try {
                 val avatarState = withContext(Dispatchers.IO) {
                     return@withContext profileUseCase.updateBackground(uri)
                 }
 
-                _stateAvatar.value = State.Success(avatarState)
+                _stateBackground.value = State.Success(avatarState)
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                _stateAvatar.value = State.Failure("${e.message}")
+                _stateBackground.value = State.Failure("${e.message}")
             }
         }
     }

@@ -40,13 +40,15 @@
 
     <string name="menu_logout">Đăng xuất</string>
 
-    <string name="create_post">Bạn đang nghĩ gì?</string>
 
     <string name="post_like">Thích</string>
     <string name="post_comment">Bình luận</string>
     <string name="post_share">Chia sẻ</string>
+
+    <string name="create_post">Bạn đang nghĩ gì?</string>
     <string name="create_new_post">Tạo bài viết</string>
     <string name="create_post_send">Đăng</string>
+    <string name="create_post_addimage">Thêm vào bài viết</string>
 
     <string name="profile_username">Guest</string>
     <string name="profile_intro">Nếu ai cũng có thể hiểu bạn, vậy bạn phải bình thường tới mức nào đây?</string>
