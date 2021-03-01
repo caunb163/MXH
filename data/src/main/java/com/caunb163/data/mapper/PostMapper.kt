@@ -10,15 +10,15 @@ class PostMapper {
         userAvatar: String
     ): PostEntity {
         return PostEntity(
+            postId = post.postId,
             userId = post.userId,
             userName = username,
             userAvatar = userAvatar,
             content = post.content,
             createDate = post.createDate,
-            like = post.like,
-            likeNumber = post.likeNumber,
-            commentNumber = post.commentNumber,
-            images = post.images
+            images = post.images,
+            arrCmtId = post.arrCmtId,
+            arrLike = post.arrLike
         )
     }
 

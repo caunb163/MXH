@@ -15,17 +15,13 @@ class CreatePostViewModel(
 ) : ViewModel() {
 
     private val _state: MutableLiveData<State> = MutableLiveData()
-
     val state: LiveData<State> get() = _state
 
     fun createPost(
         userId: String,
-        likeNumber: Int,
-        like: Boolean,
         createDate: Long,
         images: List<String>,
-        content: String,
-        commentNumber: Int
+        content: String
     ) {
         viewModelScope.launch {
             _state.value = State.Loading
@@ -33,12 +29,11 @@ class CreatePostViewModel(
                 val createPostUseCase = withContext(Dispatchers.IO) {
                     return@withContext createPostUseCase.createPost(
                         userId,
-                        likeNumber,
-                        like,
                         createDate,
                         images,
                         content,
-                        commentNumber
+                        mutableListOf(),
+                        mutableListOf()
                     )
                 }
                 _state.value = State.Success(createPostUseCase)

@@ -12,13 +12,15 @@ import com.bumptech.glide.request.RequestOptions
 import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.caunb163.mxh.ui.main.home.HomeOnClick
 import com.caunb163.mxh.ui.main.home.PostViewHolder
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileAdapter(
     private val glide: RequestManager,
     private val user: User,
-    private val onClick: ProfileOnClick
+    private val profileOnClick: ProfileOnClick,
+    private val homeOnClick: HomeOnClick
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_PROFILE = 0
@@ -50,9 +52,14 @@ class ProfileAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == TYPE_POST) {
-            (holder as PostViewHolder).bind(glide, list[position] as PostEntity, userLocal)
+            (holder as PostViewHolder).bind(
+                glide,
+                list[position] as PostEntity,
+                userLocal,
+                homeOnClick
+            )
         } else {
-            (holder as ProfileViewHolder).bind(glide, list[position] as User, onClick)
+            (holder as ProfileViewHolder).bind(glide, list[position] as User, profileOnClick)
         }
     }
 
@@ -89,7 +96,7 @@ class ProfileAdapter(
         private var imvCameraBackground: CircleImageView =
             view.findViewById(R.id.profile_camera_background)
 
-        fun bind(glide: RequestManager, user: User, onClick: ProfileOnClick) {
+        fun bind(glide: RequestManager, user: User, profileOnClick: ProfileOnClick) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoBackground)
                 .into(imvBackground)
             glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl).into(imvAvatar)
@@ -98,18 +105,19 @@ class ProfileAdapter(
             address.setText(user.address)
             birthday.setText(user.birthDay)
             phone.setText(user.phone)
-            addListener(onClick)
+            addListener(profileOnClick)
         }
 
         fun unbind() {
             imvBackground.setImageDrawable(null)
             imvAvatar.setImageDrawable(null)
+            imvCameraAvatar.setOnClickListener(null)
+            imvCameraBackground.setOnClickListener(null)
         }
 
-        private fun addListener(onClick: ProfileOnClick) {
-            imvCameraAvatar.setOnClickListener { onClick.avatarClick() }
-
-            imvCameraBackground.setOnClickListener { onClick.backgroundClick() }
+        private fun addListener(profileOnClick: ProfileOnClick) {
+            imvCameraAvatar.setOnClickListener { profileOnClick.avatarClick() }
+            imvCameraBackground.setOnClickListener { profileOnClick.backgroundClick() }
         }
     }
 }

@@ -15,8 +15,10 @@ import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
+import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 
+@InternalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
 class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private val TAG = "HomeFragment"
@@ -53,8 +55,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     override fun initObserve() {
-        viewModel.getAllPost()
-        viewModel.statePost.observe(this, Observer { state ->
+        viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
                 is State.Success<*> -> onSuccess(state.data as MutableList<PostEntity>)
@@ -87,4 +88,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
     }
 
+    override fun onCommentClick(postId: String) {
+        val action = HomeFragmentDirections.actionHomeFragmentToCommentFragment(postId)
+        findNavController().navigate(action)
+    }
 }

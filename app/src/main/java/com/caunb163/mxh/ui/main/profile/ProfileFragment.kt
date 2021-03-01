@@ -19,11 +19,12 @@ import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
+import com.caunb163.mxh.ui.main.home.HomeOnClick
 import com.caunb163.mxh.ultis.CustomProgressBar
 import org.koin.android.ext.android.inject
 
 @Suppress("UNCHECKED_CAST")
-class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick {
+class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick, HomeOnClick {
     private val TAG = "ProfileFragment"
     private val REQUEST_AVATAR_CODE = 222
     private val REQUEST_BACKGROUND_CODE = 333
@@ -55,7 +56,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick 
         )
 
         user = localStorage.getAccount()!!
-        profileAdapter = ProfileAdapter(glide, user, this)
+        profileAdapter = ProfileAdapter(glide, user, this, this)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -212,4 +213,11 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick 
     private fun uploadBackground(uri: String) {
         viewModel.uploadBackground(uri)
     }
+
+    override fun createPostClick() {
+    }
+
+    override fun onCommentClick(postId: String) {
+    }
+
 }

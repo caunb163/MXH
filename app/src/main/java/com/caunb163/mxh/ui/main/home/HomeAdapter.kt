@@ -41,7 +41,7 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder.itemViewType == TYPE_POST) {
-            (holder as PostViewHolder).bind(glide, list[position] as PostEntity, user)
+            (holder as PostViewHolder).bind(glide, list[position] as PostEntity, user, homeOnClick)
         } else {
             (holder as CreatePostViewHolder).bind(glide, list[position] as User, homeOnClick)
         }
@@ -78,6 +78,7 @@ class HomeAdapter(
 
         fun unbind() {
             imgAvatar.setImageDrawable(null)
+            tvCreatePost.setOnClickListener(null)
         }
     }
 }

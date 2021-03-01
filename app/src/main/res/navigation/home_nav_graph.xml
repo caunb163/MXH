@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </fragment>
 
     <fragment
@@ -35,4 +38,14 @@
         android:name="com.caunb163.mxh.ui.main.home.create_post.CreatePostFragment"
         android:label="fragment_create_post"
         tools:layout="@layout/fragment_create_post" />
+    <dialog
+        android:id="@+id/commentFragment"
+        android:name="com.caunb163.mxh.ui.main.home.comment.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment">
+
+        <argument
+            android:name="postId"
+            app:argType="string"/>
+    </dialog>
 </navigation>

@@ -6,10 +6,10 @@ import android.app.Dialog
 import android.content.ClipData
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,7 +79,6 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private var timenow: Long = 0
 
     private var listPermission = mutableListOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private var uriList: MutableList<Uri> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,9 +96,9 @@ class CreatePostFragment : BottomSheetDialogFragment() {
             val bottomSheetDialog = it as BottomSheetDialog
             val parentLayout =
                 bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            parentLayout?.let { it ->
-                val behaviour = BottomSheetBehavior.from(it)
-                setupFullHeight(it)
+            parentLayout?.let { it1 ->
+                val behaviour = BottomSheetBehavior.from(it1)
+                setupFullHeight(it1)
                 behaviour.state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
@@ -205,12 +204,9 @@ class CreatePostFragment : BottomSheetDialogFragment() {
             if (content.text.isNotEmpty()) {
                 viewModel.createPost(
                     user.userId,
-                    0,
-                    false,
                     timenow,
                     listImages,
-                    content.text.toString(),
-                    0
+                    content.text.toString()
                 )
             }
         }
@@ -296,6 +292,10 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         when (requestCode) {
             REQUEST_INTENT_CODE_MULTIPLE -> {
                 data?.let {
+                    it.data?.let {
+                        listImages.add(it.toString())
+                        updateImage()
+                    }
                     val clipData: ClipData? = it.clipData
                     clipData?.let {
                         listImages.clear()
@@ -303,13 +303,15 @@ class CreatePostFragment : BottomSheetDialogFragment() {
                             listImages.add(it.getItemAt(item).uri.toString())
                         }
                         updateImage()
+                        Log.e(TAG, "onActivityResult size: ${listImages.size} ")
                     }
                 }
             }
         }
     }
 
-    private fun updateImage(){
+    @SuppressLint("SetTextI18n")
+    private fun updateImage() {
         when (listImages.size) {
             0 -> {
                 showImage(0)
@@ -378,7 +380,12 @@ class CreatePostFragment : BottomSheetDialogFragment() {
                 glide.applyDefaultRequestOptions(RequestOptions())
                     .load(listImages[4])
                     .into(img55)
-                tvImgNumber.text = "+${listImages.size - 5}"
+                if (listImages.size == 5) {
+                    tvImgNumber.visibility = View.INVISIBLE
+                } else {
+                    tvImgNumber.visibility = View.VISIBLE
+                    tvImgNumber.text = "+${listImages.size - 5}"
+                }
             }
         }
     }

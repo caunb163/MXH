@@ -15,12 +15,11 @@ class RepositoryCreatePostImpl(
 ) : RepositoryCreatePost {
     override suspend fun createPost(
         userId: String,
-        likeNumber: Int,
-        like: Boolean,
         createDate: Long,
         images: List<String>,
         content: String,
-        commentNumber: Int
+        arrCmtId: List<String>,
+        arrLike: List<String>
     ) {
         val db = Firebase.firestore
         val listImage = mutableListOf<String>()
@@ -47,19 +46,19 @@ class RepositoryCreatePostImpl(
         }
 
         val post = Post(
-            userId,
-            content,
-            createDate,
-            like,
-            likeNumber,
-            commentNumber,
-            listImage
+            userId = userId,
+            content = content,
+            createDate = createDate,
+            images = listImage,
+            arrCmtId = arrCmtId,
+            arrLike = arrLike
         )
 
         db.collection("Posts").add(post).addOnSuccessListener { it ->
             user.arrPostId.add(it.id)
             localStorage.saveAccount(user)
             db.collection("Users").document(userId).update("arrPostId", user.arrPostId)
+            db.collection("Posts").document(it.id).update("postId",it.id)
         }.await()
     }
 }

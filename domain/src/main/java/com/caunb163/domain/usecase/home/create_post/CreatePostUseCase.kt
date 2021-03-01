@@ -5,21 +5,19 @@ class CreatePostUseCase(
 ) {
     suspend fun createPost(
         userId: String,
-        likeNumber: Int,
-        like: Boolean,
         createDate: Long,
         images: List<String>,
         content: String,
-        commentNumber: Int
+        arrCmtId: List<String>,
+        arrLike: List<String>
     ) {
         repositotyCreatePost.createPost(
             userId,
-            likeNumber,
-            like,
             createDate,
             images,
             content,
-            commentNumber
+            arrCmtId,
+            arrLike
         )
     }
 }

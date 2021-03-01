@@ -1,6 +1,5 @@
 package com.caunb163.data.repository
 
-import android.util.Log
 import com.caunb163.data.firebase.Auth
 import com.caunb163.domain.model.User
 import com.google.firebase.firestore.ktx.firestore
@@ -26,11 +25,9 @@ class RepositoryMainImpl(private val auth: Auth) {
             var user = User()
             value?.let {
                 user = value.toObject(User::class.java)!!
-                Log.e(TAG, "saveUser: $user")
+                offer(user)
             }
-            offer(user)
         }
-
         awaitClose { subscription.remove() }
     }
 }

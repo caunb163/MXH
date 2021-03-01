@@ -56,15 +56,19 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private var tvImgNumber: TextView = view.findViewById(R.id.post_tv_img_number)
 
     @SuppressLint("SetTextI18n")
-    fun bind(glide: RequestManager, post: PostEntity, user: User) {
+    fun bind(glide: RequestManager, post: PostEntity, user: User, onClick: HomeOnClick) {
 
         username.text = post.userName
         glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
 
         createDate.text = getDate(post.createDate)
         content.text = post.content
-        likeNumber.text = post.likeNumber.toString()
-        commentNumber.text = "${post.commentNumber} bình luận"
+        likeNumber.text = post.arrLike.size.toString()
+        commentNumber.text = "${post.arrCmtId.size} bình luận"
+
+        comment.setOnClickListener {
+            onClick.onCommentClick(post.postId)
+        }
 
 
         when (post.images.size) {
@@ -120,7 +124,13 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     .into(img54)
                 glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[4])
                     .into(img55)
-                tvImgNumber.text = "+${post.images.size - 5}"
+
+                if (post.images.size == 5) {
+                    tvImgNumber.visibility = View.INVISIBLE
+                } else {
+                    tvImgNumber.visibility = View.VISIBLE
+                    tvImgNumber.text = "+${post.images.size - 5}"
+                }
             }
         }
 
@@ -130,6 +140,7 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun unbind() {
         imgAvatar.setImageDrawable(null)
+        comment.setOnClickListener(null)
     }
 
     private fun getDate(milliSeconds: Long): String? {
