@@ -18,8 +18,8 @@ class RepositoryCreatePostImpl(
         createDate: Long,
         images: List<String>,
         content: String,
-        arrCmtId: List<String>,
-        arrLike: List<String>
+        arrCmtId: MutableList<String>,
+        arrLike: MutableList<String>
     ) {
         val db = Firebase.firestore
         val listImage = mutableListOf<String>()

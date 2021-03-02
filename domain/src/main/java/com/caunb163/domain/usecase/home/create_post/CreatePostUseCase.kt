@@ -8,8 +8,8 @@ class CreatePostUseCase(
         createDate: Long,
         images: List<String>,
         content: String,
-        arrCmtId: List<String>,
-        arrLike: List<String>
+        arrCmtId: MutableList<String>,
+        arrLike: MutableList<String>
     ) {
         repositotyCreatePost.createPost(
             userId,

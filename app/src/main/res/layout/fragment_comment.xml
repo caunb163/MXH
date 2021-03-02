@@ -74,6 +74,15 @@
         app:layout_constraintBottom_toTopOf="@id/view2"
         app:layout_constraintTop_toBottomOf="@id/view1" />
 
+    <ProgressBar
+        android:id="@+id/cmt_progressbar"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/view1" />
+
     <View
         android:id="@+id/view2"
         android:layout_width="match_parent"
@@ -81,7 +90,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:background="@color/gray"
-        app:layout_constraintBottom_toTopOf="@id/cmt_edt_cmt" />
+        app:layout_constraintBottom_toTopOf="@id/cmt_image" />
 
     <ImageView
         android:id="@+id/cmt_imv_camera"
@@ -96,21 +105,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_send"
-        app:layout_constraintBottom_toBottomOf="@id/cmt_imv_camera"
+        app:layout_constraintBottom_toBottomOf="@id/cmt_edt_cmt"
         app:layout_constraintEnd_toEndOf="@id/guideline_end" />
 
+    <ProgressBar
+        android:id="@+id/cmt_progressbar_cmt"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/cmt_imv_send"
+        app:layout_constraintEnd_toEndOf="@id/cmt_imv_send"
+        app:layout_constraintStart_toStartOf="@id/cmt_imv_send"
+        app:layout_constraintTop_toTopOf="@id/cmt_imv_send" />
+
     <EditText
-        android:layout_marginStart="5dp"
         android:id="@+id/cmt_edt_cmt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/custom_background_comment"
         android:hint="@string/cmt_cmt"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/cmt_imv_send"
-        app:layout_constraintStart_toEndOf="@id/cmt_imv_camera"
-        android:layout_marginBottom="5dp"/>
+        app:layout_constraintStart_toEndOf="@id/cmt_imv_camera" />
+
+    <ImageView
+        android:id="@+id/cmt_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
+        android:src="@drawable/bg1"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/cmt_edt_cmt"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toEndOf="@id/cmt_imv_camera" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,9 @@
 package com.caunb163.mxh.ui.main.home.create_post
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ClipData
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,7 +15,6 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -25,6 +22,7 @@ import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.state.State
+import com.caunb163.mxh.ultis.CheckPermission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -37,7 +35,7 @@ import java.util.*
 class CreatePostFragment : BottomSheetDialogFragment() {
     private val TAG = "CreatePostFragment"
 
-    private val REQUEST_INTENT_CODE_MULTIPLE = 1234
+    private val REQUEST_INTENT_CODE_MULTIPLE = 5678
 
     private lateinit var toolbar: Toolbar
     private lateinit var btnpost: Button
@@ -77,8 +75,6 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private val viewModel: CreatePostViewModel by inject()
     private val listImages = mutableListOf<String>()
     private var timenow: Long = 0
-
-    private var listPermission = mutableListOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -172,7 +168,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         createDate.text = getDate(timenow)
     }
 
-    fun getDate(milliSeconds: Long): String? {
+    private fun getDate(milliSeconds: Long): String? {
         val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = milliSeconds
@@ -211,37 +207,30 @@ class CreatePostFragment : BottomSheetDialogFragment() {
             }
         }
 
-        imvAddImage.setOnClickListener { ensurePermission(REQUEST_INTENT_CODE_MULTIPLE) }
-    }
-
-    private fun ensurePermission(requestCode: Int) {
-        if (checkPermission(listPermission)) {
-            openLibrary(requestCode)
-        } else
-            requestPermissions(listPermission.toTypedArray(), requestCode)
-    }
-
-    private fun checkPermission(listPermission: MutableList<String>): Boolean {
-        if (listPermission.isNullOrEmpty()) {
-            for (permission in listPermission) {
-                if (ActivityCompat.checkSelfPermission(
-                        requireContext(),
-                        permission
-                    ) != PackageManager.PERMISSION_GRANTED
-                )
-                    return false
-            }
+        imvAddImage.setOnClickListener {
+            ensurePermission()
         }
-
-        return true
     }
 
-    private fun openLibrary(requestCode: Int) {
+    private fun ensurePermission() {
+        if (CheckPermission.checkPermission(requireContext())) {
+            openLibraryMultiple()
+        } else
+            requestPermissions(
+                CheckPermission.listPermission.toTypedArray(),
+                REQUEST_INTENT_CODE_MULTIPLE
+            )
+    }
+
+    private fun openLibraryMultiple() {
         val intent = Intent()
         intent.type = "image/*"
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Select picture"), requestCode)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(
+            Intent.createChooser(intent, "Select picture"),
+            REQUEST_INTENT_CODE_MULTIPLE
+        )
     }
 
     private fun initObserver() {
@@ -280,8 +269,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_INTENT_CODE_MULTIPLE) {
-            if (checkPermission(listPermission)) {
-                openLibrary(requestCode)
+            if (CheckPermission.checkPermission(requireContext())) {
+                openLibraryMultiple()
             } else Toast.makeText(context, "Yêu cầu bị từ chối", Toast.LENGTH_SHORT).show()
         }
     }

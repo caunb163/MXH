@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.Comment
 import com.caunb163.domain.model.CommentEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
@@ -52,9 +51,20 @@ class CommentAdapter(
         fun bind(glide: RequestManager, user: User, comment: CommentEntity) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(comment.userAvatar)
                 .into(imgAvatar)
-            glide.applyDefaultRequestOptions(RequestOptions()).load(comment.image).into(imageview)
+            if (comment.image.isNotEmpty()) {
+                imageview.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(comment.image)
+                    .into(imageview)
+            } else {
+                imageview.visibility = View.GONE
+            }
             tvUserName.text = comment.username
-            tvContent.text = comment.content
+            if (comment.content.isNotEmpty()) {
+                tvContent.visibility = View.VISIBLE
+                tvContent.text = comment.content
+            } else {
+                tvContent.visibility = View.GONE
+            }
         }
 
         fun unbind() {

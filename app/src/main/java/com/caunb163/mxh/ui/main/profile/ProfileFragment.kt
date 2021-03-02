@@ -20,6 +20,7 @@ import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ui.main.home.HomeOnClick
+import com.caunb163.mxh.ultis.CheckPermission
 import com.caunb163.mxh.ultis.CustomProgressBar
 import org.koin.android.ext.android.inject
 
@@ -40,7 +41,6 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
     private lateinit var user: User
     private lateinit var customProgressBar: CustomProgressBar
 
-    private var listPermission = mutableListOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE)
     private lateinit var uri: Uri
 
     override fun initView(view: View) {
@@ -146,25 +146,10 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
     }
 
     private fun ensurePermission(requestCode: Int) {
-        if (checkPermission(listPermission)) {
+        if (CheckPermission.checkPermission(requireContext())) {
             openLibrary(requestCode)
         } else
-            requestPermissions(listPermission.toTypedArray(), requestCode)
-    }
-
-    private fun checkPermission(listPermission: MutableList<String>): Boolean {
-        if (listPermission.isNullOrEmpty()) {
-            for (permission in listPermission) {
-                if (ActivityCompat.checkSelfPermission(
-                        requireContext(),
-                        permission
-                    ) != PackageManager.PERMISSION_GRANTED
-                )
-                    return false
-            }
-        }
-
-        return true
+            requestPermissions(CheckPermission.listPermission.toTypedArray(), requestCode)
     }
 
     private fun openLibrary(requestCode: Int) {
@@ -181,7 +166,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if ((requestCode == REQUEST_AVATAR_CODE) || (requestCode == REQUEST_BACKGROUND_CODE)) {
-            if (checkPermission(listPermission)) {
+            if (CheckPermission.checkPermission(requireContext())) {
                 openLibrary(requestCode)
             } else showToat("Yêu cầu bị từ chối")
         }
