@@ -83,7 +83,6 @@ class CommentFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         postId = args.postId
-        Log.e(TAG, "onViewCreated: $postId")
         initview(view)
         initObserve()
     }
@@ -111,6 +110,7 @@ class CommentFragment : BottomSheetDialogFragment() {
     }
 
     fun initObserve() {
+        viewModel.setPostId(postId)
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()

@@ -1,9 +1,9 @@
 package com.caunb163.data.repository
 
-import android.util.Log
 import com.caunb163.data.mapper.CommentMapper
 import com.caunb163.domain.model.Comment
 import com.caunb163.domain.model.CommentEntity
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -17,10 +17,10 @@ class RepositoryCommentImpl(
     private val commentMapper: CommentMapper
 ) {
     private val TAG = "RepositoryCommentImpl"
-    suspend fun getAllComment(): Flow<List<CommentEntity>> = callbackFlow {
+    suspend fun getAllComment(postId: String): Flow<List<CommentEntity>> = callbackFlow {
         val db = Firebase.firestore
-        val data = db.collection("Comments")
 
+        val data = db.collection("Posts").document(postId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -29,23 +29,35 @@ class RepositoryCommentImpl(
             val commentEntityList = mutableListOf<CommentEntity>()
 
             value?.let {
-                for (result in value) {
-                    val comment = result.toObject(Comment::class.java)
-                    db.collection("Users").document(comment.userId).get()
-                        .addOnCompleteListener { task ->
-                            val user = task.result?.toObject(User::class.java)
-                            val commentEntity = commentMapper.toEntity(
-                                comment,
-                                user?.username ?: "",
-                                user?.photoUrl ?: ""
-                            )
-                            commentEntityList.add(commentEntity)
-                            commentEntityList.sortByDescending { it.time.inc() }
-                            offer(commentEntityList)
-                        }
+                val post = it.toObject(Post::class.java)
+                post?.let { p ->
+                    for (cmtId in p.arrCmtId) {
+                        db.collection("Comments").document(cmtId).get()
+                            .addOnCompleteListener { task ->
+                                val cmt = task.result?.toObject(Comment::class.java)
+                                cmt?.let { comment ->
+                                    db.collection("Users").document(comment.userId).get()
+                                        .addOnCompleteListener { t ->
+                                            val user = t.result?.toObject(User::class.java)
+                                            val cmtEntity = commentMapper.toEntity(
+                                                comment,
+                                                user?.username ?: "",
+                                                user?.photoUrl ?: ""
+                                            )
+
+                                            commentEntityList.add(cmtEntity)
+                                            commentEntityList.sortByDescending { l ->
+                                                l.time.inc()
+                                            }
+                                            offer(commentEntityList)
+                                        }
+                                }
+                            }
+                    }
                 }
             }
         }
+
         awaitClose { subscription.remove() }
     }
 }
