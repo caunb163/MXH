@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:text="20"
+        android:text="0"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/cmt_imv_heart"
         app:layout_constraintStart_toEndOf="@id/cmt_imv_heart"
@@ -54,6 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_like"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/cmt_imv_heart"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toTopOf="@id/cmt_imv_heart" />

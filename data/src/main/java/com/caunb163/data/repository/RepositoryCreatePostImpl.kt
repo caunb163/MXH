@@ -58,7 +58,6 @@ class RepositoryCreatePostImpl(
             user.arrPostId.add(it.id)
             localStorage.saveAccount(user)
             db.collection("Users").document(userId).update("arrPostId", user.arrPostId)
-            db.collection("Posts").document(it.id).update("postId",it.id)
         }.await()
     }
 }

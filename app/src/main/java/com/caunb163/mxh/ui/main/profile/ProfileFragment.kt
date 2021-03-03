@@ -1,12 +1,9 @@
 package com.caunb163.mxh.ui.main.profile
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.view.View
 import android.widget.ProgressBar
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -199,10 +196,17 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         viewModel.uploadBackground(uri)
     }
 
-    override fun createPostClick() {
-    }
+    override fun createPostClick() {}
 
-    override fun onCommentClick(postId: String) {
+    override fun onCommentClick(post: PostEntity) {}
+
+    override fun onLikeClick(postId: String) {}
+
+    override fun onShareClick(content: String) {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
+        startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
     }
 
 }

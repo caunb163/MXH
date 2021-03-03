@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +17,7 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.CommentEntity
+import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.state.State
@@ -44,6 +42,7 @@ class CommentFragment : BottomSheetDialogFragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var progressBarCmt: ProgressBar
+    private lateinit var tvLike: TextView
 
     private val viewModel: CommentViewModel by inject()
     private val localStorage: LocalStorage by inject()
@@ -52,8 +51,8 @@ class CommentFragment : BottomSheetDialogFragment() {
     private lateinit var user: User
 
     private val list = mutableListOf<CommentEntity>()
-    val args: CommentFragmentArgs by navArgs()
-    private lateinit var postId: String
+    private val args: CommentFragmentArgs by navArgs()
+    private lateinit var post: PostEntity
     private var timenow: Long = 0
     private var image: String = ""
 
@@ -90,10 +89,11 @@ class CommentFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        postId = args.postId
+        post = args.post
         initview(view)
         initObserve()
         addListener()
+        tvLike.text = "${post.arrLike.size}"
     }
 
     private fun initview(view: View) {
@@ -105,6 +105,7 @@ class CommentFragment : BottomSheetDialogFragment() {
         recyclerView = view.findViewById(R.id.cmt_recycler_view)
         progressBar = view.findViewById(R.id.cmt_progressbar)
         progressBarCmt = view.findViewById(R.id.cmt_progressbar_cmt)
+        tvLike = view.findViewById(R.id.cmt_tv_like)
 
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
@@ -128,7 +129,7 @@ class CommentFragment : BottomSheetDialogFragment() {
                 viewModel.createComment(
                     user.userId,
                     timenow,
-                    postId,
+                    post.postId,
                     image,
                     edtComment.text.toString()
                 )
@@ -144,7 +145,7 @@ class CommentFragment : BottomSheetDialogFragment() {
     }
 
     fun initObserve() {
-        viewModel.setPostId(postId)
+        viewModel.setPostId(post.postId)
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()

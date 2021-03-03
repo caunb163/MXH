@@ -6,11 +6,12 @@ import com.caunb163.domain.model.Post
 class PostMapper {
     fun toEntity(
         post: Post,
+        postId: String,
         username: String,
         userAvatar: String
     ): PostEntity {
         return PostEntity(
-            postId = post.postId,
+            postId = postId,
             userId = post.userId,
             userName = username,
             userAvatar = userAvatar,

@@ -29,9 +29,12 @@ class RepositoryProfileImpl(
             val post = data.toObject(Post::class.java)
             db.collection("Users").document(post!!.userId).get().addOnCompleteListener { task ->
                 val user = task.result?.toObject(User::class.java)
-                val postEntity =
-                    postMapper.toEntity(post, user?.username ?: "", user?.photoUrl ?: "")
-                list.add(postEntity)
+                user?.let { u ->
+                    val postEntity =
+                        postMapper.toEntity(post, postId, u.username, u.photoUrl)
+                    list.add(postEntity)
+                }
+
             }.await()
         }
         list.sortByDescending { it.createDate.inc() }

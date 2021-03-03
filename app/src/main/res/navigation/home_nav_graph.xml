@@ -45,7 +45,7 @@
         tools:layout="@layout/fragment_comment">
 
         <argument
-            android:name="postId"
-            app:argType="string"/>
+            android:name="post"
+            app:argType="com.caunb163.domain.model.PostEntity"/>
     </dialog>
 </navigation>

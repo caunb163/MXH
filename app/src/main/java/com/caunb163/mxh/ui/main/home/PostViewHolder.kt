@@ -1,6 +1,7 @@
 package com.caunb163.mxh.ui.main.home
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -55,21 +56,35 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private var img55: ImageView = view.findViewById(R.id.post_5_img5)
     private var tvImgNumber: TextView = view.findViewById(R.id.post_tv_img_number)
 
-    @SuppressLint("SetTextI18n")
-    fun bind(glide: RequestManager, post: PostEntity, user: User, onClick: HomeOnClick) {
+    private var imvlike: ImageView = view.findViewById(R.id.post_ll_imv_like)
+    private var tvlike: TextView = view.findViewById(R.id.post_ll_tv_like)
 
+    @SuppressLint("SetTextI18n")
+    fun bind(
+        glide: RequestManager,
+        post: PostEntity,
+        user: User,
+        onClick: HomeOnClick
+    ) {
         username.text = post.userName
         glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
-
         createDate.text = getDate(post.createDate)
         content.text = post.content
         likeNumber.text = post.arrLike.size.toString()
+        if (post.arrLike.contains(user.userId)) {
+            imvlike.setImageResource(R.drawable.ic_heart_red)
+            tvlike.setTextColor(Color.RED)
+        } else {
+            imvlike.setImageResource(R.drawable.ic_heart)
+            tvlike.setTextColor(Color.GRAY)
+        }
         commentNumber.text = "${post.arrCmtId.size} bình luận"
 
-        comment.setOnClickListener {
-            onClick.onCommentClick(post.postId)
-        }
+        comment.setOnClickListener { onClick.onCommentClick(post) }
 
+        like.setOnClickListener { onClick.onLikeClick(post.postId) }
+
+        share.setOnClickListener { onClick.onShareClick(post.content) }
 
         when (post.images.size) {
             0 -> {
@@ -141,6 +156,8 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun unbind() {
         imgAvatar.setImageDrawable(null)
         comment.setOnClickListener(null)
+        like.setOnClickListener(null)
+        share.setOnClickListener(null)
     }
 
     private fun getDate(milliSeconds: Long): String? {
@@ -156,7 +173,6 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         ctl3.visibility = View.GONE
         ctl4.visibility = View.GONE
         ctl5.visibility = View.GONE
-
         when (size) {
             1 -> {
                 ctl1.visibility = View.VISIBLE

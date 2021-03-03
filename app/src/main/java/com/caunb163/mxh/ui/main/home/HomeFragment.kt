@@ -1,5 +1,6 @@
 package com.caunb163.mxh.ui.main.home
 
+import android.content.Intent
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
@@ -55,10 +56,18 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     override fun initObserve() {
+        viewModel.getAllPost()
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
                 is State.Success<*> -> onSuccess(state.data as MutableList<PostEntity>)
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+        viewModel.stateLike.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoadingLike()
+                is State.Success<*> -> onSuccessLike()
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -69,6 +78,50 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         recyclerView.visibility = View.INVISIBLE
     }
 
+    private fun onLoadingLike() {}
+
+    private fun onSuccessLike() {}
+
+    private fun onSuccessListener(post: PostEntity) {
+        if (post.userId.isEmpty()) {
+            val index = checkPostIndex(post)
+            if (index != -1) {
+                list.removeAt(index)
+                homeAdapter.notifyItemRemoved(index)
+            }
+        } else if (checkListAdd(post)) {
+            val index = checkPostIndex(post)
+            if (index != -1) {
+                list[index] = post
+                homeAdapter.notifyItemChanged(index)
+            }
+        } else {
+            if (!list.contains(post)) {
+                list.add(1, post)
+                homeAdapter.notifyItemInserted(1)
+            }
+        }
+    }
+
+    private fun checkPostIndex(post: PostEntity): Int {
+        for (index in 1 until list.size)
+            if ((list[index] as PostEntity).postId == post.postId) {
+                return index
+            }
+        return -1
+    }
+
+    private fun checkListAdd(post: PostEntity): Boolean {
+        list.forEach {
+            if (it is PostEntity) {
+                if (it.postId == post.postId) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     private fun onSuccess(listPost: MutableList<PostEntity>) {
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
@@ -76,6 +129,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         list.add(user)
         list.addAll(listPost)
         homeAdapter.updateData(list)
+
+        viewModel.listener.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoadingLike()
+                is State.Success<*> -> onSuccessListener(state.data as PostEntity)
+                is State.Failure -> onFailure(state.message)
+            }
+        })
     }
 
     private fun onFailure(message: String) {
@@ -88,8 +149,19 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
     }
 
-    override fun onCommentClick(postId: String) {
-        val action = HomeFragmentDirections.actionHomeFragmentToCommentFragment(postId)
+    override fun onCommentClick(post: PostEntity) {
+        val action = HomeFragmentDirections.actionHomeFragmentToCommentFragment(post)
         findNavController().navigate(action)
+    }
+
+    override fun onLikeClick(postId: String) {
+        viewModel.likePost(postId)
+    }
+
+    override fun onShareClick(content: String) {
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
+        startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
     }
 }
