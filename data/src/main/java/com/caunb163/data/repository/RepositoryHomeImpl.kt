@@ -100,25 +100,18 @@ class RepositoryHomeImpl(
                                 )
                                 when (dc.type) {
                                     DocumentChange.Type.ADDED -> {
-                                        Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
+//                                        Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
                                         offer(postEntity)
                                     }
                                     DocumentChange.Type.MODIFIED -> {
-                                        Log.e(
-                                            TAG,
-                                            "listenerPostChange: MODIFIED ${dc.document.data}"
-                                        )
+//                                        Log.e(TAG, "listenerPostChange: MODIFIED ${dc.document.data}")
                                         offer(postEntity)
                                     }
                                     DocumentChange.Type.REMOVED -> {
-                                        Log.e(
-                                            TAG,
-                                            "listenerPostChange: REMOVED ${PostEntity(postId = postEntity.postId)}"
-                                        )
+//                                        Log.e(TAG, "listenerPostChange: REMOVED ${PostEntity(postId = postEntity.postId)}")
                                         offer(PostEntity(postId = postEntity.postId))
                                     }
                                 }
-
                             }
                         }
                 }

@@ -21,4 +21,5 @@ val repositoryModule = module {
     factory<RepositoryProfile> { RepositoryProfileImpl(get(), get()) }
     factory<RepositoryMainImpl> { RepositoryMainImpl(get()) }
     factory<RepositoryCommentImpl> { (RepositoryCommentImpl(get())) }
+    factory<RepositoryGroupImpl> { RepositoryGroupImpl(get()) }
 }

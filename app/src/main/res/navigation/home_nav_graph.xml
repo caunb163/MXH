@@ -22,7 +22,11 @@
         android:id="@+id/messengerFragment"
         android:name="com.caunb163.mxh.ui.main.messenger.MessengerFragment"
         android:label="fragment_messenger"
-        tools:layout="@layout/fragment_messenger" />
+        tools:layout="@layout/fragment_messenger" >
+        <action
+            android:id="@+id/action_messengerFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.caunb163.mxh.ui.main.profile.ProfileFragment"
@@ -48,4 +52,14 @@
             android:name="post"
             app:argType="com.caunb163.domain.model.PostEntity"/>
     </dialog>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.caunb163.mxh.ui.main.messenger.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+
+        <argument android:name="group"
+            app:argType="com.caunb163.domain.model.GroupEntity"/>
+
+    </fragment>
 </navigation>

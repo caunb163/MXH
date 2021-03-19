@@ -9,4 +9,4 @@ data class Post(
     val images: List<String> = mutableListOf(),
     var arrCmtId: MutableList<String> = mutableListOf(),
     var arrLike: MutableList<String> = mutableListOf()
-): Serializable
+) : Serializable

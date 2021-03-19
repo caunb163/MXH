@@ -5,6 +5,7 @@ import com.caunb163.mxh.ui.main.MainViewModel
 import com.caunb163.mxh.ui.main.home.HomeViewModel
 import com.caunb163.mxh.ui.main.home.comment.CommentViewModel
 import com.caunb163.mxh.ui.main.home.create_post.CreatePostViewModel
+import com.caunb163.mxh.ui.main.messenger.MessengerViewModel
 import com.caunb163.mxh.ui.main.profile.ProfileViewModel
 import com.caunb163.mxh.ui.onboarding.OnBoardingViewModel
 import com.caunb163.mxh.ui.register.RegisterViewModel
@@ -24,4 +25,5 @@ val viewModelModule = module {
     viewModel<ProfileViewModel> { ProfileViewModel(get()) }
     viewModel<MainViewModel> { MainViewModel(get()) }
     viewModel<CommentViewModel> { CommentViewModel(get()) }
+    viewModel<MessengerViewModel> { MessengerViewModel(get(), get()) }
 }

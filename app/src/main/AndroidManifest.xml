@@ -14,8 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MXH">
-        <activity android:name=".ui.main.home.comment.CommentActivity" />
-        <activity android:name=".ui.main.home.create_post.CreatePostActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

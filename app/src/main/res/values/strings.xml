@@ -2,6 +2,7 @@
     <string name="app_name">MXH</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="fab_content">Add</string>
 
     <string name="action_on_boarding_done">Bắt đầu</string>
     <string name="action_on_boarding_skip">Bỏ qua</string>
@@ -58,6 +59,10 @@
     <string name="profile_post">Bài viết</string>
 
     <string name="cmt_cmt">Viết bình luận…</string>
+
+    <string name="chat_messenger">Messenger</string>
+    <string name="chat_name">Group Name</string>
+    <string name="chat_chat">Nhập tin nhắn…</string>
 
 
 </resources>
