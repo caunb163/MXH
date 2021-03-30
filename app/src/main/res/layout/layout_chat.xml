@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewFlipper xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chat_viewflipper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_avatar1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/chat_message1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/custom_background_chat1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Xin chào"
+            app:layout_constraintBottom_toBottomOf="@id/chat_avatar1"
+            app:layout_constraintStart_toEndOf="@id/chat_avatar1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/chat_avatar2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_user"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/chat_message2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/custom_background_chat2"
+            android:gravity="center"
+            android:padding="5dp"
+            android:text="Xin chào"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/chat_avatar2"
+            app:layout_constraintEnd_toStartOf="@id/chat_avatar2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ViewFlipper>

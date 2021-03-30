@@ -1,6 +1,7 @@
 package com.caunb163.mxh.ui.main.messenger
 
 import android.view.View
+import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,10 +23,11 @@ import org.koin.android.ext.android.inject
 class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClickListener {
     private val TAG = "MessengerFragment"
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var createBtn: FloatingActionButton
     private val viewModel: MessengerViewModel by inject()
     private val localStorage: LocalStorage by inject()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var createBtn: FloatingActionButton
     private lateinit var glide: RequestManager
     private lateinit var groupAdapter: GroupAdapter
     private val list = mutableListOf<GroupEntity>()
@@ -33,6 +35,7 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.message_recyclerview)
         createBtn = view.findViewById(R.id.message_create)
+        progressBar = view.findViewById(R.id.message_progressbar)
 
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
@@ -49,7 +52,11 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
 
     }
 
-    override fun initListener() {}
+    override fun initListener() {
+        createBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_messengerFragment_to_createGroupFragment)
+        }
+    }
 
     override fun initObserve() {
         viewModel.getAllMyGroup()
@@ -62,9 +69,14 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
         })
     }
 
-    private fun onLoading() {}
+    private fun onLoading() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.INVISIBLE
+    }
 
     private fun onSuccess(groups: MutableList<GroupEntity>) {
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
         list.clear()
         list.addAll(groups)
         groupAdapter.updateData(list)
@@ -117,6 +129,8 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
 //    }
 
     private fun onFailure(message: String) {
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
         showToat(message)
     }
 

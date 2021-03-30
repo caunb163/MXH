@@ -11,7 +11,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/chat_toolbar"
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,41 +23,72 @@
             android:background="@color/colorPlaceholder" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="5dp"
-        android:background="@drawable/border_black">
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <EditText
-            android:id="@+id/chat_chat"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:backgroundTint="@color/white"
-            android:hint="@string/chat_chat"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/chat_send"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="RtlSymmetry" />
-
-        <ImageView
-            android:id="@+id/chat_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:padding="5dp"
-            android:src="@drawable/ic_send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/bottom"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/chat_progressBar"
+            style="@android:style/Widget.ProgressBar.Inverse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:background="@drawable/border_black"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <EditText
+                android:id="@+id/chat_chat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/white"
+                android:hint="@string/chat_chat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/chat_send"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="RtlSymmetry" />
+
+            <ImageView
+                android:id="@+id/chat_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_un_send"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ProgressBar
+                app:layout_constraintTop_toTopOf="@id/chat_send"
+                app:layout_constraintBottom_toBottomOf="@id/chat_send"
+                app:layout_constraintStart_toStartOf="@id/chat_send"
+                app:layout_constraintEnd_toEndOf="@id/chat_send"
+                android:id="@+id/chat_progressBar_send"
+                style="@android:style/Widget.ProgressBar.Inverse"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:visibility="invisible"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

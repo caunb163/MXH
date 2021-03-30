@@ -29,6 +29,16 @@
         android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
+    <ProgressBar
+        android:id="@+id/message_progressbar"
+        style="@android:style/Widget.ProgressBar.Inverse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/message_create"
         android:layout_width="wrap_content"

@@ -1,17 +1,15 @@
 package com.caunb163.mxh.ui.main.messenger
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.data.repository.RepositoryGroupImpl
+import com.caunb163.data.repository.RepositoryMessengerImpl
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MessengerViewModel(
-    private val repositoryGroupImpl: RepositoryGroupImpl,
+    private val repositoryMessengerImpl: RepositoryMessengerImpl,
     private val localStorage: LocalStorage
 ) : ViewModel() {
     private val _state: MutableLiveData<State> = MutableLiveData()
@@ -22,7 +20,7 @@ class MessengerViewModel(
             _state.value = State.Loading
             try {
                 val stateGroup = withContext(Dispatchers.IO) {
-                    return@withContext repositoryGroupImpl.getAllMyGroup(localStorage.getAccount()!!.userId)
+                    return@withContext repositoryMessengerImpl.getAllMyGroup(localStorage.getAccount()!!.userId)
                 }
                 _state.value = State.Success(stateGroup)
             } catch (e: Exception) {

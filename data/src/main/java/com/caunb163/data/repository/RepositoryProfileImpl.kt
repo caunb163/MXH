@@ -3,6 +3,7 @@ package com.caunb163.data.repository
 import android.net.Uri
 import android.util.Log
 import com.caunb163.data.datalocal.LocalStorage
+import com.caunb163.data.firebase.FB
 import com.caunb163.data.mapper.PostMapper
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.PostEntity
@@ -25,9 +26,9 @@ class RepositoryProfileImpl(
     override suspend fun getProfilePost(): List<PostEntity> {
         val list = mutableListOf<PostEntity>()
         for (postId in user.arrPostId) {
-            val data = db.collection("Posts").document(postId).get().await()
+            val data = db.collection(FB.POST).document(postId).get().await()
             val post = data.toObject(Post::class.java)
-            db.collection("Users").document(post!!.userId).get().addOnCompleteListener { task ->
+            db.collection(FB.USER).document(post!!.userId).get().addOnCompleteListener { task ->
                 val user = task.result?.toObject(User::class.java)
                 user?.let { u ->
                     val postEntity =
@@ -54,7 +55,7 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection("Users").document(user.userId).update("photoUrl", stringPath)
+                db.collection(FB.USER).document(user.userId).update("photoUrl", stringPath)
             }
         }.await()
 
@@ -74,7 +75,7 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection("Users").document(user.userId).update("photoBackground", stringPath)
+                db.collection(FB.USER).document(user.userId).update("photoBackground", stringPath)
             }
         }.await()
 

@@ -1,6 +1,7 @@
 package com.caunb163.mxh.ui.main.home
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer

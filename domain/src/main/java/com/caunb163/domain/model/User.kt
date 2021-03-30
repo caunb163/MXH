@@ -11,4 +11,6 @@ data class User(
     var birthDay: String = "",
     var address: String = "",
     var intro: String = ""
-)
+) {
+    var ischeck: Boolean = false
+}

@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_messengerFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_messengerFragment_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -62,4 +65,9 @@
             app:argType="com.caunb163.domain.model.GroupEntity"/>
 
     </fragment>
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="com.caunb163.mxh.ui.main.messenger.create_group.CreateGroupFragment"
+        android:label="fragment_create_group"
+        tools:layout="@layout/fragment_create_group" />
 </navigation>

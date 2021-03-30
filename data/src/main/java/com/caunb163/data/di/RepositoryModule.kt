@@ -3,6 +3,7 @@ package com.caunb163.data.di
 import com.caunb163.data.repository.*
 import com.caunb163.domain.usecase.home.create_post.RepositoryCreatePost
 import com.caunb163.domain.usecase.login.RepositoryLogin
+import com.caunb163.domain.usecase.messenger.create_group.RepositoryCreateGroup
 import com.caunb163.domain.usecase.onboarding.RepositoryOnBoarding
 import com.caunb163.domain.usecase.profile.RepositoryProfile
 import com.caunb163.domain.usecase.register.RepositoryRegister
@@ -21,5 +22,7 @@ val repositoryModule = module {
     factory<RepositoryProfile> { RepositoryProfileImpl(get(), get()) }
     factory<RepositoryMainImpl> { RepositoryMainImpl(get()) }
     factory<RepositoryCommentImpl> { (RepositoryCommentImpl(get())) }
-    factory<RepositoryGroupImpl> { RepositoryGroupImpl(get()) }
+    factory<RepositoryMessengerImpl> { RepositoryMessengerImpl(get()) }
+    factory<RepositoryCreateGroup> { RepositoryCreateGroupImpl() }
+    factory<RepositoryChatImpl> { RepositoryChatImpl(get()) }
 }

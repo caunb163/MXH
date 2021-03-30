@@ -2,6 +2,7 @@ package com.caunb163.data.repository
 
 import android.util.Log
 import com.caunb163.data.datalocal.LocalStorage
+import com.caunb163.data.firebase.FB
 import com.caunb163.data.mapper.PostMapper
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.PostEntity
@@ -25,13 +26,13 @@ class RepositoryHomeImpl(
     private val user = localStorage.getAccount()!!
 
     suspend fun getAllPost(): MutableList<PostEntity> {
-        val data = db.collection("Posts").get().await()
+        val data = db.collection(FB.POST).get().await()
         val postEntityList = mutableListOf<PostEntity>()
 
         for (result in data.documents) {
             val post = result.toObject(Post::class.java)
             post?.let {
-                db.collection("Users").document(it.userId).get().addOnCompleteListener { task ->
+                db.collection(FB.USER).document(it.userId).get().addOnCompleteListener { task ->
                     val user = task.result?.toObject(User::class.java)
                     user?.let { u ->
                         val postEntity = postMapper.toEntity(
@@ -80,7 +81,7 @@ class RepositoryHomeImpl(
 
     suspend fun listenerPostChange(): Flow<PostEntity> = callbackFlow {
         val data =
-            db.collection("Posts")
+            db.collection(FB.POST)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -88,7 +89,7 @@ class RepositoryHomeImpl(
             value?.let { qs ->
                 for (dc in qs.documentChanges) {
                     val post = dc.document.toObject(Post::class.java)
-                    db.collection("Users").document(post.userId).get()
+                    db.collection(FB.USER).document(post.userId).get()
                         .addOnCompleteListener { task ->
                             val user = task.result?.toObject(User::class.java)
                             user?.let { u ->
@@ -121,7 +122,7 @@ class RepositoryHomeImpl(
     }
 
     suspend fun likePost(postId: String) {
-        db.collection("Posts").document(postId).get().addOnCompleteListener { task ->
+        db.collection(FB.POST).document(postId).get().addOnCompleteListener { task ->
             val post = task.result?.toObject(Post::class.java)
             post?.let { p ->
                 val arrLike = p.arrLike
@@ -130,7 +131,7 @@ class RepositoryHomeImpl(
                 } else {
                     arrLike.add(user.userId)
                 }
-                db.collection("Posts").document(postId).update("arrLike", arrLike)
+                db.collection(FB.POST).document(postId).update("arrLike", arrLike)
             }
         }.await()
     }

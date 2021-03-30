@@ -197,6 +197,7 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         })
 
         btnpost.setOnClickListener {
+            timenow = System.currentTimeMillis()
             if (content.text.isNotEmpty()) {
                 viewModel.createPost(
                     user.userId,

@@ -1,6 +1,7 @@
 package com.caunb163.data.repository
 
 import com.caunb163.data.firebase.Auth
+import com.caunb163.data.firebase.FB
 import com.caunb163.domain.model.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,7 +17,7 @@ class RepositoryMainImpl(private val auth: Auth) {
 
     suspend fun saveUser(): Flow<User> = callbackFlow {
         val userId = auth.getUser().uid
-        val data = db.collection("Users").document(userId)
+        val data = db.collection(FB.USER).document(userId)
 
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {

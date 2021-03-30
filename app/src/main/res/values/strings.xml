@@ -62,7 +62,11 @@
 
     <string name="chat_messenger">Messenger</string>
     <string name="chat_name">Group Name</string>
+    <string name="chat_group">Nhóm mới</string>
     <string name="chat_chat">Nhập tin nhắn…</string>
 
+    <string name="create_group_btn">Tạo</string>
+    <string name="create_group_name">Đặt tên cho đoạn chat mới</string>
+    <string name="create_group_edittext">Tên nhóm (Bắt buộc)</string>
 
 </resources>
