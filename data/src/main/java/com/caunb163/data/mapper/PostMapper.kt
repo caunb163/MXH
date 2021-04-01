@@ -23,4 +23,15 @@ class PostMapper {
         )
     }
 
+    fun toModel(postEntiy: PostEntity): Post {
+        return Post(
+            userId = postEntiy.userId,
+            content = postEntiy.content,
+            createDate = postEntiy.createDate,
+            images = postEntiy.images,
+            arrCmtId = postEntiy.arrCmtId.toMutableList(),
+            arrLike = postEntiy.arrLike.toMutableList()
+        )
+    }
+
 }

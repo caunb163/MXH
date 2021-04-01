@@ -209,4 +209,10 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
     }
 
+    override fun onEditClick(post: PostEntity) {
+    }
+
+    override fun onDeleteClick(post: PostEntity) {
+    }
+
 }

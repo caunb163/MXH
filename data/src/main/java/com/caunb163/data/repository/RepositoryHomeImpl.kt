@@ -1,6 +1,5 @@
 package com.caunb163.data.repository
 
-import android.util.Log
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.data.firebase.FB
 import com.caunb163.data.mapper.PostMapper
@@ -135,5 +134,17 @@ class RepositoryHomeImpl(
             }
         }.await()
     }
+
+    suspend fun deletePost(post: PostEntity) {
+        db.collection(FB.POST).document(post.postId).delete().await()
+        db.collection(FB.USER).document(post.userId).get().addOnCompleteListener { task ->
+            val user = task.result?.toObject(User::class.java)
+            user?.let { u ->
+                u.arrPostId.remove(post.postId)
+                db.collection(FB.USER).document(post.userId).update("arrPostId", u.arrPostId)
+            }
+        }.await()
+    }
+
 }
 

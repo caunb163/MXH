@@ -69,4 +69,12 @@
     <string name="create_group_name">Đặt tên cho đoạn chat mới</string>
     <string name="create_group_edittext">Tên nhóm (Bắt buộc)</string>
 
+    <string name="post_edit">Chỉnh sửa</string>
+    <string name="post_delete">Xoá</string>
+
+    <string name="editpost_toolbar">Chỉnh sửa bài viết</string>
+    <string name="editpost_save">Lưu</string>
+    <string name="editpost_content">Bạn viết gì đi…</string>
+
+
 </resources>

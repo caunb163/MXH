@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_editPostFragment2"
+            app:destination="@id/editPostFragment" />
     </fragment>
 
     <fragment
@@ -70,4 +73,17 @@
         android:name="com.caunb163.mxh.ui.main.messenger.create_group.CreateGroupFragment"
         android:label="fragment_create_group"
         tools:layout="@layout/fragment_create_group" />
+
+    <dialog
+        android:id="@+id/editPostFragment"
+        android:name="com.caunb163.mxh.ui.main.home.edit_post.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+
+        <argument
+            android:name="post"
+            app:argType="com.caunb163.domain.model.PostEntity"/>
+
+    </dialog>
+
 </navigation>

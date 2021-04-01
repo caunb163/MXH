@@ -2,6 +2,7 @@ package com.caunb163.mxh.ui.main.home
 
 import androidx.lifecycle.*
 import com.caunb163.data.repository.RepositoryHomeImpl
+import com.caunb163.domain.model.PostEntity
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -57,6 +58,22 @@ class HomeViewModel(
 
             } catch (e: Exception) {
                 _stateLike.value = State.Failure("${e.message}")
+            }
+        }
+    }
+
+    private val _stateDelete: MutableLiveData<State> = MutableLiveData()
+    val stateDelete: LiveData<State> get() = _stateDelete
+    fun deletePost(post: PostEntity) {
+        viewModelScope.launch {
+            _stateDelete.value = State.Loading
+            try {
+                val delete = withContext(Dispatchers.IO) {
+                    return@withContext repositoryHomeImpl.deletePost(post)
+                }
+                _stateDelete.value = State.Success(delete)
+            } catch (e: Exception) {
+                _stateDelete.value = State.Failure("${e.message}")
             }
         }
     }

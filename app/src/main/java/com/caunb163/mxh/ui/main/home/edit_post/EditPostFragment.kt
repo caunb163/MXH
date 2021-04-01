@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.main.home.create_post
+package com.caunb163.mxh.ui.main.home.edit_post
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -15,11 +15,11 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.User
+import com.caunb163.domain.model.PostEntity
 import com.caunb163.mxh.R
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
@@ -31,14 +31,13 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
+class EditPostFragment : BottomSheetDialogFragment() {
+    private val TAG = "EditPostFragment"
 
-class CreatePostFragment : BottomSheetDialogFragment() {
-    private val TAG = "CreatePostFragment"
-
-    private val REQUEST_INTENT_CODE_MULTIPLE = 5678
+    private val REQUEST_INTENT_CODE_MULTIPLE = 1678
 
     private lateinit var toolbar: Toolbar
-    private lateinit var btnpost: Button
+    private lateinit var btnSave: Button
     private lateinit var imgAvatar: CircleImageView
     private lateinit var username: TextView
     private lateinit var createDate: TextView
@@ -69,20 +68,18 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private lateinit var imvAddImage: ImageView
     private lateinit var progressBar: ProgressBar
 
-    private val localStorage: LocalStorage by inject()
     private lateinit var glide: RequestManager
-    private lateinit var user: User
-    private val viewModel: CreatePostViewModel by inject()
+    private val args: EditPostFragmentArgs by navArgs()
+    private val viewModel: EditPostViewModel by inject()
+    private lateinit var postEntity: PostEntity
     private val listImages = mutableListOf<String>()
-    private var timenow: Long = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_post, container, false)
+        return inflater.inflate(R.layout.fragment_edit_post, container, false)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -109,63 +106,67 @@ class CreatePostFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initview(view)
-        timenow = System.currentTimeMillis()
+        initView(view)
+
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
             dialog?.dismiss()
         }
+
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
             RequestOptions()
                 .placeholder(R.drawable.image_default)
                 .error(R.drawable.image_default)
         )
-        user = localStorage.getAccount()!!
-        fillInfomation()
+        postEntity = args.post
+        fillInformation()
         initObserver()
         addListener()
     }
 
-    private fun initview(view: View) {
-        toolbar = view.findViewById(R.id.createpost_toolbar)
-        btnpost = view.findViewById(R.id.createpost_btnpost)
-        imgAvatar = view.findViewById(R.id.createpost_imv_avatar)
-        username = view.findViewById(R.id.createpost_tv_user)
-        createDate = view.findViewById(R.id.createpost_tv_date)
-        content = view.findViewById(R.id.createpost_edt_content)
+    private fun initView(view: View) {
+        toolbar = view.findViewById(R.id.editpost_toolbar)
+        btnSave = view.findViewById(R.id.editpost_btnSave)
+        imgAvatar = view.findViewById(R.id.editpost_imv_avatar)
+        username = view.findViewById(R.id.editpost_tv_user)
+        createDate = view.findViewById(R.id.editpost_tv_date)
+        content = view.findViewById(R.id.editpost_edt_content)
 
-        ctl1 = view.findViewById(R.id.createpost_ctl1)
-        ctl2 = view.findViewById(R.id.createpost_ctl2)
-        ctl3 = view.findViewById(R.id.createpost_ctl3)
-        ctl4 = view.findViewById(R.id.createpost_ctl4)
-        ctl5 = view.findViewById(R.id.createpost_ctl5)
+        ctl1 = view.findViewById(R.id.editpost_ctl1)
+        ctl2 = view.findViewById(R.id.editpost_ctl2)
+        ctl3 = view.findViewById(R.id.editpost_ctl3)
+        ctl4 = view.findViewById(R.id.editpost_ctl4)
+        ctl5 = view.findViewById(R.id.editpost_ctl5)
 
-        img1 = view.findViewById(R.id.createpost_1_img)
-        img21 = view.findViewById(R.id.createpost_2_img1)
-        img22 = view.findViewById(R.id.createpost_2_img2)
-        img31 = view.findViewById(R.id.createpost_3_img1)
-        img32 = view.findViewById(R.id.createpost_3_img2)
-        img33 = view.findViewById(R.id.createpost_3_img3)
-        img41 = view.findViewById(R.id.createpost_4_img1)
-        img42 = view.findViewById(R.id.createpost_4_img2)
-        img43 = view.findViewById(R.id.createpost_4_img3)
-        img44 = view.findViewById(R.id.createpost_4_img4)
-        img51 = view.findViewById(R.id.createpost_5_img1)
-        img52 = view.findViewById(R.id.createpost_5_img2)
-        img53 = view.findViewById(R.id.createpost_5_img3)
-        img54 = view.findViewById(R.id.createpost_5_img4)
-        img55 = view.findViewById(R.id.createpost_5_img5)
-        tvImgNumber = view.findViewById(R.id.createpost_tv_img_number)
-        imvAddImage = view.findViewById(R.id.createpost_addimage)
-        progressBar = view.findViewById(R.id.createpost_progressbar)
+        img1 = view.findViewById(R.id.editpost_1_img)
+        img21 = view.findViewById(R.id.editpost_2_img1)
+        img22 = view.findViewById(R.id.editpost_2_img2)
+        img31 = view.findViewById(R.id.editpost_3_img1)
+        img32 = view.findViewById(R.id.editpost_3_img2)
+        img33 = view.findViewById(R.id.editpost_3_img3)
+        img41 = view.findViewById(R.id.editpost_4_img1)
+        img42 = view.findViewById(R.id.editpost_4_img2)
+        img43 = view.findViewById(R.id.editpost_4_img3)
+        img44 = view.findViewById(R.id.editpost_4_img4)
+        img51 = view.findViewById(R.id.editpost_5_img1)
+        img52 = view.findViewById(R.id.editpost_5_img2)
+        img53 = view.findViewById(R.id.editpost_5_img3)
+        img54 = view.findViewById(R.id.editpost_5_img4)
+        img55 = view.findViewById(R.id.editpost_5_img5)
+        tvImgNumber = view.findViewById(R.id.editpost_tv_img_number)
+        imvAddImage = view.findViewById(R.id.editpost_addimage)
+        progressBar = view.findViewById(R.id.editpost_progressbar)
     }
 
-    private fun fillInfomation() {
-        glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl)
+    private fun fillInformation() {
+        glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
             .into(imgAvatar)
-        username.text = user.username
-        createDate.text = getDate(timenow)
+        username.text = postEntity.userName
+        createDate.text = getDate(postEntity.createDate)
+        content.text = postEntity.content
+        listImages.addAll(postEntity.images)
+        updateImage()
     }
 
     private fun getDate(milliSeconds: Long): String? {
@@ -175,65 +176,8 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         return formatter.format(calendar.time)
     }
 
-    private fun addListener() {
-        content.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                s?.let {
-                    if (it.isEmpty()) {
-                        btnpost.isEnabled = false
-                        btnpost.setBackgroundColor(resources.getColor(R.color.colorUnPost, null))
-                    } else {
-                        btnpost.isEnabled = true
-                        btnpost.setBackgroundColor(resources.getColor(R.color.colorPost, null))
-                    }
-                }
-            }
-        })
-
-        btnpost.setOnClickListener {
-            timenow = System.currentTimeMillis()
-            viewModel.createPost(
-                user.userId,
-                timenow,
-                listImages,
-                content.text.toString()
-            )
-        }
-
-        imvAddImage.setOnClickListener {
-            ensurePermission()
-        }
-    }
-
-    private fun ensurePermission() {
-        if (CheckPermission.checkPermission(requireContext())) {
-            openLibraryMultiple()
-        } else
-            requestPermissions(
-                CheckPermission.listPermission.toTypedArray(),
-                REQUEST_INTENT_CODE_MULTIPLE
-            )
-    }
-
-    private fun openLibraryMultiple() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        startActivityForResult(
-            Intent.createChooser(intent, "Select picture"),
-            REQUEST_INTENT_CODE_MULTIPLE
-        )
-    }
-
     private fun initObserver() {
-        viewModel.state.observe(this, androidx.lifecycle.Observer { state ->
+        viewModel.stateEdit.observe(this, androidx.lifecycle.Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
                 is State.Success<*> -> onSuccess()
@@ -243,58 +187,58 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     }
 
     private fun onLoading() {
-        btnpost.visibility = View.GONE
+        btnSave.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
 
     private fun onSuccess() {
-        btnpost.visibility = View.VISIBLE
+        btnSave.visibility = View.VISIBLE
         progressBar.visibility = View.INVISIBLE
         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         dialog?.dismiss()
     }
 
     private fun onFailure(message: String) {
-        btnpost.visibility = View.VISIBLE
+        btnSave.visibility = View.VISIBLE
         progressBar.visibility = View.INVISIBLE
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_INTENT_CODE_MULTIPLE) {
-            if (CheckPermission.checkPermission(requireContext())) {
-                openLibraryMultiple()
-            } else Toast.makeText(context, "Yêu cầu bị từ chối", Toast.LENGTH_SHORT).show()
-        }
-    }
+    private fun addListener() {
+        content.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-    @SuppressLint("SetTextI18n")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            REQUEST_INTENT_CODE_MULTIPLE -> {
-                data?.let { intent ->
-                    intent.data?.let {
-                        listImages.add(it.toString())
-                        updateImage()
-                    }
-                    val clipData: ClipData? = intent.clipData
-                    clipData?.let {
-                        listImages.clear()
-                        for (item in 0 until it.itemCount) {
-                            listImages.add(it.getItemAt(item).uri.toString())
-                        }
-                        updateImage()
-                        Log.e(TAG, "onActivityResult size: ${listImages.size} ")
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                s?.let {
+                    if (it.isEmpty()) {
+                        btnSave.isEnabled = false
+                        btnSave.setBackgroundColor(resources.getColor(R.color.colorUnPost, null))
+                    } else {
+                        btnSave.isEnabled = true
+                        btnSave.setBackgroundColor(resources.getColor(R.color.colorPost, null))
                     }
                 }
             }
+        })
+
+        btnSave.setOnClickListener {
+            val postE = PostEntity(
+                postId = postEntity.postId,
+                userId = postEntity.userId,
+                userName = postEntity.userName,
+                userAvatar = postEntity.userAvatar,
+                content = content.text.toString(),
+                createDate = postEntity.createDate,
+                images = listImages,
+                arrCmtId = postEntity.arrCmtId,
+                arrLike = postEntity.arrLike
+            )
+            viewModel.editPost(postE)
         }
+
+        imvAddImage.setOnClickListener { ensurePermission() }
     }
 
     @SuppressLint("SetTextI18n")
@@ -405,4 +349,64 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun ensurePermission() {
+        if (CheckPermission.checkPermission(requireContext())) {
+            openLibraryMultiple()
+        } else
+            requestPermissions(
+                CheckPermission.listPermission.toTypedArray(),
+                REQUEST_INTENT_CODE_MULTIPLE
+            )
+    }
+
+    private fun openLibraryMultiple() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(
+            Intent.createChooser(intent, "Select picture"),
+            REQUEST_INTENT_CODE_MULTIPLE
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_INTENT_CODE_MULTIPLE) {
+            if (CheckPermission.checkPermission(requireContext())) {
+                openLibraryMultiple()
+            } else Toast.makeText(context, "Yêu cầu bị từ chối", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_INTENT_CODE_MULTIPLE -> {
+                data?.let { intent ->
+                    intent.data?.let {
+                        listImages.add(it.toString())
+                        updateImage()
+                        btnSave.isEnabled = true
+                        btnSave.setBackgroundColor(resources.getColor(R.color.colorPost, null))
+                    }
+                    val clipData: ClipData? = intent.clipData
+                    clipData?.let {
+                        for (item in 0 until it.itemCount) {
+                            listImages.add(it.getItemAt(item).uri.toString())
+                        }
+                        btnSave.isEnabled = true
+                        btnSave.setBackgroundColor(resources.getColor(R.color.colorPost, null))
+                        updateImage()
+                        Log.e(TAG, "onActivityResult size: ${listImages.size} ")
+                    }
+                }
+            }
+        }
+    }
 }

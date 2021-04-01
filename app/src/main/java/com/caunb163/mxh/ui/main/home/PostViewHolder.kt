@@ -2,9 +2,11 @@ package com.caunb163.mxh.ui.main.home
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +20,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private val TAG = "PostViewHolder"
+
     private var imgAvatar: CircleImageView = view.findViewById(R.id.post_imv_avatar)
     private var imvMenu: ImageView = view.findViewById(R.id.post_imv_menu)
     private var username: TextView = view.findViewById(R.id.post_tv_user)
@@ -58,6 +62,7 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     private var imvlike: ImageView = view.findViewById(R.id.post_ll_imv_like)
     private var tvlike: TextView = view.findViewById(R.id.post_ll_tv_like)
+    private var context = view.context
 
     @SuppressLint("SetTextI18n")
     fun bind(
@@ -151,6 +156,23 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         if (user.userId == post.userId) imvMenu.visibility = View.VISIBLE
         else imvMenu.visibility = View.INVISIBLE
+
+        imvMenu.setOnClickListener {
+            val popupMenu: PopupMenu = PopupMenu(context, imvMenu)
+            popupMenu.inflate(R.menu.post_menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.post_edit -> {
+                        onClick.onEditClick(post)
+                    }
+                    R.id.post_delete -> {
+                        onClick.onDeleteClick(post)
+                    }
+                }
+                false
+            }
+            popupMenu.show()
+        }
     }
 
     fun unbind() {

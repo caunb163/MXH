@@ -1,9 +1,9 @@
 package com.caunb163.mxh.ui.main.home
 
 import android.content.Intent
-import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,6 +66,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
             }
         })
         viewModel.stateLike.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoadingLike()
+                is State.Success<*> -> onSuccessLike()
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+
+        viewModel.stateDelete.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoadingLike()
                 is State.Success<*> -> onSuccessLike()
@@ -164,5 +172,21 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         sharingIntent.type = "text/plain"
         sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
         startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
+    }
+
+    override fun onEditClick(post: PostEntity) {
+        val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment2(post)
+        findNavController().navigate(action)
+    }
+
+    override fun onDeleteClick(post: PostEntity) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setTitle("Xóa bài viết")
+        alertDialog.setMessage("Bạn có chắc muốn xóa bài viết này không?")
+        alertDialog.setPositiveButton("Có") { dialog, which ->
+            viewModel.deletePost(post)
+        }
+        alertDialog.setNegativeButton("Không") { dialog, _ -> dialog.dismiss() }
+        alertDialog.show()
     }
 }

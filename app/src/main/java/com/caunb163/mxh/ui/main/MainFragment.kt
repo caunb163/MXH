@@ -1,12 +1,15 @@
 package com.caunb163.mxh.ui.main
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.User
+import com.caunb163.mxh.KeepStateNavigator
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
@@ -21,6 +24,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private val viewModel: MainViewModel by inject()
     private val localStorage: LocalStorage by inject()
 
+    @SuppressLint("RestrictedApi")
     override fun initView(view: View) {
         val navView: BottomNavigationView = view.findViewById(R.id.bottom_navigation_view)
 
@@ -28,10 +32,25 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             childFragmentManager.findFragmentById(R.id.nav_home_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
         NavigationUI.setupWithNavController(navView, navController)
+
+//        val navHostFragment: NavHostFragment =
+//            childFragmentManager.findFragmentById(R.id.nav_home_fragment) as NavHostFragment
+//        val navController = navHostFragment.navController
+//
+//        val navigator = KeepStateNavigator(
+//            requireContext(),
+//            navHostFragment.childFragmentManager,
+//            R.id.nav_home_fragment
+//        )
+////
+//        navController.navigatorProvider.addNavigator(navigator)
+//        navController.setGraph(R.navigation.home_nav_graph)
+//
+//        navView.setupWithNavController(navController)
+
     }
 
-    override fun initListener() {
-    }
+    override fun initListener() {}
 
     override fun initObserve() {
         viewModel.state.observe(this, Observer { state ->
@@ -43,8 +62,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         })
     }
 
-    private fun onLoading() {
-    }
+    private fun onLoading() {}
 
     private fun onSuccess(user: User) {
         localStorage.saveAccount(user)

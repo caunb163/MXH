@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
@@ -81,4 +82,19 @@ class HomeAdapter(
             tvCreatePost.setOnClickListener(null)
         }
     }
+}
+
+interface HomeOnClick {
+    fun createPostClick()
+
+    fun onCommentClick(post: PostEntity)
+
+    fun onLikeClick(postId: String)
+
+    fun onShareClick(content: String)
+
+    fun onEditClick(post: PostEntity)
+
+    fun onDeleteClick(post: PostEntity)
+
 }
