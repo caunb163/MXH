@@ -97,4 +97,5 @@ interface HomeOnClick {
 
     fun onDeleteClick(post: PostEntity)
 
+    fun onImageClick(post: PostEntity, position: Int)
 }

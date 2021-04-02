@@ -121,3 +121,11 @@ class ProfileAdapter(
         }
     }
 }
+
+
+interface ProfileOnClick {
+
+    fun avatarClick()
+
+    fun backgroundClick()
+}

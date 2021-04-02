@@ -13,24 +13,29 @@ import kotlinx.coroutines.tasks.await
 class RepositoryEditPostImpl {
     val db = Firebase.firestore
     val listImage = mutableListOf<String>()
+
     suspend fun editPost(postEntity: PostEntity) {
         if (postEntity.images.isNotEmpty()) {
             for (item in postEntity.images) {
-                val uriPath = Uri.parse(item)
-                val storageRef =
-                    Firebase.storage.reference.child("image/" + uriPath.lastPathSegment)
-                val uploadTask: UploadTask = storageRef.putFile(uriPath)
-                uploadTask.continueWithTask { task ->
-                    if (!task.isSuccessful) {
-                        task.exception?.let { throw  it }
-                    }
-                    storageRef.downloadUrl
-                }.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val path = task.result.toString()
-                        listImage.add(path)
-                    }
-                }.await()
+                if (item.contains("firebasestorage")) {
+                    listImage.add(item)
+                } else {
+                    val uriPath = Uri.parse(item)
+                    val storageRef =
+                        Firebase.storage.reference.child("image/" + uriPath.lastPathSegment)
+                    val uploadTask: UploadTask = storageRef.putFile(uriPath)
+                    uploadTask.continueWithTask { task ->
+                        if (!task.isSuccessful) {
+                            task.exception?.let { throw  it }
+                        }
+                        storageRef.downloadUrl
+                    }.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val path = task.result.toString()
+                            listImage.add(path)
+                        }
+                    }.await()
+                }
             }
         }
 

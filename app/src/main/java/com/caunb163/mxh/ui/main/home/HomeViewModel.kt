@@ -77,4 +77,8 @@ class HomeViewModel(
             }
         }
     }
+
+    fun logout() {
+        repositoryHomeImpl.logout()
+    }
 }

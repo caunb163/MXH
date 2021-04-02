@@ -76,7 +76,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         showToat("Success")
         progressBar.visibility = View.INVISIBLE
         signin.visibility = View.VISIBLE
-        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
 
     }
 

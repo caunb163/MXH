@@ -37,7 +37,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
         when (state) {
             is SplashUseCase.SplashState.OpenLogin -> findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
             is SplashUseCase.SplashState.OpenOnBoarding -> findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
-            is SplashUseCase.SplashState.OpenHome -> findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
+            is SplashUseCase.SplashState.OpenHome -> findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
         }
     }
 

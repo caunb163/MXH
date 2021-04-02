@@ -1,10 +1,14 @@
 package com.caunb163.mxh.ui.main.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,9 +18,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
+import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
+import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 
@@ -33,10 +39,30 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private lateinit var glide: RequestManager
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var user: User
+    private lateinit var toolbar: MaterialToolbar
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    @SuppressLint("ResourceType")
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.home_recycleview)
         progressBar = view.findViewById(R.id.home_progressbar)
+        toolbar = view.findViewById(R.id.home_toolbar)
+
+        toolbar.inflateMenu(R.menu.menu_option)
+        toolbar.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.logout -> {
+                    viewModel.logout()
+                    (activity as MainActivity).findNavController(R.id.main_nav_host_fragment)
+                        .navigate(R.id.action_mainFragment_to_splashFragment)
+                }
+            }
+            true
+        }
 
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
@@ -175,7 +201,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     override fun onEditClick(post: PostEntity) {
-        val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment2(post)
+        val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment(post)
         findNavController().navigate(action)
     }
 
@@ -183,10 +209,15 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         val alertDialog = AlertDialog.Builder(requireContext())
         alertDialog.setTitle("Xóa bài viết")
         alertDialog.setMessage("Bạn có chắc muốn xóa bài viết này không?")
-        alertDialog.setPositiveButton("Có") { dialog, which ->
+        alertDialog.setPositiveButton("Có") { _, _ ->
             viewModel.deletePost(post)
         }
         alertDialog.setNegativeButton("Không") { dialog, _ -> dialog.dismiss() }
         alertDialog.show()
+    }
+
+    override fun onImageClick(post: PostEntity, position: Int) {
+        val action = HomeFragmentDirections.actionHomeFragmentToListImageFragment(post, position)
+        findNavController().navigate(action)
     }
 }

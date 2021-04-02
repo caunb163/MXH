@@ -17,15 +17,18 @@
             android:id="@+id/action_homeFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_editPostFragment2"
+            android:id="@+id/action_homeFragment_to_editPostFragment"
             app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_listImageFragment"
+            app:destination="@id/listImageFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/messengerFragment"
         android:name="com.caunb163.mxh.ui.main.messenger.MessengerFragment"
         android:label="fragment_messenger"
-        tools:layout="@layout/fragment_messenger" >
+        tools:layout="@layout/fragment_messenger">
         <action
             android:id="@+id/action_messengerFragment_to_chatFragment"
             app:destination="@id/chatFragment" />
@@ -56,16 +59,17 @@
 
         <argument
             android:name="post"
-            app:argType="com.caunb163.domain.model.PostEntity"/>
+            app:argType="com.caunb163.domain.model.PostEntity" />
     </dialog>
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.caunb163.mxh.ui.main.messenger.chat.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" >
+        tools:layout="@layout/fragment_chat">
 
-        <argument android:name="group"
-            app:argType="com.caunb163.domain.model.GroupEntity"/>
+        <argument
+            android:name="group"
+            app:argType="com.caunb163.domain.model.GroupEntity" />
 
     </fragment>
     <fragment
@@ -78,11 +82,28 @@
         android:id="@+id/editPostFragment"
         android:name="com.caunb163.mxh.ui.main.home.edit_post.EditPostFragment"
         android:label="fragment_edit_post"
-        tools:layout="@layout/fragment_edit_post" >
+        tools:layout="@layout/fragment_edit_post">
 
         <argument
             android:name="post"
-            app:argType="com.caunb163.domain.model.PostEntity"/>
+            app:argType="com.caunb163.domain.model.PostEntity" />
+
+    </dialog>
+
+    <dialog
+        android:id="@+id/listImageFragment"
+        android:name="com.caunb163.mxh.ui.main.home.view_image.ListImageFragment"
+        android:label="fragment_list_image"
+        tools:layout="@layout/fragment_list_image" >
+
+        <argument
+            android:name="post"
+            app:argType="com.caunb163.domain.model.PostEntity" />
+
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
 
     </dialog>
 

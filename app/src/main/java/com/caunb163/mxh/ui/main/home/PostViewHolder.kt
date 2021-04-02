@@ -173,6 +173,7 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             }
             popupMenu.show()
         }
+        setImageClick(onClick, post)
     }
 
     fun unbind() {
@@ -180,6 +181,38 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         comment.setOnClickListener(null)
         like.setOnClickListener(null)
         share.setOnClickListener(null)
+        imvMenu.setOnClickListener(null)
+        img1.setImageDrawable(null)
+        img21.setImageDrawable(null)
+        img22.setImageDrawable(null)
+        img31.setImageDrawable(null)
+        img32.setImageDrawable(null)
+        img33.setImageDrawable(null)
+        img41.setImageDrawable(null)
+        img42.setImageDrawable(null)
+        img43.setImageDrawable(null)
+        img44.setImageDrawable(null)
+        img51.setImageDrawable(null)
+        img52.setImageDrawable(null)
+        img53.setImageDrawable(null)
+        img54.setImageDrawable(null)
+        img55.setImageDrawable(null)
+
+        img1.setOnClickListener(null)
+        img21.setOnClickListener(null)
+        img22.setOnClickListener(null)
+        img31.setOnClickListener(null)
+        img32.setOnClickListener(null)
+        img33.setOnClickListener(null)
+        img41.setOnClickListener(null)
+        img42.setOnClickListener(null)
+        img43.setOnClickListener(null)
+        img44.setOnClickListener(null)
+        img51.setOnClickListener(null)
+        img52.setOnClickListener(null)
+        img53.setOnClickListener(null)
+        img54.setOnClickListener(null)
+        img55.setOnClickListener(null)
     }
 
     private fun getDate(milliSeconds: Long): String? {
@@ -214,5 +247,23 @@ class PostViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             else -> {
             }
         }
+    }
+
+    private fun setImageClick(onClick: HomeOnClick, postEntity: PostEntity) {
+        img1.setOnClickListener { onClick.onImageClick(postEntity, 1) }
+        img21.setOnClickListener { onClick.onImageClick(postEntity, 1) }
+        img22.setOnClickListener { onClick.onImageClick(postEntity, 2) }
+        img31.setOnClickListener { onClick.onImageClick(postEntity, 1) }
+        img32.setOnClickListener { onClick.onImageClick(postEntity, 2) }
+        img33.setOnClickListener { onClick.onImageClick(postEntity, 3) }
+        img41.setOnClickListener { onClick.onImageClick(postEntity, 1) }
+        img42.setOnClickListener { onClick.onImageClick(postEntity, 2) }
+        img43.setOnClickListener { onClick.onImageClick(postEntity, 3) }
+        img44.setOnClickListener { onClick.onImageClick(postEntity, 4) }
+        img51.setOnClickListener { onClick.onImageClick(postEntity, 1) }
+        img52.setOnClickListener { onClick.onImageClick(postEntity, 2) }
+        img53.setOnClickListener { onClick.onImageClick(postEntity, 3) }
+        img54.setOnClickListener { onClick.onImageClick(postEntity, 4) }
+        img55.setOnClickListener { onClick.onImageClick(postEntity, 5) }
     }
 }

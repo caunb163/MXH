@@ -9,7 +9,6 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="7dp"
-        android:layout_marginTop="7dp"
         android:background="@color/gray"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -365,7 +364,7 @@
     <View
         android:id="@+id/view1"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="5dp"
         android:background="#A39A9A"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"

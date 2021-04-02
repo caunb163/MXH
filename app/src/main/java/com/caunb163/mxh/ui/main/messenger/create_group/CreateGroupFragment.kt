@@ -2,6 +2,8 @@ package com.caunb163.mxh.ui.main.messenger.create_group
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
