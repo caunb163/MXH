@@ -6,10 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupWithNavController
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.User
-import com.caunb163.mxh.KeepStateNavigator
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
@@ -69,7 +67,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
     private fun onFailure(message: String) {
-        showToat(message)
+        showToast(message)
     }
 
 }

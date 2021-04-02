@@ -32,6 +32,13 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
         freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
+
+    allprojects {
+        repositories {
+            maven { url "https://www.jitpack.io" }
+        }
+    }
+
 }
 
 dependencies {
@@ -57,6 +64,7 @@ dependencies {
     implementation Deps.glide
     implementation Deps.glideCompiler
     implementation Deps.lifecycle
+    implementation Deps.photoView
 }
 
 apply plugin: 'com.google.gms.google-services'

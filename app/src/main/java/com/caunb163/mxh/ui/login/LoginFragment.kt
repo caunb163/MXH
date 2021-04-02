@@ -73,7 +73,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
     private fun onSuccess() {
-        showToat("Success")
+        showToast("Success")
         progressBar.visibility = View.INVISIBLE
         signin.visibility = View.VISIBLE
         findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
@@ -83,7 +83,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private fun onFailure(message: String) {
         progressBar.visibility = View.INVISIBLE
         signin.visibility = View.VISIBLE
-        showToat(message)
+        showToast(message)
     }
 
     private fun blurviewBackground() {

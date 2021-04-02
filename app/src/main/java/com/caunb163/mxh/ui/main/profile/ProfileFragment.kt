@@ -131,7 +131,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         customProgressBar.dismiss()
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
-        showToat(message)
+        showToast(message)
     }
 
     override fun avatarClick() {
@@ -165,7 +165,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         if ((requestCode == REQUEST_AVATAR_CODE) || (requestCode == REQUEST_BACKGROUND_CODE)) {
             if (CheckPermission.checkPermission(requireContext())) {
                 openLibrary(requestCode)
-            } else showToat("Yêu cầu bị từ chối")
+            } else showToast("Yêu cầu bị từ chối")
         }
     }
 

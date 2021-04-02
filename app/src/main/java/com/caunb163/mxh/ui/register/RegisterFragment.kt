@@ -92,7 +92,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
     private fun onFailure(message: String) {
         progressBar.visibility = View.INVISIBLE
         signup.visibility = View.VISIBLE
-        showToat(message)
+        showToast(message)
     }
 
     private fun blurviewBackground() {

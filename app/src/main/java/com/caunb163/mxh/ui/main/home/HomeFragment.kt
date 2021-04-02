@@ -3,7 +3,6 @@ package com.caunb163.mxh.ui.main.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -177,7 +176,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private fun onFailure(message: String) {
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
-        showToat(message)
+        showToast(message)
     }
 
     override fun createPostClick() {

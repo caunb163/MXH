@@ -2,8 +2,6 @@ package com.caunb163.mxh.ui.main.messenger.create_group
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -146,7 +144,7 @@ class CreateGroupFragment : BaseFragment(R.layout.fragment_create_group), UserOn
         recyclerView.visibility = View.VISIBLE
         createBtn.visibility = View.VISIBLE
         progressBar.visibility = View.GONE
-        showToat(message)
+        showToast(message)
     }
 
     override fun userOnClick(u: User) {

@@ -19,13 +19,14 @@ import com.caunb163.domain.model.MessageEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
+import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
 import com.google.android.material.appbar.MaterialToolbar
 import org.koin.android.ext.android.inject
 
 @Suppress("UNCHECKED_CAST")
-class ChatFragment : BaseFragment(R.layout.fragment_chat) {
+class ChatFragment : BaseDialogFragment() {
     private val TAG = "ChatFragment"
     private lateinit var toolbar: MaterialToolbar
     private lateinit var recyclerView: RecyclerView
@@ -43,6 +44,8 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
     private lateinit var user: User
     private val list = mutableListOf<MessageEntity>()
     private var timenow: Long = 0
+
+    override fun getLayoutId(): Int = R.layout.fragment_chat
 
     override fun initView(view: View) {
         toolbar = view.findViewById(R.id.chat_toolbar)
@@ -199,6 +202,6 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
         recyclerView.visibility = View.VISIBLE
         progressSend.visibility = View.INVISIBLE
         btnSend.visibility = View.VISIBLE
-        showToat(message)
+        showToast(message)
     }
 }

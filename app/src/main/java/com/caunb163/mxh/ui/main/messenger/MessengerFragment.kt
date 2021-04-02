@@ -131,7 +131,7 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
     private fun onFailure(message: String) {
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
-        showToat(message)
+        showToast(message)
     }
 
     override fun onGroupClick(groupEntity: GroupEntity) {

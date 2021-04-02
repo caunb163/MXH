@@ -58,7 +58,12 @@ class ListImageAdapter(
             )
             (holder as PostViewHolder).bind(glide, post, user, homeOnClick)
         } else {
-            (holder as ListImageViewHolder).bind(postEntity.images[position - 1], onClick, glide)
+            (holder as ListImageViewHolder).bind(
+                postEntity.images.toMutableList(),
+                onClick,
+                glide,
+                position - 1
+            )
         }
     }
 
@@ -70,13 +75,24 @@ class ListImageAdapter(
 
     override fun getItemCount(): Int = postEntity.images.size + 1
 
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is PostViewHolder) holder.unbind()
+        else if (holder is ListImageViewHolder) holder.unbind()
+    }
+
     class ListImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private var image: ImageView = view.findViewById(R.id.view_image)
 
-        fun bind(uri: String, onClick: OnImageClick, glide: RequestManager) {
-            glide.applyDefaultRequestOptions(RequestOptions()).load(uri).into(image)
+        fun bind(
+            images: MutableList<String>,
+            onClick: OnImageClick,
+            glide: RequestManager,
+            position: Int
+        ) {
+            glide.applyDefaultRequestOptions(RequestOptions()).load(images[position]).into(image)
             image.setOnClickListener {
-                onClick.onClick(uri)
+                onClick.onViewClick(images, position)
             }
         }
 
@@ -88,5 +104,5 @@ class ListImageAdapter(
 }
 
 interface OnImageClick {
-    fun onClick(uri: String)
+    fun onViewClick(images: MutableList<String>, position: Int)
 }

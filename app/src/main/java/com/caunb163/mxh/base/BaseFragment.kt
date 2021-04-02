@@ -29,7 +29,7 @@ abstract class BaseFragment : Fragment {
 
     abstract fun initObserve()
 
-    fun showToat(message: String) {
+    fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 }

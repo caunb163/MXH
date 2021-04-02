@@ -61,7 +61,7 @@
             android:name="post"
             app:argType="com.caunb163.domain.model.PostEntity" />
     </dialog>
-    <fragment
+    <dialog
         android:id="@+id/chatFragment"
         android:name="com.caunb163.mxh.ui.main.messenger.chat.ChatFragment"
         android:label="fragment_chat"
@@ -71,7 +71,7 @@
             android:name="group"
             app:argType="com.caunb163.domain.model.GroupEntity" />
 
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/createGroupFragment"
         android:name="com.caunb163.mxh.ui.main.messenger.create_group.CreateGroupFragment"
@@ -104,6 +104,22 @@
             android:name="position"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_listImageFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/imageViewFragment"
+        android:name="com.caunb163.mxh.ui.main.home.view_image.ImageViewFragment"
+        android:label="ImageViewFragment" >
+
+        <argument
+            android:name="images"
+            app:argType="string[]" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
 
     </dialog>
 

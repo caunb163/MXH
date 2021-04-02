@@ -32,6 +32,7 @@ object Versions {
     const val blurview = "1.6.5"
     const val circleImgView = "3.1.0"
     const val lifecycle = "2.3.0"
+    const val photoView = "2.3.0"
 
 }
 
@@ -74,6 +75,7 @@ object Deps {
     const val circleImgView = "de.hdodenhof:circleimageview:${Versions.circleImgView}"
     const val lifecycle = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
 
+    const val photoView = "com.github.chrisbanes:PhotoView:${Versions.photoView}"
 }
 
 object TestDeps {

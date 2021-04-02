@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -32,9 +33,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CreatePostFragment : BottomSheetDialogFragment() {
+class CreatePostFragment : BaseDialogFragment() {
     private val TAG = "CreatePostFragment"
-
     private val REQUEST_INTENT_CODE_MULTIPLE = 5678
 
     private lateinit var toolbar: Toolbar
@@ -75,59 +75,9 @@ class CreatePostFragment : BottomSheetDialogFragment() {
     private val viewModel: CreatePostViewModel by inject()
     private val listImages = mutableListOf<String>()
     private var timenow: Long = 0
+    override fun getLayoutId(): Int = R.layout.fragment_create_post
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_post, container, false)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = BottomSheetDialog(requireContext(), theme)
-        dialog.setOnShowListener {
-
-            val bottomSheetDialog = it as BottomSheetDialog
-            val parentLayout =
-                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            parentLayout?.let { it1 ->
-                val behaviour = BottomSheetBehavior.from(it1)
-                setupFullHeight(it1)
-                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        }
-        return dialog
-    }
-
-    private fun setupFullHeight(bottomSheet: View) {
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initview(view)
-        timenow = System.currentTimeMillis()
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbar.setNavigationOnClickListener {
-            dialog?.dismiss()
-        }
-        glide = Glide.with(this)
-        glide.applyDefaultRequestOptions(
-            RequestOptions()
-                .placeholder(R.drawable.image_default)
-                .error(R.drawable.image_default)
-        )
-        user = localStorage.getAccount()!!
-        fillInfomation()
-        initObserver()
-        addListener()
-    }
-
-    private fun initview(view: View) {
+    override fun initView(view: View) {
         toolbar = view.findViewById(R.id.createpost_toolbar)
         btnpost = view.findViewById(R.id.createpost_btnpost)
         imgAvatar = view.findViewById(R.id.createpost_imv_avatar)
@@ -159,23 +109,23 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         tvImgNumber = view.findViewById(R.id.createpost_tv_img_number)
         imvAddImage = view.findViewById(R.id.createpost_addimage)
         progressBar = view.findViewById(R.id.createpost_progressbar)
+
+        timenow = System.currentTimeMillis()
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener {
+            dialog?.dismiss()
+        }
+        glide = Glide.with(this)
+        glide.applyDefaultRequestOptions(
+            RequestOptions()
+                .placeholder(R.drawable.image_default)
+                .error(R.drawable.image_default)
+        )
+        user = localStorage.getAccount()!!
+        fillInfomation()
     }
 
-    private fun fillInfomation() {
-        glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl)
-            .into(imgAvatar)
-        username.text = user.username
-        createDate.text = getDate(timenow)
-    }
-
-    private fun getDate(milliSeconds: Long): String? {
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = milliSeconds
-        return formatter.format(calendar.time)
-    }
-
-    private fun addListener() {
+    override fun initListener() {
         content.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -211,6 +161,23 @@ class CreatePostFragment : BottomSheetDialogFragment() {
         }
     }
 
+    override fun initObserve() {
+        viewModel.state.observe(this, androidx.lifecycle.Observer { state ->
+            when (state) {
+                is State.Loading -> onLoading()
+                is State.Success<*> -> onSuccess()
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+    }
+
+    private fun fillInfomation() {
+        glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl)
+            .into(imgAvatar)
+        username.text = user.username
+        createDate.text = getDate(timenow)
+    }
+
     private fun ensurePermission() {
         if (CheckPermission.checkPermission(requireContext())) {
             openLibraryMultiple()
@@ -230,16 +197,6 @@ class CreatePostFragment : BottomSheetDialogFragment() {
             Intent.createChooser(intent, "Select picture"),
             REQUEST_INTENT_CODE_MULTIPLE
         )
-    }
-
-    private fun initObserver() {
-        viewModel.state.observe(this, androidx.lifecycle.Observer { state ->
-            when (state) {
-                is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess()
-                is State.Failure -> onFailure(state.message)
-            }
-        })
     }
 
     private fun onLoading() {

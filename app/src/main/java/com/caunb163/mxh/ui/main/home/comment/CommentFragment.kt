@@ -20,6 +20,7 @@ import com.caunb163.domain.model.CommentEntity
 import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -30,7 +31,7 @@ import org.koin.android.ext.android.inject
 
 @Suppress("UNCHECKED_CAST")
 @InternalCoroutinesApi
-class CommentFragment : BottomSheetDialogFragment() {
+class CommentFragment : BaseDialogFragment() {
     private val TAG = "CommentFragment"
     private val REQUEST_INTENT_IMAGE_CODE = 1234
 
@@ -55,48 +56,9 @@ class CommentFragment : BottomSheetDialogFragment() {
     private lateinit var post: PostEntity
     private var timenow: Long = 0
     private var image: String = ""
+    override fun getLayoutId(): Int = R.layout.fragment_comment
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comment, container, false)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = BottomSheetDialog(requireContext(), theme)
-        dialog.setOnShowListener {
-
-            val bottomSheetDialog = it as BottomSheetDialog
-            val parentLayout =
-                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            parentLayout?.let { it1 ->
-                val behaviour = BottomSheetBehavior.from(it1)
-                setupFullHeight(it1)
-                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        }
-        return dialog
-    }
-
-    private fun setupFullHeight(bottomSheet: View) {
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        post = args.post
-        initview(view)
-        initObserve()
-        addListener()
-        tvLike.text = "${post.arrLike.size}"
-    }
-
-    private fun initview(view: View) {
+    override fun initView(view: View) {
         imvLike = view.findViewById(R.id.cmt_imv_like)
         imvCamera = view.findViewById(R.id.cmt_imv_camera)
         imvSend = view.findViewById(R.id.cmt_imv_send)
@@ -120,9 +82,12 @@ class CommentFragment : BottomSheetDialogFragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = commentAdapter
         }
+
+        post = args.post
+        tvLike.text = "${post.arrLike.size}"
     }
 
-    private fun addListener() {
+    override fun initListener() {
         imvSend.setOnClickListener {
             if (edtComment.text.isNotEmpty() || image.isNotEmpty()) {
                 timenow = System.currentTimeMillis()
@@ -144,7 +109,7 @@ class CommentFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun initObserve() {
+    override fun initObserve() {
         viewModel.setPostId(post.postId)
         viewModel.state.observe(this, Observer { state ->
             when (state) {
