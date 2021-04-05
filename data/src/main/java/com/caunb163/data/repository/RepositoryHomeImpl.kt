@@ -106,6 +106,9 @@ class RepositoryHomeImpl(
     }
 
     suspend fun deletePost(post: PostEntity) {
+        for (item in post.arrCmtId) {
+            db.collection(FB.COMMENT).document(item).delete().await()
+        }
         db.collection(FB.POST).document(post.postId).delete().await()
         db.collection(FB.USER).document(post.userId).get().addOnCompleteListener { task ->
             val user = task.result?.toObject(User::class.java)

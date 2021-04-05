@@ -5,9 +5,9 @@
         android:icon="@drawable/ic_home"
         android:title="@string/menu_home" />
     <item
-        android:id="@+id/youtubeFragment"
+        android:id="@+id/videoFragment"
         android:icon="@drawable/ic_youtube"
-        android:title="@string/menu_youtube" />
+        android:title="@string/menu_video" />
 
     <item
         android:id="@+id/messengerFragment"

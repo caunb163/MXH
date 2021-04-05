@@ -42,10 +42,10 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
-        android:id="@+id/youtubeFragment"
-        android:name="com.caunb163.mxh.ui.main.youtube.YoutubeFragment"
+        android:id="@+id/videoFragment"
+        android:name="com.caunb163.mxh.ui.main.video.VideoFragment"
         android:label="fragment_youtube"
-        tools:layout="@layout/fragment_youtube" />
+        tools:layout="@layout/fragment_video" />
     <dialog
         android:id="@+id/createPostFragment"
         android:name="com.caunb163.mxh.ui.main.home.create_post.CreatePostFragment"
@@ -72,7 +72,7 @@
             app:argType="com.caunb163.domain.model.GroupEntity" />
 
     </dialog>
-    <fragment
+    <dialog
         android:id="@+id/createGroupFragment"
         android:name="com.caunb163.mxh.ui.main.messenger.create_group.CreateGroupFragment"
         android:label="fragment_create_group"

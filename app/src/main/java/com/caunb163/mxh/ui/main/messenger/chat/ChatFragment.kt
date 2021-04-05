@@ -156,6 +156,8 @@ class ChatFragment : BaseDialogFragment() {
     private fun onSuccessListener(message: MessageEntity) {
         progressSend.visibility = View.INVISIBLE
         btnSend.visibility = View.VISIBLE
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
         if (message.groupId.isEmpty()) {
             Log.e(TAG, "onSuccessListener: remove")
             val index = checkMessageIndex(message)

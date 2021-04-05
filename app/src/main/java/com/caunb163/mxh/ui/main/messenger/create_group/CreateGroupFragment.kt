@@ -15,6 +15,7 @@ import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
+import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
 import com.google.android.material.appbar.MaterialToolbar
@@ -22,7 +23,7 @@ import com.google.android.material.button.MaterialButton
 import org.koin.android.ext.android.inject
 
 @Suppress("UNCHECKED_CAST")
-class CreateGroupFragment : BaseFragment(R.layout.fragment_create_group), UserOnClick {
+class CreateGroupFragment : BaseDialogFragment(), UserOnClick {
     private val TAG = "CreateGroupFragment"
     private lateinit var toolbar: MaterialToolbar
     private lateinit var recyclerView: RecyclerView
@@ -41,6 +42,7 @@ class CreateGroupFragment : BaseFragment(R.layout.fragment_create_group), UserOn
     private val arrUserId = mutableListOf<String>()
     private var timenow: Long = 0
 
+    override fun getLayoutId(): Int = R.layout.fragment_create_group
 
     override fun initView(view: View) {
         toolbar = view.findViewById(R.id.creategroup_toolbar)

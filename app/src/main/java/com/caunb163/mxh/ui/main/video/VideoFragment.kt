@@ -1,10 +1,10 @@
-package com.caunb163.mxh.ui.main.youtube
+package com.caunb163.mxh.ui.main.video
 
 import android.view.View
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 
-class YoutubeFragment : BaseFragment(R.layout.fragment_youtube) {
+class VideoFragment : BaseFragment(R.layout.fragment_video) {
     override fun initView(view: View) {
     }
 

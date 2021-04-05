@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.youtube.YoutubeFragment">
+    tools:context=".ui.main.video.VideoFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="YOUTUBE" />
+        android:text="Video" />
 
 </FrameLayout>
