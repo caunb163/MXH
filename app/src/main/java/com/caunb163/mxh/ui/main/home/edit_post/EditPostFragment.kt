@@ -21,6 +21,7 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.domain.model.PostEntity
 import com.caunb163.mxh.R
+import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,7 +32,7 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EditPostFragment : BottomSheetDialogFragment() {
+class EditPostFragment : BaseDialogFragment() {
     private val TAG = "EditPostFragment"
 
     private val REQUEST_INTENT_CODE_MULTIPLE = 1678
@@ -73,59 +74,9 @@ class EditPostFragment : BottomSheetDialogFragment() {
     private val viewModel: EditPostViewModel by inject()
     private lateinit var postEntity: PostEntity
     private val listImages = mutableListOf<String>()
+    override fun getLayoutId(): Int = R.layout.fragment_edit_post
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_edit_post, container, false)
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = BottomSheetDialog(requireContext(), theme)
-        dialog.setOnShowListener {
-
-            val bottomSheetDialog = it as BottomSheetDialog
-            val parentLayout =
-                bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            parentLayout?.let { it1 ->
-                val behaviour = BottomSheetBehavior.from(it1)
-                setupFullHeight(it1)
-                behaviour.state = BottomSheetBehavior.STATE_EXPANDED
-            }
-        }
-        return dialog
-    }
-
-    private fun setupFullHeight(bottomSheet: View) {
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView(view)
-
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbar.setNavigationOnClickListener {
-            dialog?.dismiss()
-        }
-
-        glide = Glide.with(this)
-        glide.applyDefaultRequestOptions(
-            RequestOptions()
-                .placeholder(R.drawable.image_default)
-                .error(R.drawable.image_default)
-        )
-        postEntity = args.post
-        fillInformation()
-        initObserver()
-        addListener()
-    }
-
-    private fun initView(view: View) {
+    override fun initView(view: View) {
         toolbar = view.findViewById(R.id.editpost_toolbar)
         btnSave = view.findViewById(R.id.editpost_btnSave)
         imgAvatar = view.findViewById(R.id.editpost_imv_avatar)
@@ -157,54 +108,23 @@ class EditPostFragment : BottomSheetDialogFragment() {
         tvImgNumber = view.findViewById(R.id.editpost_tv_img_number)
         imvAddImage = view.findViewById(R.id.editpost_addimage)
         progressBar = view.findViewById(R.id.editpost_progressbar)
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener {
+            dialog?.dismiss()
+        }
+
+        glide = Glide.with(this)
+        glide.applyDefaultRequestOptions(
+            RequestOptions()
+                .placeholder(R.drawable.image_default)
+                .error(R.drawable.image_default)
+        )
+        postEntity = args.post
+        fillInformation()
     }
 
-    private fun fillInformation() {
-        glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
-            .into(imgAvatar)
-        username.text = postEntity.userName
-        createDate.text = getDate(postEntity.createDate)
-        content.text = postEntity.content
-        listImages.addAll(postEntity.images)
-        updateImage()
-    }
-
-    private fun getDate(milliSeconds: Long): String? {
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = milliSeconds
-        return formatter.format(calendar.time)
-    }
-
-    private fun initObserver() {
-        viewModel.stateEdit.observe(this, androidx.lifecycle.Observer { state ->
-            when (state) {
-                is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess()
-                is State.Failure -> onFailure(state.message)
-            }
-        })
-    }
-
-    private fun onLoading() {
-        btnSave.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
-    }
-
-    private fun onSuccess() {
-        btnSave.visibility = View.VISIBLE
-        progressBar.visibility = View.INVISIBLE
-        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-        dialog?.dismiss()
-    }
-
-    private fun onFailure(message: String) {
-        btnSave.visibility = View.VISIBLE
-        progressBar.visibility = View.INVISIBLE
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun addListener() {
+    override fun initListener() {
         content.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -236,9 +156,48 @@ class EditPostFragment : BottomSheetDialogFragment() {
                 arrLike = postEntity.arrLike
             )
             viewModel.editPost(postE)
+            hideKeyboardFrom(requireContext(), it)
         }
 
         imvAddImage.setOnClickListener { ensurePermission() }
+    }
+
+    override fun initObserve() {
+        viewModel.stateEdit.observe(this, androidx.lifecycle.Observer { state ->
+            when (state) {
+                is State.Loading -> onLoading()
+                is State.Success<*> -> onSuccess()
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+    }
+
+    private fun fillInformation() {
+        glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
+            .into(imgAvatar)
+        username.text = postEntity.userName
+        createDate.text = getDate(postEntity.createDate)
+        content.text = postEntity.content
+        listImages.addAll(postEntity.images)
+        updateImage()
+    }
+
+    private fun onLoading() {
+        btnSave.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun onSuccess() {
+        btnSave.visibility = View.VISIBLE
+        progressBar.visibility = View.INVISIBLE
+        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+        dialog?.dismiss()
+    }
+
+    private fun onFailure(message: String) {
+        btnSave.visibility = View.VISIBLE
+        progressBar.visibility = View.INVISIBLE
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("SetTextI18n")

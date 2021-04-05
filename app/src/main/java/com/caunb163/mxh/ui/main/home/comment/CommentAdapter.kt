@@ -9,13 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.domain.model.CommentEntity
-import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import de.hdodenhof.circleimageview.CircleImageView
 
 class CommentAdapter(
-    private val glide: RequestManager,
-    private val user: User
+    private val glide: RequestManager
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list: MutableList<CommentEntity> = mutableListOf()
@@ -32,7 +30,7 @@ class CommentAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as CommentViewHolder).bind(glide, user, list[position])
+        (holder as CommentViewHolder).bind(glide, list[position])
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
@@ -48,7 +46,7 @@ class CommentAdapter(
         private var tvContent: TextView = view.findViewById(R.id.cmt_tv_content)
         private var imageview: ImageView = view.findViewById(R.id.cmt_image)
 
-        fun bind(glide: RequestManager, user: User, comment: CommentEntity) {
+        fun bind(glide: RequestManager, comment: CommentEntity) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(comment.userAvatar)
                 .into(imgAvatar)
             if (comment.image.isNotEmpty()) {

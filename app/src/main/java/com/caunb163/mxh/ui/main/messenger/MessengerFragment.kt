@@ -49,6 +49,7 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
             layoutManager = LinearLayoutManager(activity)
             adapter = groupAdapter
         }
+        groupAdapter.updateData(list)
 
     }
 
@@ -59,74 +60,55 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
     }
 
     override fun initObserve() {
-        viewModel.getAllMyGroup()
-        viewModel.state.observe(this, Observer { state ->
+        viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as MutableList<GroupEntity>)
+                is State.Success<*> -> onSuccessListener(state.data as GroupEntity)
                 is State.Failure -> onFailure(state.message)
             }
         })
     }
 
-    private fun onLoading() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.INVISIBLE
+    private fun onLoading() {}
+
+    private fun onSuccessListener(group: GroupEntity) {
+        if (group.name.isEmpty()) {
+            val index = checkGroupIndex(group)
+            if (index != -1) {
+                list.removeAt(index)
+                groupAdapter.notifyItemRemoved(index)
+            }
+        } else if (checkListAdd(group)) {
+            val index = checkGroupIndex(group)
+            if (index != -1) {
+                list[index] = group
+                groupAdapter.notifyItemChanged(index)
+            }
+        } else {
+            if (!list.contains(group)) {
+                list.add(0, group)
+                list.sortByDescending { it.createDate }
+                groupAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
-    private fun onSuccess(groups: MutableList<GroupEntity>) {
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
-        list.clear()
-        list.addAll(groups)
-        groupAdapter.updateData(list)
-
-//        viewModel.listener.observe(this, Observer { state ->
-//            when (state) {
-//                is State.Loading -> onLoading()
-//                is State.Success<*> -> onSuccessListener(state.data as GroupEntity)
-//                is State.Failure -> onFailure(state.message)
-//            }
-//        })
+    private fun checkGroupIndex(group: GroupEntity): Int {
+        for (index in 1 until list.size)
+            if (list[index].groupId == group.groupId) {
+                return index
+            }
+        return -1
     }
 
-//    private fun onSuccessListener(group: GroupEntity) {
-//        if (group.name.isEmpty()) {
-//            val index = checkGroupIndex(group)
-//            if (index != -1) {
-//                list.removeAt(index)
-//                groupAdapter.notifyItemRemoved(index)
-//            }
-//        } else if (checkListAdd(group)) {
-//            val index = checkGroupIndex(group)
-//            if (index != -1) {
-//                list[index] = group
-//                groupAdapter.notifyItemChanged(index)
-//            }
-//        } else {
-//            if (!list.contains(group)) {
-//                list.add(0, group)
-//                groupAdapter.notifyItemInserted(0)
-//            }
-//        }
-//    }
-
-//    private fun checkGroupIndex(group: GroupEntity): Int {
-//        for (index in 1 until list.size)
-//            if (list[index].groupId == group.groupId) {
-//                return index
-//            }
-//        return -1
-//    }
-//
-//    private fun checkListAdd(group: GroupEntity): Boolean {
-//        list.forEach {
-//            if (it.groupId == group.groupId) {
-//                return true
-//            }
-//        }
-//        return false
-//    }
+    private fun checkListAdd(group: GroupEntity): Boolean {
+        list.forEach {
+            if (it.groupId == group.groupId) {
+                return true
+            }
+        }
+        return false
+    }
 
     private fun onFailure(message: String) {
         progressBar.visibility = View.INVISIBLE

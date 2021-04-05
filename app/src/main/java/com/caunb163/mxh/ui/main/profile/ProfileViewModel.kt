@@ -1,50 +1,35 @@
 package com.caunb163.mxh.ui.main.profile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.caunb163.domain.usecase.profile.ProfileUseCase
+import androidx.lifecycle.*
+import com.caunb163.data.repository.RepositoryProfileImpl
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ProfileViewModel(
-    private val profileUseCase: ProfileUseCase
+    private val repositoryProfileImpl: RepositoryProfileImpl
 ) : ViewModel() {
-    private val _statePost: MutableLiveData<State> = MutableLiveData()
-    val statePost: LiveData<State> get() = _statePost
-
-    private val _stateAvatar: MutableLiveData<State> = MutableLiveData()
-    val stateAvatar: LiveData<State> get() = _stateAvatar
-
-    private val _stateBackground: MutableLiveData<State> = MutableLiveData()
-    val stateBackground: LiveData<State> get() = _stateBackground
-
-    fun getProfilePost() {
-        viewModelScope.launch {
-            _statePost.value = State.Loading
-            try {
-                val profileState = withContext(Dispatchers.IO) {
-                    return@withContext profileUseCase.getProfilePost()
-                }
-
-                _statePost.value = State.Success(profileState)
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                _statePost.value = State.Failure("${e.message}")
+    val listener: LiveData<State> = liveData(Dispatchers.IO) {
+        emit(State.Loading)
+        try {
+            repositoryProfileImpl.listenerPostChange().collect {
+                emit(State.Success(it))
             }
+        } catch (e: Exception) {
+            emit(State.Failure("${e.message}"))
         }
     }
 
+    private val _stateAvatar: MutableLiveData<State> = MutableLiveData()
+    val stateAvatar: LiveData<State> get() = _stateAvatar
     fun uploadAvatar(uri: String) {
         viewModelScope.launch {
             _stateAvatar.value = State.Loading
             try {
                 val avatarState = withContext(Dispatchers.IO) {
-                    return@withContext profileUseCase.updateAvatar(uri)
+                    return@withContext repositoryProfileImpl.updateAvatar(uri)
                 }
 
                 _stateAvatar.value = State.Success(avatarState)
@@ -56,12 +41,14 @@ class ProfileViewModel(
         }
     }
 
+    private val _stateBackground: MutableLiveData<State> = MutableLiveData()
+    val stateBackground: LiveData<State> get() = _stateBackground
     fun uploadBackground(uri: String) {
         viewModelScope.launch {
             _stateBackground.value = State.Loading
             try {
                 val avatarState = withContext(Dispatchers.IO) {
-                    return@withContext profileUseCase.updateBackground(uri)
+                    return@withContext repositoryProfileImpl.updateBackground(uri)
                 }
 
                 _stateBackground.value = State.Success(avatarState)

@@ -16,6 +16,7 @@ class MessageMapper {
             groupId = message.groupId,
             content = message.content,
             createDate = message.createDate,
+            image = message.image,
             userName = userName,
             userAvatar = userAvatar
         )

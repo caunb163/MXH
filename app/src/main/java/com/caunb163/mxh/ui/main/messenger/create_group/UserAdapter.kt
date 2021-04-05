@@ -52,7 +52,7 @@ class UserAdapter(
             userName.text = user.username
 
             checkBox.isChecked = user.ischeck
-            checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            checkBox.setOnCheckedChangeListener { _, isChecked ->
                 user.ischeck = isChecked
                 listener.userOnClick(user)
             }

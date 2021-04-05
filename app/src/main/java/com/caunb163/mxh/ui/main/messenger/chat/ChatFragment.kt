@@ -1,5 +1,6 @@
 package com.caunb163.mxh.ui.main.messenger.chat
 
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,12 +24,15 @@ import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
+import com.caunb163.mxh.ultis.CheckPermission
 import com.google.android.material.appbar.MaterialToolbar
 import org.koin.android.ext.android.inject
 
 @Suppress("UNCHECKED_CAST")
 class ChatFragment : BaseDialogFragment() {
     private val TAG = "ChatFragment"
+    private val REQUEST_INTENT_IMAGE_CODE = 2314
+
     private lateinit var toolbar: MaterialToolbar
     private lateinit var recyclerView: RecyclerView
     private lateinit var chat: EditText
@@ -44,6 +49,7 @@ class ChatFragment : BaseDialogFragment() {
     private lateinit var user: User
     private val list = mutableListOf<MessageEntity>()
     private var timenow: Long = 0
+    private var image: String = ""
 
     override fun getLayoutId(): Int = R.layout.fragment_chat
 
@@ -73,6 +79,7 @@ class ChatFragment : BaseDialogFragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = chatAdapter
         }
+        chatAdapter.updateData(list)
     }
 
     override fun initListener() {
@@ -94,20 +101,29 @@ class ChatFragment : BaseDialogFragment() {
 
         btnSend.setOnClickListener {
             timenow = System.currentTimeMillis()
-            viewModel.createMessage(chat.text.toString(), timenow, args.group.groupId, user.userId)
+            viewModel.createMessage(
+                chat.text.toString(),
+                timenow,
+                args.group.groupId,
+                user.userId,
+                ""
+            )
+            chat.setText("")
+            hideKeyboardFrom(requireContext(), it)
         }
     }
 
     override fun initObserve() {
         viewModel.setGroupId(args.group.groupId)
-        viewModel.getAllMessage()
-        viewModel.state.observe(this, Observer { state ->
+
+        viewModel.listener.observe(this, Observer { state ->
             when (state) {
-                is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as MutableList<MessageEntity>)
+                is State.Loading -> onLoadingListener()
+                is State.Success<*> -> onSuccessListener(state.data as MessageEntity)
                 is State.Failure -> onFailure(state.message)
             }
         })
+
         viewModel.stateCreateMessage.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoadingSend()
@@ -117,32 +133,11 @@ class ChatFragment : BaseDialogFragment() {
         })
     }
 
-    private fun onLoadingListener(){}
-
-    private fun onLoading() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.INVISIBLE
-    }
+    private fun onLoadingListener() {}
 
     private fun onLoadingSend() {
         progressSend.visibility = View.VISIBLE
         btnSend.visibility = View.INVISIBLE
-    }
-
-    private fun onSuccess(listMessage: MutableList<MessageEntity>) {
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
-        list.clear()
-        list.addAll(listMessage)
-        chatAdapter.updateData(list)
-        recyclerView.smoothScrollToPosition(list.size - 1)
-        viewModel.listener.observe(this, Observer { state ->
-            when (state) {
-                is State.Loading -> onLoadingListener()
-                is State.Success<*> -> onSuccessListener(state.data as MessageEntity)
-                is State.Failure -> onFailure(state.message)
-            }
-        })
     }
 
     private fun onSuccessCreateMessage() {
@@ -150,7 +145,6 @@ class ChatFragment : BaseDialogFragment() {
         btnSend.visibility = View.VISIBLE
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
-        chat.setText("")
     }
 
     private fun onSuccessListener(message: MessageEntity) {
@@ -176,7 +170,8 @@ class ChatFragment : BaseDialogFragment() {
             if (!list.contains(message)) {
                 Log.e(TAG, "onSuccessListener: add")
                 list.add(message)
-                chatAdapter.notifyItemInserted(list.size - 1)
+                list.sortBy { it.createDate.inc() }
+                chatAdapter.notifyDataSetChanged()
             }
         }
         recyclerView.smoothScrollToPosition(list.size - 1)
@@ -205,5 +200,47 @@ class ChatFragment : BaseDialogFragment() {
         progressSend.visibility = View.INVISIBLE
         btnSend.visibility = View.VISIBLE
         showToast(message)
+    }
+
+    private fun ensurePermission() {
+        if (CheckPermission.checkPermission(requireContext())) {
+            openLibrary()
+        } else
+            requestPermissions(
+                CheckPermission.listPermission.toTypedArray(),
+                REQUEST_INTENT_IMAGE_CODE
+            )
+    }
+
+    private fun openLibrary() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_PICK
+        startActivityForResult(intent, REQUEST_INTENT_IMAGE_CODE)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_INTENT_IMAGE_CODE) {
+            if (CheckPermission.checkPermission(requireContext())) {
+                openLibrary()
+            } else Toast.makeText(context, "Yêu cầu bị từ chối", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_INTENT_IMAGE_CODE) {
+            data?.let {
+                image = data.data!!.toString()
+//                imvImage.visibility = View.VISIBLE
+//                glide.applyDefaultRequestOptions(RequestOptions()).load(image)
+//                    .into(imvImage)
+            }
+        }
     }
 }

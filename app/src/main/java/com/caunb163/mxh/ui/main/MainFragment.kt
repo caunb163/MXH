@@ -30,22 +30,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             childFragmentManager.findFragmentById(R.id.nav_home_fragment) as NavHostFragment
         val navController: NavController = navHostFragment.navController
         NavigationUI.setupWithNavController(navView, navController)
-
-//        val navHostFragment: NavHostFragment =
-//            childFragmentManager.findFragmentById(R.id.nav_home_fragment) as NavHostFragment
-//        val navController = navHostFragment.navController
-//
-//        val navigator = KeepStateNavigator(
-//            requireContext(),
-//            navHostFragment.childFragmentManager,
-//            R.id.nav_home_fragment
-//        )
-////
-//        navController.navigatorProvider.addNavigator(navigator)
-//        navController.setGraph(R.navigation.home_nav_graph)
-//
-//        navView.setupWithNavController(navController)
-
     }
 
     override fun initListener() {}

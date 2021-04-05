@@ -44,13 +44,25 @@
             android:visibility="invisible"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:padding="5dp"
+            android:id="@+id/chat_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintTop_toTopOf="@id/bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="5dp"
             android:background="@drawable/border_black"
+            app:layout_constraintStart_toEndOf="@+id/chat_camera"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <EditText
@@ -77,16 +89,16 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ProgressBar
-                app:layout_constraintTop_toTopOf="@id/chat_send"
-                app:layout_constraintBottom_toBottomOf="@id/chat_send"
-                app:layout_constraintStart_toStartOf="@id/chat_send"
-                app:layout_constraintEnd_toEndOf="@id/chat_send"
                 android:id="@+id/chat_progressBar_send"
                 style="@android:style/Widget.ProgressBar.Inverse"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/chat_send"
+                app:layout_constraintEnd_toEndOf="@id/chat_send"
+                app:layout_constraintStart_toStartOf="@id/chat_send"
+                app:layout_constraintTop_toTopOf="@id/chat_send" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

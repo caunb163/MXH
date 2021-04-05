@@ -14,27 +14,10 @@ import kotlinx.coroutines.withContext
 class HomeViewModel(
     private val repositoryHomeImpl: RepositoryHomeImpl
 ) : ViewModel() {
+    private val TAG = "HomeViewModel"
 
     private val _stateLike: MutableLiveData<State> = MutableLiveData()
     val stateLike: LiveData<State> get() = _stateLike
-
-    private val _state: MutableLiveData<State> = MutableLiveData()
-    val state: LiveData<State> get() = _state
-
-    fun getAllPost() {
-        viewModelScope.launch {
-            _state.value = State.Loading
-            try {
-                val statePost = withContext(Dispatchers.IO) {
-                    return@withContext repositoryHomeImpl.getAllPost()
-                }
-                _state.value = State.Success(statePost)
-
-            } catch (e: Exception) {
-                _state.value = State.Failure("${e.message}")
-            }
-        }
-    }
 
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)

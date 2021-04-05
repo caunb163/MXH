@@ -3,6 +3,7 @@ package com.caunb163.mxh.ui.main.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -76,20 +77,21 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
             layoutManager = LinearLayoutManager(activity)
             adapter = homeAdapter
         }
+        list.add(user)
+        homeAdapter.updateData(list)
     }
 
-    override fun initListener() {
-    }
+    override fun initListener() {}
 
     override fun initObserve() {
-        viewModel.getAllPost()
-        viewModel.state.observe(this, Observer { state ->
+        viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as MutableList<PostEntity>)
+                is State.Success<*> -> onSuccessListener(state.data as PostEntity)
                 is State.Failure -> onFailure(state.message)
             }
         })
+
         viewModel.stateLike.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoadingLike()
@@ -108,8 +110,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     private fun onLoading() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.INVISIBLE
+//        progressBar.visibility = View.VISIBLE
+//        recyclerView.visibility = View.INVISIBLE
     }
 
     private fun onLoadingLike() {}
@@ -131,8 +133,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
             }
         } else {
             if (!list.contains(post)) {
-                list.add(1, post)
-                homeAdapter.notifyItemInserted(1)
+                list.add(post)
+                list.sortByDescending {
+                    if (it is PostEntity) {
+                        it.createDate.inc()
+                    } else {
+                        null
+                    }
+                }
+                list.remove(user)
+                list.add(0,user)
+                homeAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -154,23 +165,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
             }
         }
         return false
-    }
-
-    private fun onSuccess(listPost: MutableList<PostEntity>) {
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
-        list.clear()
-        list.add(user)
-        list.addAll(listPost)
-        homeAdapter.updateData(list)
-
-        viewModel.listener.observe(this, Observer { state ->
-            when (state) {
-                is State.Loading -> onLoadingLike()
-                is State.Success<*> -> onSuccessListener(state.data as PostEntity)
-                is State.Failure -> onFailure(state.message)
-            }
-        })
     }
 
     private fun onFailure(message: String) {

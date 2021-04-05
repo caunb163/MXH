@@ -59,17 +59,18 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
             layoutManager = LinearLayoutManager(activity)
             adapter = profileAdapter
         }
+        list.add(user)
+        profileAdapter.updateData(list)
     }
 
     override fun initListener() {
     }
 
     override fun initObserve() {
-        viewModel.getProfilePost()
-        viewModel.statePost.observe(this, Observer { state ->
+        viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as MutableList<PostEntity>)
+                is State.Success<*> -> onSuccessListener(state.data as PostEntity)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -91,22 +92,40 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         })
     }
 
-    private fun onLoading() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.INVISIBLE
-    }
+    private fun onLoading() {}
 
     private fun onLoadingAvatar() {
         customProgressBar.show()
     }
 
-    private fun onSuccess(listPost: MutableList<PostEntity>) {
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
-        list.clear()
-        list.add(user)
-        list.addAll(listPost)
-        profileAdapter.updateData(list)
+    private fun onSuccessListener(post: PostEntity) {
+        if (post.userId.isEmpty()) {
+            val index = checkPostIndex(post)
+            if (index != -1) {
+                list.removeAt(index)
+                profileAdapter.notifyItemRemoved(index)
+            }
+        } else if (checkListAdd(post)) {
+            val index = checkPostIndex(post)
+            if (index != -1) {
+                list[index] = post
+                profileAdapter.notifyItemChanged(index)
+            }
+        } else {
+            if (!list.contains(post)) {
+                list.add(post)
+                list.sortByDescending {
+                    if (it is PostEntity) {
+                        it.createDate.inc()
+                    } else {
+                        null
+                    }
+                }
+                list.remove(user)
+                list.add(0,user)
+                profileAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
     private fun onSuccess(uri: String) {
@@ -132,6 +151,25 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
         showToast(message)
+    }
+
+    private fun checkPostIndex(post: PostEntity): Int {
+        for (index in 1 until list.size)
+            if ((list[index] as PostEntity).postId == post.postId) {
+                return index
+            }
+        return -1
+    }
+
+    private fun checkListAdd(post: PostEntity): Boolean {
+        list.forEach {
+            if (it is PostEntity) {
+                if (it.postId == post.postId) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     override fun avatarClick() {

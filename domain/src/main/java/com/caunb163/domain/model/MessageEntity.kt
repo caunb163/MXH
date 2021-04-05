@@ -6,6 +6,7 @@ data class MessageEntity(
     val groupId: String = "",
     val content: String = "",
     val createDate: Long = 1614633736659,
+    val image: String = "",
     val userName: String = "",
     val userAvatar: String = ""
 )

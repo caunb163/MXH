@@ -23,9 +23,8 @@ class RepositoryMainImpl(private val auth: Auth) {
             if (error != null) {
                 return@addSnapshotListener
             }
-            var user = User()
             value?.let {
-                user = value.toObject(User::class.java)!!
+                val user = value.toObject(User::class.java)!!
                 offer(user)
             }
         }

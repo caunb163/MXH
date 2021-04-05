@@ -25,29 +25,6 @@ class RepositoryHomeImpl(
     private val db = Firebase.firestore
     private val user = localStorage.getAccount()!!
 
-    suspend fun getAllPost(): MutableList<PostEntity> {
-        val data = db.collection(FB.POST).get().await()
-        val postEntityList = mutableListOf<PostEntity>()
-
-        for (result in data.documents) {
-            val post = result.toObject(Post::class.java)
-            post?.let {
-                db.collection(FB.USER).document(it.userId).get().addOnCompleteListener { task ->
-                    val user = task.result?.toObject(User::class.java)
-                    user?.let { u ->
-                        val postEntity = postMapper.toEntity(
-                            post, result.id,
-                            u.username, u.photoUrl
-                        )
-                        postEntityList.add(postEntity)
-                    }
-                }.await()
-            }
-        }
-        postEntityList.sortByDescending { it.createDate.inc() }
-        return postEntityList
-    }
-
     suspend fun listenerPostChange(): Flow<PostEntity> = callbackFlow {
         val data =
             db.collection(FB.POST)

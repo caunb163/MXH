@@ -144,7 +144,6 @@
         android:src="@drawable/bg1"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/cmt_edt_cmt"
-        app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintHeight_percent="0.15"
         app:layout_constraintStart_toEndOf="@id/cmt_imv_camera" />
 

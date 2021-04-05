@@ -76,7 +76,7 @@ class CommentFragment : BaseDialogFragment() {
                 .error(R.drawable.image_default)
         )
         user = localStorage.getAccount()!!
-        commentAdapter = CommentAdapter(glide, user)
+        commentAdapter = CommentAdapter(glide)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -102,6 +102,7 @@ class CommentFragment : BaseDialogFragment() {
                 imvImage.visibility = View.GONE
                 edtComment.setText("")
             }
+            hideKeyboardFrom(requireContext(),it)
         }
 
         imvCamera.setOnClickListener {

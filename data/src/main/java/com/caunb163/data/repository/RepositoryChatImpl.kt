@@ -19,28 +19,28 @@ class RepositoryChatImpl(
     private val TAG = "RepositoryChatImpl"
     private val db = Firebase.firestore
 
-    suspend fun getAllMessages(groupId: String): MutableList<MessageEntity> {
-        val data = db.collection(FB.MESSAGE).whereEqualTo("groupId", groupId).get().await()
-        val messageEntityList = mutableListOf<MessageEntity>()
-
-        for (result in data.documents) {
-            val message = result.toObject(Message::class.java)
-            message?.let {
-                db.collection(FB.USER).document(it.userId).get().addOnCompleteListener { task ->
-                    val user = task.result?.toObject(User::class.java)
-                    user?.let { u ->
-                        val messageEntity = messageMapper.toEntity(
-                            it, u.username, u.photoUrl, result.id
-                        )
-                        messageEntityList.add(messageEntity)
-                    }
-                }.await()
-            }
-        }
-
-        messageEntityList.sortBy { it.createDate.dec() }
-        return messageEntityList
-    }
+//    suspend fun getAllMessages(groupId: String): MutableList<MessageEntity> {
+//        val data = db.collection(FB.MESSAGE).whereEqualTo("groupId", groupId).get().await()
+//        val messageEntityList = mutableListOf<MessageEntity>()
+//
+//        for (result in data.documents) {
+//            val message = result.toObject(Message::class.java)
+//            message?.let {
+//                db.collection(FB.USER).document(it.userId).get().addOnCompleteListener { task ->
+//                    val user = task.result?.toObject(User::class.java)
+//                    user?.let { u ->
+//                        val messageEntity = messageMapper.toEntity(
+//                            it, u.username, u.photoUrl, result.id
+//                        )
+//                        messageEntityList.add(messageEntity)
+//                    }
+//                }.await()
+//            }
+//        }
+//
+//        messageEntityList.sortBy { it.createDate.dec() }
+//        return messageEntityList
+//    }
 
     suspend fun listenerMessageChange(groupId: String): Flow<MessageEntity> = callbackFlow {
         val data =
@@ -88,10 +88,11 @@ class RepositoryChatImpl(
         content: String,
         createDate: Long,
         groupId: String,
-        userId: String
+        userId: String,
+        image: String
     ) {
         val message = Message(
-            userId, groupId, content, createDate
+            userId, groupId, content, createDate, image
         )
         db.collection(FB.MESSAGE).add(message).await()
         db.collection(FB.GROUP).document(groupId).update("lastMessage", content).await()

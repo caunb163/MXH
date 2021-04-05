@@ -18,21 +18,21 @@ class ChatViewModel(
         _groupId.value = groupId
     }
 
-    private val _state: MutableLiveData<State> = MutableLiveData()
-    val state: LiveData<State> get() = _state
-    fun getAllMessage() {
-        viewModelScope.launch {
-            _state.value = State.Loading
-            try {
-                val stateMessage = withContext(Dispatchers.IO) {
-                    return@withContext repositoryChatImpl.getAllMessages(_groupId.value!!)
-                }
-                _state.value = State.Success(stateMessage)
-            } catch (e: Exception) {
-                _state.value = State.Failure("${e.message}")
-            }
-        }
-    }
+//    private val _state: MutableLiveData<State> = MutableLiveData()
+//    val state: LiveData<State> get() = _state
+//    fun getAllMessage() {
+//        viewModelScope.launch {
+//            _state.value = State.Loading
+//            try {
+//                val stateMessage = withContext(Dispatchers.IO) {
+//                    return@withContext repositoryChatImpl.getAllMessages(_groupId.value!!)
+//                }
+//                _state.value = State.Success(stateMessage)
+//            } catch (e: Exception) {
+//                _state.value = State.Failure("${e.message}")
+//            }
+//        }
+//    }
 
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)
@@ -47,16 +47,19 @@ class ChatViewModel(
 
     private val _stateCreateMessage: MutableLiveData<State> = MutableLiveData()
     val stateCreateMessage: LiveData<State> get() = _stateCreateMessage
-    fun createMessage(content: String, createDate: Long, groupId: String, userId: String) {
+    fun createMessage(
+        content: String,
+        createDate: Long,
+        groupId: String,
+        userId: String,
+        image: String
+    ) {
         viewModelScope.launch {
             _stateCreateMessage.value = State.Loading
             try {
                 val stateM = withContext(Dispatchers.IO) {
                     return@withContext repositoryChatImpl.createMessenger(
-                        content,
-                        createDate,
-                        groupId,
-                        userId
+                        content, createDate, groupId, userId, image
                     )
                 }
                 _stateCreateMessage.value = State.Success(stateM)

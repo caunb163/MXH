@@ -93,6 +93,7 @@ class CreateGroupFragment : BaseDialogFragment(), UserOnClick {
         createBtn.setOnClickListener {
             timenow = System.currentTimeMillis()
             viewModel.createGroup(arrUserId, edtName.text.toString(), timenow)
+            hideKeyboardFrom(requireContext(), it)
         }
     }
 

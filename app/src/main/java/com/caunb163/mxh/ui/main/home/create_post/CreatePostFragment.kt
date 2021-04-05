@@ -154,6 +154,7 @@ class CreatePostFragment : BaseDialogFragment() {
                 listImages,
                 content.text.toString()
             )
+            hideKeyboardFrom(requireContext(), it)
         }
 
         imvAddImage.setOnClickListener {
