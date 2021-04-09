@@ -70,6 +70,9 @@
         <argument
             android:name="group"
             app:argType="com.caunb163.domain.model.GroupEntity" />
+        <action
+            android:id="@+id/action_chatFragment_to_emojiFragment"
+            app:destination="@id/emojiFragment" />
 
     </dialog>
     <dialog
@@ -120,6 +123,17 @@
         <argument
             android:name="position"
             app:argType="integer" />
+
+    </dialog>
+    <dialog
+        android:id="@+id/emojiFragment"
+        android:name="com.caunb163.mxh.ui.main.messenger.chat.emoji.EmojiFragment"
+        android:label="fragment_emoji"
+        tools:layout="@layout/fragment_emoji" >
+
+        <argument
+            android:name="group"
+            app:argType="com.caunb163.domain.model.GroupEntity" />
 
     </dialog>
 

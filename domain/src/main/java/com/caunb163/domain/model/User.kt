@@ -1,5 +1,7 @@
 package com.caunb163.domain.model
 
+import java.io.Serializable
+
 data class User(
     var username: String = "",
     var email: String = "",
@@ -11,6 +13,6 @@ data class User(
     var birthDay: String = "",
     var address: String = "",
     var intro: String = ""
-) {
+) : Serializable {
     var ischeck: Boolean = false
 }

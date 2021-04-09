@@ -2,7 +2,7 @@ package com.caunb163.data.repository
 
 import android.net.Uri
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.data.firebase.FB
+import com.caunb163.data.firebase.FireStore
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.usecase.home.create_post.RepositoryCreatePost
 import com.google.firebase.firestore.ktx.firestore
@@ -55,10 +55,10 @@ class RepositoryCreatePostImpl(
             arrLike = arrLike
         )
 
-        db.collection(FB.POST).add(post).addOnSuccessListener { it ->
+        db.collection(FireStore.POST).add(post).addOnSuccessListener { it ->
             user.arrPostId.add(it.id)
             localStorage.saveAccount(user)
-            db.collection(FB.USER).document(userId).update("arrPostId", user.arrPostId)
+            db.collection(FireStore.USER).document(userId).update("arrPostId", user.arrPostId)
         }.await()
     }
 }

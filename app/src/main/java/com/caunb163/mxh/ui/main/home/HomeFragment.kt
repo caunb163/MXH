@@ -109,10 +109,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         })
     }
 
-    private fun onLoading() {
-//        progressBar.visibility = View.VISIBLE
-//        recyclerView.visibility = View.INVISIBLE
-    }
+    private fun onLoading() {}
 
     private fun onLoadingLike() {}
 

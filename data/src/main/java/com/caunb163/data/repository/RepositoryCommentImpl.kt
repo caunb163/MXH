@@ -1,7 +1,7 @@
 package com.caunb163.data.repository
 
 import android.net.Uri
-import com.caunb163.data.firebase.FB
+import com.caunb163.data.firebase.FireStore
 import com.caunb163.data.mapper.CommentMapper
 import com.caunb163.domain.model.Comment
 import com.caunb163.domain.model.CommentEntity
@@ -25,7 +25,7 @@ class RepositoryCommentImpl(
     val db = Firebase.firestore
 
     suspend fun getAllComment(postId: String): Flow<List<CommentEntity>> = callbackFlow {
-        val data = db.collection(FB.POST).document(postId)
+        val data = db.collection(FireStore.POST).document(postId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -37,11 +37,11 @@ class RepositoryCommentImpl(
                 val post = it.toObject(Post::class.java)
                 post?.let { p ->
                     for (cmtId in p.arrCmtId) {
-                        db.collection(FB.COMMENT).document(cmtId).get()
+                        db.collection(FireStore.COMMENT).document(cmtId).get()
                             .addOnCompleteListener { task ->
                                 val cmt = task.result?.toObject(Comment::class.java)
                                 cmt?.let { comment ->
-                                    db.collection(FB.USER).document(comment.userId).get()
+                                    db.collection(FireStore.USER).document(comment.userId).get()
                                         .addOnCompleteListener { t ->
                                             val user = t.result?.toObject(User::class.java)
                                             val cmtEntity = commentMapper.toEntity(
@@ -96,13 +96,13 @@ class RepositoryCommentImpl(
             time = time
         )
 
-        db.collection(FB.COMMENT).add(comment).addOnSuccessListener { it ->
-            db.collection(FB.POST).document(postId).get().addOnCompleteListener { task ->
+        db.collection(FireStore.COMMENT).add(comment).addOnSuccessListener { it ->
+            db.collection(FireStore.POST).document(postId).get().addOnCompleteListener { task ->
                 val post = task.result?.toObject(Post::class.java)
                 post?.let { p ->
                     val arrCmtId = p.arrCmtId
                     arrCmtId.add(it.id)
-                    db.collection(FB.POST).document(postId).update("arrCmtId", arrCmtId)
+                    db.collection(FireStore.POST).document(postId).update("arrCmtId", arrCmtId)
                 }
             }
         }.await()

@@ -2,7 +2,7 @@ package com.caunb163.data.repository
 
 import android.net.Uri
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.data.firebase.FB
+import com.caunb163.data.firebase.FireStore
 import com.caunb163.data.mapper.PostMapper
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.PostEntity
@@ -29,7 +29,7 @@ class RepositoryProfileImpl(
 
     suspend fun listenerPostChange(): Flow<PostEntity> = callbackFlow {
         val data =
-            db.collection(FB.POST).whereEqualTo("userId", user.userId)
+            db.collection(FireStore.POST).whereEqualTo("userId", user.userId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -37,7 +37,7 @@ class RepositoryProfileImpl(
             value?.let { qs ->
                 for (dc in qs.documentChanges) {
                     val post = dc.document.toObject(Post::class.java)
-                    db.collection(FB.USER).document(post.userId).get()
+                    db.collection(FireStore.USER).document(post.userId).get()
                         .addOnCompleteListener { task ->
                             val user = task.result?.toObject(User::class.java)
                             user?.let { u ->
@@ -82,7 +82,7 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection(FB.USER).document(user.userId).update("photoUrl", stringPath)
+                db.collection(FireStore.USER).document(user.userId).update("photoUrl", stringPath)
             }
         }.await()
 
@@ -102,7 +102,7 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection(FB.USER).document(user.userId).update("photoBackground", stringPath)
+                db.collection(FireStore.USER).document(user.userId).update("photoBackground", stringPath)
             }
         }.await()
 

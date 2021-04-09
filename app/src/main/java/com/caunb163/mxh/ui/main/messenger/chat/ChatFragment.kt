@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,6 @@ import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
-import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
 import com.google.android.material.appbar.MaterialToolbar
@@ -37,8 +37,11 @@ class ChatFragment : BaseDialogFragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var chat: EditText
     private lateinit var btnSend: ImageView
+    private lateinit var btnEmoji: ImageView
     private lateinit var progressBar: ProgressBar
     private lateinit var progressSend: ProgressBar
+    private lateinit var imageView: ImageView
+    private lateinit var camera: ImageView
 
     private val viewModel: ChatViewModel by inject()
     private val args: ChatFragmentArgs by navArgs()
@@ -59,8 +62,11 @@ class ChatFragment : BaseDialogFragment() {
         recyclerView = view.findViewById(R.id.chat_recyclerView)
         chat = view.findViewById(R.id.chat_chat)
         btnSend = view.findViewById(R.id.chat_send)
+        btnEmoji = view.findViewById(R.id.chat_enmoji)
         progressBar = view.findViewById(R.id.chat_progressBar)
         progressSend = view.findViewById(R.id.chat_progressBar_send)
+        imageView = view.findViewById(R.id.chat_image)
+        camera = view.findViewById(R.id.chat_camera)
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
@@ -89,27 +95,39 @@ class ChatFragment : BaseDialogFragment() {
             override fun afterTextChanged(s: Editable?) {
                 s?.let {
                     if (it.isNotEmpty()) {
-                        btnSend.isEnabled = true
-                        btnSend.setImageResource(R.drawable.ic_send)
+                        btnSend.visibility = View.VISIBLE
+                        btnEmoji.visibility = View.INVISIBLE
                     } else {
-                        btnSend.isEnabled = false
-                        btnSend.setImageResource(R.drawable.ic_un_send)
+                        btnSend.visibility = View.INVISIBLE
                     }
                 }
             }
         })
 
         btnSend.setOnClickListener {
-            timenow = System.currentTimeMillis()
-            viewModel.createMessage(
-                chat.text.toString(),
-                timenow,
-                args.group.groupId,
-                user.userId,
-                ""
-            )
-            chat.setText("")
-            hideKeyboardFrom(requireContext(), it)
+            if (chat.text.toString().isNotEmpty() || image.isNotEmpty()) {
+                timenow = System.currentTimeMillis()
+                viewModel.createMessage(
+                    chat.text.toString(),
+                    timenow,
+                    user.userId,
+                    image
+                )
+                imageView.setImageDrawable(null)
+                imageView.visibility = View.GONE
+                image = ""
+                chat.setText("")
+                hideKeyboardFrom(requireContext(), it)
+            }
+        }
+
+        btnEmoji.setOnClickListener {
+            val action = ChatFragmentDirections.actionChatFragmentToEmojiFragment(args.group)
+            findNavController().navigate(action)
+        }
+
+        camera.setOnClickListener {
+            ensurePermission()
         }
     }
 
@@ -137,30 +155,26 @@ class ChatFragment : BaseDialogFragment() {
 
     private fun onLoadingSend() {
         progressSend.visibility = View.VISIBLE
+        btnEmoji.visibility = View.INVISIBLE
         btnSend.visibility = View.INVISIBLE
     }
 
     private fun onSuccessCreateMessage() {
         progressSend.visibility = View.INVISIBLE
-        btnSend.visibility = View.VISIBLE
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
+        btnEmoji.visibility = View.VISIBLE
+        btnSend.visibility = View.INVISIBLE
     }
 
     private fun onSuccessListener(message: MessageEntity) {
-        progressSend.visibility = View.INVISIBLE
-        btnSend.visibility = View.VISIBLE
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
         if (message.groupId.isEmpty()) {
-            Log.e(TAG, "onSuccessListener: remove")
+//            Log.e(TAG, "onSuccessListener: remove")
             val index = checkMessageIndex(message)
             if (index != -1) {
                 list.removeAt(index)
                 chatAdapter.notifyItemRemoved(index)
             }
         } else if (checkListAdd(message)) {
-            Log.e(TAG, "onSuccessListener: update")
+//            Log.e(TAG, "onSuccessListener: update")
             val index = checkMessageIndex(message)
             if (index != -1) {
                 list[index] = message
@@ -168,7 +182,7 @@ class ChatFragment : BaseDialogFragment() {
             }
         } else {
             if (!list.contains(message)) {
-                Log.e(TAG, "onSuccessListener: add")
+//                Log.e(TAG, "onSuccessListener: add")
                 list.add(message)
                 list.sortBy { it.createDate.inc() }
                 chatAdapter.notifyDataSetChanged()
@@ -195,10 +209,9 @@ class ChatFragment : BaseDialogFragment() {
     }
 
     private fun onFailure(message: String) {
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
+        btnSend.visibility = View.INVISIBLE
         progressSend.visibility = View.INVISIBLE
-        btnSend.visibility = View.VISIBLE
+        btnEmoji.visibility = View.VISIBLE
         showToast(message)
     }
 
@@ -237,9 +250,11 @@ class ChatFragment : BaseDialogFragment() {
         if (requestCode == REQUEST_INTENT_IMAGE_CODE) {
             data?.let {
                 image = data.data!!.toString()
-//                imvImage.visibility = View.VISIBLE
-//                glide.applyDefaultRequestOptions(RequestOptions()).load(image)
-//                    .into(imvImage)
+                imageView.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(image)
+                    .into(imageView)
+                btnEmoji.visibility = View.INVISIBLE
+                btnSend.visibility = View.VISIBLE
             }
         }
     }

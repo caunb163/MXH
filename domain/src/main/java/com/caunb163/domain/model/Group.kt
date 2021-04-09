@@ -7,4 +7,4 @@ data class Group(
     val lastMessage: String = "",
     val createDate: Long = 1614570926872,
     val arrUserId: MutableList<String> = mutableListOf()
-) : Serializable
+): Serializable

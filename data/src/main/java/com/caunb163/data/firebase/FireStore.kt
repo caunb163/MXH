@@ -1,6 +1,6 @@
 package com.caunb163.data.firebase
 
-class FB {
+class FireStore {
     companion object {
         const val USER = "Users"
         const val POST = "Posts"

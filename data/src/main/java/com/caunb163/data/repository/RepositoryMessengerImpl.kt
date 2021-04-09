@@ -1,5 +1,6 @@
 package com.caunb163.data.repository
 
+import android.util.Log
 import com.caunb163.data.mapper.GroupMapper
 import com.caunb163.domain.model.Group
 import com.caunb163.domain.model.GroupEntity
@@ -41,17 +42,17 @@ class RepositoryMessengerImpl(
                     val groupTemp = groupMapper.toTemp(group, dc.document.id)
                     when (dc.type) {
                         DocumentChange.Type.ADDED -> {
-//                            Log.e(TAG, "listenerGroupChange: ADD ${dc.document.data}")
+                            Log.e(TAG, "listenerGroupChange: ADD ${dc.document.data}")
                             offer(groupTemp)
                         }
 
                         DocumentChange.Type.MODIFIED -> {
-//                            Log.e(TAG, "listenerGroupChange: MODIFIED ${dc.document.data}")
+                            Log.e(TAG, "listenerGroupChange: MODIFIED ${dc.document.data}")
                             offer(groupTemp)
                         }
 
                         DocumentChange.Type.REMOVED -> {
-//                            Log.e(TAG, "listenerGroupChange: REMOVED ${dc.document.data}")
+                            Log.e(TAG, "listenerGroupChange: REMOVED ${dc.document.data}")
                             offer(GroupTemp(groupId = groupTemp.groupId))
                         }
                     }

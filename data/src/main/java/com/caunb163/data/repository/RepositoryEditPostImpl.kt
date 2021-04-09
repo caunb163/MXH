@@ -1,7 +1,7 @@
 package com.caunb163.data.repository
 
 import android.net.Uri
-import com.caunb163.data.firebase.FB
+import com.caunb163.data.firebase.FireStore
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.PostEntity
 import com.google.firebase.firestore.ktx.firestore
@@ -48,6 +48,6 @@ class RepositoryEditPostImpl {
             arrLike = postEntity.arrLike.toMutableList()
         )
 
-        db.collection(FB.POST).document(postEntity.postId).set(post).await()
+        db.collection(FireStore.POST).document(postEntity.postId).set(post).await()
     }
 }

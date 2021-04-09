@@ -1,7 +1,8 @@
 package com.caunb163.data.repository
 
+import android.util.Log
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.data.firebase.FB
+import com.caunb163.data.firebase.FireStore
 import com.caunb163.data.mapper.PostMapper
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.PostEntity
@@ -26,16 +27,16 @@ class RepositoryHomeImpl(
     private val user = localStorage.getAccount()!!
 
     suspend fun listenerPostChange(): Flow<PostEntity> = callbackFlow {
-        val data =
-            db.collection(FB.POST)
+        val data = db.collection(FireStore.POST)
+//            db.collection(FB.POST).orderBy("createDate", Query.Direction.DESCENDING)
         val subscription = data.addSnapshotListener { value, error ->
-            if (error != null) {
-                return@addSnapshotListener
-            }
+            if (error != null) return@addSnapshotListener
             value?.let { qs ->
-                for (dc in qs.documentChanges) {
+                val list =
+                    qs.documentChanges.sortedByDescending { it.document.toObject(Post::class.java).createDate }
+                for (dc in list) {
                     val post = dc.document.toObject(Post::class.java)
-                    db.collection(FB.USER).document(post.userId).get()
+                    db.collection(FireStore.USER).document(post.userId).get()
                         .addOnCompleteListener { task ->
                             val user = task.result?.toObject(User::class.java)
                             user?.let { u ->
@@ -68,7 +69,7 @@ class RepositoryHomeImpl(
     }
 
     suspend fun likePost(postId: String) {
-        db.collection(FB.POST).document(postId).get().addOnCompleteListener { task ->
+        db.collection(FireStore.POST).document(postId).get().addOnCompleteListener { task ->
             val post = task.result?.toObject(Post::class.java)
             post?.let { p ->
                 val arrLike = p.arrLike
@@ -77,21 +78,21 @@ class RepositoryHomeImpl(
                 } else {
                     arrLike.add(user.userId)
                 }
-                db.collection(FB.POST).document(postId).update("arrLike", arrLike)
+                db.collection(FireStore.POST).document(postId).update("arrLike", arrLike)
             }
         }.await()
     }
 
     suspend fun deletePost(post: PostEntity) {
         for (item in post.arrCmtId) {
-            db.collection(FB.COMMENT).document(item).delete().await()
+            db.collection(FireStore.COMMENT).document(item).delete().await()
         }
-        db.collection(FB.POST).document(post.postId).delete().await()
-        db.collection(FB.USER).document(post.userId).get().addOnCompleteListener { task ->
+        db.collection(FireStore.POST).document(post.postId).delete().await()
+        db.collection(FireStore.USER).document(post.userId).get().addOnCompleteListener { task ->
             val user = task.result?.toObject(User::class.java)
             user?.let { u ->
                 u.arrPostId.remove(post.postId)
-                db.collection(FB.USER).document(post.userId).update("arrPostId", u.arrPostId)
+                db.collection(FireStore.USER).document(post.userId).update("arrPostId", u.arrPostId)
             }
         }.await()
     }
@@ -100,6 +101,5 @@ class RepositoryHomeImpl(
         Firebase.auth.signOut()
         localStorage.saveAccount(null)
     }
-
 }
 

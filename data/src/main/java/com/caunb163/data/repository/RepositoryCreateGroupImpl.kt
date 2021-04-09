@@ -1,7 +1,7 @@
 package com.caunb163.data.repository
 
 import android.util.Log
-import com.caunb163.data.firebase.FB
+import com.caunb163.data.firebase.FireStore
 import com.caunb163.domain.model.Group
 import com.caunb163.domain.model.User
 import com.caunb163.domain.usecase.messenger.create_group.RepositoryCreateGroup
@@ -21,12 +21,12 @@ class RepositoryCreateGroupImpl : RepositoryCreateGroup {
             arrUserId = arrUserId.toMutableList()
         )
 
-        db.collection(FB.GROUP).add(group).await()
+        db.collection(FireStore.GROUP).add(group).await()
     }
 
     override suspend fun getAllUser(): List<User> {
         val list = mutableListOf<User>()
-        db.collection(FB.USER).get().addOnCompleteListener { task ->
+        db.collection(FireStore.USER).get().addOnCompleteListener { task ->
             val data = task.result?.documents
             data?.let { d ->
                 for (result in d) {

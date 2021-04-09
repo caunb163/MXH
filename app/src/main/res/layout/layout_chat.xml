@@ -27,7 +27,24 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="Xin chào"
+            android:maxWidth="200dp"
             app:layout_constraintBottom_toBottomOf="@id/chat_avatar1"
+            app:layout_constraintStart_toEndOf="@id/chat_avatar1" />
+
+        <ImageView
+            android:id="@+id/chat_image1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="5dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/custom_background_image"
+            android:maxWidth="200dp"
+            android:maxHeight="250dp"
+            android:scaleType="center"
+            android:src="@drawable/image_default"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/chat_message1"
             app:layout_constraintStart_toEndOf="@id/chat_avatar1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -35,14 +52,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/chat_avatar2"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_user"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/chat_message2"
@@ -53,9 +62,26 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="Xin chào"
+            android:maxWidth="200dp"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/chat_avatar2"
-            app:layout_constraintEnd_toStartOf="@id/chat_avatar2" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/chat_image2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/custom_background_image"
+            android:maxWidth="200dp"
+            android:maxHeight="250dp"
+            android:scaleType="center"
+            android:src="@drawable/image_default"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/chat_message2"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package com.caunb163.mxh.ui.main.messenger
 
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
@@ -87,10 +88,12 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
         } else {
             if (!list.contains(group)) {
                 list.add(0, group)
-                list.sortByDescending { it.createDate }
-                groupAdapter.notifyDataSetChanged()
+                groupAdapter.notifyItemInserted(0)
             }
         }
+
+        list.sortByDescending { it.createDate }
+        groupAdapter.notifyDataSetChanged()
     }
 
     private fun checkGroupIndex(group: GroupEntity): Int {

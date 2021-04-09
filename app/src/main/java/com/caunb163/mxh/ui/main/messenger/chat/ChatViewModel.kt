@@ -11,28 +11,13 @@ import kotlinx.coroutines.withContext
 class ChatViewModel(
     private val repositoryChatImpl: RepositoryChatImpl
 ) : ViewModel() {
+    private val TAG = "ChatViewModel"
 
     private val _groupId: MutableLiveData<String> = MutableLiveData()
 
     fun setGroupId(groupId: String) {
         _groupId.value = groupId
     }
-
-//    private val _state: MutableLiveData<State> = MutableLiveData()
-//    val state: LiveData<State> get() = _state
-//    fun getAllMessage() {
-//        viewModelScope.launch {
-//            _state.value = State.Loading
-//            try {
-//                val stateMessage = withContext(Dispatchers.IO) {
-//                    return@withContext repositoryChatImpl.getAllMessages(_groupId.value!!)
-//                }
-//                _state.value = State.Success(stateMessage)
-//            } catch (e: Exception) {
-//                _state.value = State.Failure("${e.message}")
-//            }
-//        }
-//    }
 
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)
@@ -50,7 +35,6 @@ class ChatViewModel(
     fun createMessage(
         content: String,
         createDate: Long,
-        groupId: String,
         userId: String,
         image: String
     ) {
@@ -59,7 +43,7 @@ class ChatViewModel(
             try {
                 val stateM = withContext(Dispatchers.IO) {
                     return@withContext repositoryChatImpl.createMessenger(
-                        content, createDate, groupId, userId, image
+                        content, createDate, _groupId.value!!, userId, image
                     )
                 }
                 _stateCreateMessage.value = State.Success(stateM)

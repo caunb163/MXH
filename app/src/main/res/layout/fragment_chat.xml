@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_camera"
             app:layout_constraintTop_toTopOf="@id/bottom"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/bottom"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +83,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:padding="5dp"
-                android:src="@drawable/ic_un_send"
+                android:visibility="gone"
+                android:src="@drawable/ic_send"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:visibility="visible"
+                android:id="@+id/chat_enmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="5dp"
+                android:padding="5dp"
+                android:src="@drawable/ic_happy"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -100,6 +113,28 @@
                 app:layout_constraintStart_toStartOf="@id/chat_send"
                 app:layout_constraintTop_toTopOf="@id/chat_send" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/chat_image"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="5dp"
+            android:adjustViewBounds="true"
+            android:scaleType="center"
+            android:src="@drawable/bg1"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottom"
+            app:layout_constraintHeight_percent="0.15"
+            app:layout_constraintStart_toEndOf="@id/chat_camera" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toTopOf="@id/chat_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
