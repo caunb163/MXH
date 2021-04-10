@@ -6,4 +6,9 @@ class LoginUseCase(
     suspend fun loginWithEmailAndPassword(email: String, password: String) {
         return repositoryLogin.loginWithEmailAndPassword(email, password)
     }
+
+    suspend fun loginWithGoogle(idToken: String) {
+        repositoryLogin.loginWithGoogle(idToken)
+    }
+
 }

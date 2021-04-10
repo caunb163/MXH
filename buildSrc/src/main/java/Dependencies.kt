@@ -1,7 +1,7 @@
 object Config {
     const val compileSdk = 30
     const val buildTool = "30.0.2"
-    const val minSdk = 23
+    const val minSdk = 21
     const val targetSdk = 30
     const val versionCode = 1
     const val versionName = "1.0"
@@ -29,6 +29,7 @@ object Versions {
     const val gson = "2.8.6"
 
     const val firebase = "26.5.0"
+    const val serviceAuth = "19.0.0"
     const val blurview = "1.6.5"
     const val circleImgView = "3.1.0"
     const val lifecycle = "2.3.0"
@@ -70,6 +71,7 @@ object Deps {
     const val firebaseAnalytics = "com.google.firebase:firebase-analytics-ktx"
     const val firebaseFirestore = "com.google.firebase:firebase-firestore-ktx"
     const val firebaseStorage = "com.google.firebase:firebase-storage-ktx"
+    const val serviceAuth = "com.google.android.gms:play-services-auth:${Versions.serviceAuth}"
 
     const val blurview = "com.eightbitlab:blurview:${Versions.blurview}"
     const val circleImgView = "de.hdodenhof:circleimageview:${Versions.circleImgView}"
@@ -112,7 +114,8 @@ object Dependencies {
         Deps.firebaseAnalytics,
         Deps.firebaseAuth,
         Deps.firebaseFirestore,
-        Deps.firebaseStorage
+        Deps.firebaseStorage,
+        Deps.serviceAuth
     )
 
     val testDependencies = arrayOf(

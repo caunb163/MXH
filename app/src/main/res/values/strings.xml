@@ -33,6 +33,14 @@
     <string name="register_phone">Phone</string>
     <string name="register_have_account">Already have an Account?</string>
 
+    <string name="phone_hello">Xin Chào!</string>
+    <string name="phone_content1">Vui lòng nhập số điện thoại của bạn để đăng ký hoặc đăng nhập</string>
+    <string name="phone_content2">Vui lòng nhập mã xác nhận được gửi đến số điện thoại trên</string>
+    <string name="phone_signin">Tiếp tục</string>
+    <string name="phone">SĐT</string>
+    <string name="phone_verify">Verify code</string>
+
+
     <string name="menu_home">Trang chủ</string>
     <string name="menu_video">Video</string>
     <string name="menu_friend">Bạn bè</string>
@@ -40,7 +48,6 @@
     <string name="menu_profile">Cá nhân</string>
 
     <string name="menu_logout">Đăng xuất</string>
-
 
     <string name="post_like">Thích</string>
     <string name="post_comment">Bình luận</string>

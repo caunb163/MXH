@@ -55,6 +55,9 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_phoneFragment"
+            app:destination="@id/phoneFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainFragment"
@@ -77,4 +80,9 @@
             app:popUpToInclusive="true"
             app:launchSingleTop="true"/>
     </fragment>
+    <fragment
+        android:id="@+id/phoneFragment"
+        android:name="com.caunb163.mxh.ui.login.phone.PhoneFragment"
+        android:label="fragment_phone"
+        tools:layout="@layout/fragment_phone" />
 </navigation>
