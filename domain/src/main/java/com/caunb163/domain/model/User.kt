@@ -11,7 +11,7 @@ data class User(
     var phone: String = "",
     var photoBackground: String = "",
     var birthDay: String = "",
-    var address: String = "",
+    var gender: String = "",
     var intro: String = ""
 ) : Serializable {
     var ischeck: Boolean = false

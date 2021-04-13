@@ -11,4 +11,15 @@ class LoginUseCase(
         repositoryLogin.loginWithGoogle(idToken)
     }
 
+    suspend fun getUserPhone() {
+        repositoryLogin.getUserPhone()
+    }
+
+    suspend fun checkPhone(verificationId: String, opt: String): Boolean {
+        return repositoryLogin.checkPhone(verificationId, opt)
+    }
+
+    suspend fun createUser(username: String, birthday: String, gender: String) {
+        repositoryLogin.createUser(username, birthday, gender)
+    }
 }

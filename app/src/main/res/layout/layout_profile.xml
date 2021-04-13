@@ -92,19 +92,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="5dp"
-        android:src="@drawable/ic_placeholder"
+        android:src="@drawable/ic_gender"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/profile_intro" />
 
     <EditText
-        android:id="@+id/profile_edt_address"
+        android:id="@+id/profile_edt_gender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:backgroundTint="@color/white"
         android:padding="5dp"
-        android:text="@string/profile_adress"
+        android:text="@string/profile_gender"
         app:layout_constraintBottom_toBottomOf="@id/profile_imv_map"
         app:layout_constraintEnd_toStartOf="@id/profile_fix_address"
         app:layout_constraintStart_toEndOf="@id/profile_imv_map"

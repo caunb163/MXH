@@ -82,7 +82,7 @@ class ProfileAdapter(
         private var imvAvatar: CircleImageView = view.findViewById(R.id.profile_avatar)
         private var username: TextView = view.findViewById(R.id.profile_user)
         private var intro: TextView = view.findViewById(R.id.profile_intro)
-        private var address: EditText = view.findViewById(R.id.profile_edt_address)
+        private var gender: EditText = view.findViewById(R.id.profile_edt_gender)
         private var birthday: EditText = view.findViewById(R.id.profile_edt_birthday)
         private var phone: EditText = view.findViewById(R.id.profile_edt_phone)
         private var imvAdress: ImageView = view.findViewById(R.id.profile_imv_map)
@@ -102,7 +102,7 @@ class ProfileAdapter(
             glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl).into(imvAvatar)
             username.text = user.username
             intro.text = user.intro
-            address.setText(user.address)
+            gender.setText(user.gender)
             birthday.setText(user.birthDay)
             phone.setText(user.phone)
             addListener(profileOnClick)

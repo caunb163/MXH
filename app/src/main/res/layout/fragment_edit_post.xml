@@ -75,7 +75,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/bg1" />
+            android:src="@drawable/image_default" />
 
         <TextView
             android:id="@+id/editpost_tv_user"

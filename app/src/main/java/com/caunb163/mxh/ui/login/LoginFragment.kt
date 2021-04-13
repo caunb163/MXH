@@ -2,10 +2,7 @@ package com.caunb163.mxh.ui.login
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.media.Image
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,22 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.PhoneAuthOptions
-import com.google.firebase.auth.PhoneAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import eightbitlab.com.blurview.BlurView
-import eightbitlab.com.blurview.RenderScriptBlur
 import org.koin.android.ext.android.inject
-import java.util.concurrent.TimeUnit
 
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private val TAG = "LoginFragment"
     private val RC_SIGN_IN = 1227
 
-    private lateinit var blurView: BlurView
     private lateinit var emailEdt: TextInputEditText
     private lateinit var passwordEdt: TextInputEditText
     private lateinit var forgotPassword: TextView
@@ -52,8 +39,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     @SuppressLint("SetTextI18n")
     override fun initView(view: View) {
-        blurView = view.findViewById(R.id.login_blurview)
-        blurviewBackground()
 
         emailEdt = view.findViewById(R.id.login_edt_email)
         passwordEdt = view.findViewById(R.id.login_edt_password)
@@ -141,19 +126,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         progressBar.visibility = View.INVISIBLE
         signin.visibility = View.VISIBLE
         showToast(message)
-    }
-
-    private fun blurviewBackground() {
-        val radius: Float = 0.01f
-        val decorView: View = requireActivity().window.decorView
-        val rootView = decorView.findViewById<View>(android.R.id.content) as ViewGroup
-        val windowBackground = decorView.background
-        blurView.setupWith(rootView)
-            .setFrameClearDrawable(windowBackground)
-            .setBlurAlgorithm(RenderScriptBlur(context))
-            .setBlurRadius(radius)
-            .setBlurAutoUpdate(true)
-            .setHasFixedTransformationMatrix(true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

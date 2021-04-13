@@ -141,7 +141,7 @@
         android:layout_marginStart="5dp"
         android:adjustViewBounds="true"
         android:scaleType="center"
-        android:src="@drawable/bg1"
+        android:src="@drawable/image_default"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/cmt_edt_cmt"
         app:layout_constraintHeight_percent="0.15"

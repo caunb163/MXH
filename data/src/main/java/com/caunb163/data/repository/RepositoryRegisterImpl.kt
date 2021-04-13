@@ -9,9 +9,8 @@ class RepositoryRegisterImpl(
     override suspend fun register(
         username: String,
         email: String,
-        password: String,
-        phone: String
+        password: String
     ) {
-        auth.createAccount(username, email, password, phone)
+        auth.createAccount(username, email, password)
     }
 }

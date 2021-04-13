@@ -34,7 +34,9 @@ object Versions {
     const val circleImgView = "3.1.0"
     const val lifecycle = "2.3.0"
     const val photoView = "2.3.0"
-
+    const val customTab = "28.0.0"
+    const val countrycode = "2.5.1"
+    const val pinView = "1.4.4"
 }
 
 object Deps {
@@ -78,6 +80,9 @@ object Deps {
     const val lifecycle = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
 
     const val photoView = "com.github.chrisbanes:PhotoView:${Versions.photoView}"
+    const val countryCode = "com.hbb20:ccp:${Versions.countrycode}"
+    const val customTab = "com.android.support:customtabs:${Versions.customTab}"
+    const val pinView = "com.chaos.view:pinview:${Versions.pinView}"
 }
 
 object TestDeps {

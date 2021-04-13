@@ -1,279 +1,246 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.register.RegisterFragment">
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg4" />
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/register_blurview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:blurOverlayColor="@color/colorOverlay">
-
-        <ScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:fitsSystemWindows="true"
-            android:scrollbars="none">
+            android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/register_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/register_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:srcCompat="@drawable/ic_logo" />
 
-                <View
-                    android:id="@+id/view"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/register_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/register_signup"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/gray900"
+                android:textSize="21sp"
+                app:layout_constraintBottom_toTopOf="@+id/register_til1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/register_logo" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/register_til1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="32dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toTopOf="@+id/register_til2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/register_title"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintWidth_percent="0.83">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/register_edt_name"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="15dp"
-                    android:text="@string/register_signup"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.15" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/register_til1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/login_password"
-                    android:textColorHint="@color/white"
-                    app:boxStrokeColor="@color/white"
-                    app:hintTextColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@id/view"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintWidth_percent="0.9"
-                    app:startIconDrawable="@drawable/ic_lock"
-                    app:startIconTint="@color/white">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/register_edt_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center"
-                        android:inputType="textPassword"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:textColor="@color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/register_til2"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/login_email"
-                    android:textColorHint="@color/white"
-                    app:boxStrokeColor="@color/white"
-                    app:hintTextColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@id/register_til1"
-                    app:layout_constraintEnd_toEndOf="@id/register_til1"
-                    app:layout_constraintStart_toStartOf="@id/register_til1"
-                    app:startIconDrawable="@android:drawable/ic_dialog_email"
-                    app:startIconTint="@color/white">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/register_edt_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:textColor="@color/white" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/register_til3"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:focusableInTouchMode="false"
+                    android:background="@drawable/background_edt"
+                    android:drawableStart="@drawable/ic_user"
+                    android:drawablePadding="8dp"
                     android:hint="@string/register_name"
-                    android:textColorHint="@color/white"
-                    app:boxStrokeColor="@color/white"
-                    app:hintTextColor="@color/white"
-                    app:layout_constraintBottom_toTopOf="@id/register_til2"
-                    app:layout_constraintEnd_toEndOf="@id/register_til1"
-                    app:layout_constraintStart_toStartOf="@id/register_til1"
-                    app:startIconDrawable="@drawable/ic_user"
-                    app:startIconTint="@color/white">
+                    android:imeOptions="flagForceAscii|actionNext"
+                    android:importantForAutofill="no"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minHeight="52dp"
+                    android:padding="16dp"
+                    android:textColorHint="@color/gray600" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/register_edt_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/register_til2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toTopOf="@+id/register_til3"
+                app:layout_constraintEnd_toEndOf="@id/register_til1"
+                app:layout_constraintStart_toStartOf="@id/register_til1"
+                app:layout_constraintTop_toBottomOf="@+id/register_til1">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/register_til4"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/register_edt_email"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:focusableInTouchMode="false"
-                    android:hint="@string/register_phone"
-                    android:textColorHint="@color/white"
-                    app:boxStrokeColor="@color/white"
-                    app:hintTextColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@id/register_til1"
-                    app:layout_constraintStart_toStartOf="@id/register_til1"
-                    app:layout_constraintTop_toBottomOf="@id/register_til1"
-                    app:startIconDrawable="@drawable/ic_phone_call"
-                    app:startIconTint="@color/white">
+                    android:background="@drawable/background_edt"
+                    android:drawableStart="@drawable/ic_email"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/register_email"
+                    android:imeOptions="flagForceAscii|actionNext"
+                    android:importantForAutofill="no"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:minHeight="52dp"
+                    android:padding="16dp"
+                    android:textColorHint="@color/gray600" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/register_edt_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center"
-                        android:inputType="phone"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:padding="10dp"
-                        android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/register_til3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:boxBackgroundMode="none"
+                app:hintEnabled="false"
+                app:layout_constraintBottom_toTopOf="@+id/register_btn_signup"
+                app:layout_constraintEnd_toEndOf="@id/register_til1"
+                app:layout_constraintStart_toStartOf="@id/register_til1"
+                app:layout_constraintTop_toBottomOf="@+id/register_til2"
+                app:passwordToggleEnabled="true">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/register_btn_signup"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/register_edt_password"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/colorButton"
-                    android:padding="10dp"
-                    android:text="@string/login_sign_up"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    app:cornerRadius="20dp"
-                    app:layout_constraintBottom_toTopOf="@id/register_tv_or_connect"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/register_til4"
-                    app:layout_constraintWidth_percent="0.8" />
+                    android:background="@drawable/background_edt"
+                    android:drawableStart="@drawable/ic_lock"
+                    android:drawablePadding="8dp"
+                    android:hint="@string/register_password"
+                    android:imeActionLabel="Hello"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    android:inputType="textPassword"
+                    android:lines="1"
+                    android:maxLength="45"
+                    android:maxLines="1"
+                    android:minHeight="52dp"
+                    android:padding="16dp"
+                    android:selectAllOnFocus="true"
+                    android:textColorHint="@color/gray600" />
 
-                <ProgressBar
-                    android:id="@+id/register_progressbar"
-                    style="@android:style/Widget.ProgressBar.Inverse"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@id/register_btn_signup"
-                    app:layout_constraintEnd_toEndOf="@id/register_btn_signup"
-                    app:layout_constraintStart_toStartOf="@id/register_btn_signup"
-                    app:layout_constraintTop_toTopOf="@id/register_btn_signup" />
+            </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/register_btn_signup"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/colorButton"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/register_signup"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:cornerRadius="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/register_tv_or_connect"
+                app:layout_constraintEnd_toEndOf="@id/register_til1"
+                app:layout_constraintStart_toStartOf="@id/register_til1"
+                app:layout_constraintTop_toBottomOf="@+id/register_til3"
+                app:layout_constraintVertical_bias="0.2" />
+
+            <ProgressBar
+                android:id="@+id/register_progressbar"
+                style="@android:style/Widget.ProgressBar.Inverse"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/register_btn_signup"
+                app:layout_constraintEnd_toEndOf="@id/register_btn_signup"
+                app:layout_constraintStart_toStartOf="@id/register_btn_signup"
+                app:layout_constraintTop_toTopOf="@id/register_btn_signup" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/register_tv_or_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/login_connect_with"
+                android:textColor="@color/gray900"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toTopOf="@+id/register_phone"
+                app:layout_constraintEnd_toEndOf="@+id/register_btn_signup"
+                app:layout_constraintStart_toStartOf="@+id/register_btn_signup"
+                app:layout_constraintTop_toBottomOf="@+id/register_btn_signup" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/register_phone"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="80dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/register_google"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/register_tv_or_connect"
+                app:srcCompat="@drawable/ic_phone" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/register_google"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/register_phone"
+                app:layout_constraintTop_toTopOf="@+id/register_phone"
+                app:srcCompat="@drawable/ic_google" />
+
+            <LinearLayout
+                android:id="@+id/register_ll1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/register_phone"
+                app:layout_constraintVertical_bias="1">
 
                 <TextView
-                    android:id="@+id/register_tv_or_connect"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/login_connect_with"
-                    android:textColor="@color/white"
-                    app:layout_constraintTop_toBottomOf="@id/register_btn_signup"
-                    app:layout_constraintBottom_toTopOf="@id/register_ll2"/>
-
-                <LinearLayout
-                    android:id="@+id/register_ll2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@id/register_ll1"
-                    app:layout_constraintEnd_toEndOf="@id/register_btn_signup"
-                    app:layout_constraintStart_toStartOf="@id/register_btn_signup"
-                    app:layout_constraintTop_toBottomOf="@id/register_tv_or_connect">
+                    android:layout_weight="3"
+                    android:gravity="end"
+                    android:padding="3dp"
+                    android:text="@string/register_have_account" />
 
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_phone" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_facebook" />
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/ic_google" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/register_ll1"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/register_tv_signin"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.9">
+                    android:layout_weight="2"
+                    android:gravity="start"
+                    android:padding="3dp"
+                    android:text="@string/login_signin"
+                    android:textColor="@color/colorText" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:gravity="end"
-                        android:padding="3dp"
-                        android:text="@string/register_have_account"
-                        android:textColor="@color/white" />
-
-                    <TextView
-                        android:id="@+id/register_tv_signin"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:gravity="start"
-                        android:padding="3dp"
-                        android:text="@string/login_sign_in"
-                        android:textColor="@color/accent_200" />
-
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </ScrollView>
-
-    </eightbitlab.com.blurview.BlurView>
-
-
-</RelativeLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

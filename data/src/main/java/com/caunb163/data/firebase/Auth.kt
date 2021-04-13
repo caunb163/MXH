@@ -1,10 +1,7 @@
 package com.caunb163.data.firebase
 
 import com.caunb163.domain.model.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -28,7 +25,7 @@ class Auth {
     }
 
     suspend fun createAccount(
-        username: String, email: String, password: String, phone: String
+        username: String, email: String, password: String
     ): FirebaseUser {
         auth.createUserWithEmailAndPassword(email, password).await()
         val result = auth.currentUser
@@ -39,10 +36,10 @@ class Auth {
                 photoUrl = it.photoUrl?.toString() ?: "",
                 arrPostId = mutableListOf(),
                 userId = it.uid,
-                phone = phone,
+                phone = it.phoneNumber ?: "",
                 photoBackground = "",
                 birthDay = "",
-                address = "",
+                gender = "",
                 intro = "",
             )
 
@@ -68,13 +65,56 @@ class Auth {
                     phone = it.phoneNumber ?: "",
                     photoBackground = "",
                     birthDay = "",
-                    address = "",
-                    intro = "",
+                    gender = "",
+                    intro = ""
                 )
-                db.collection(FireStore.USER).document(it.uid).set(user)
+                db.collection(FireStore.USER).document(it.uid).set(user).await()
             }
         }
         return auth.currentUser ?: throw Exception("Firebase Auth exception")
     }
 
+    suspend fun getUserPhone(): User? {
+        val result = auth.currentUser
+        val data = db.collection(FireStore.USER).document(result!!.uid).get().await()
+        return data.toObject(User::class.java)
+    }
+
+    suspend fun checkPhone(verificationId: String, opt: String): Boolean {
+        val credential = PhoneAuthProvider.getCredential(verificationId, opt)
+        auth.signInWithCredential(credential).await()
+        val result = auth.currentUser
+        result?.let {
+            val data = db.collection(FireStore.USER).document(it.uid).get().await()
+            val user = data.toObject(User::class.java)
+            if (user != null) {
+                return true
+            }
+        }
+        return false
+    }
+
+    suspend fun createUser(username: String, birthday: String, gender: String): FirebaseUser {
+        val result = auth.currentUser
+        result?.let {
+            val data = db.collection(FireStore.USER).document(it.uid).get().await()
+            var user = data.toObject(User::class.java)
+            if (user == null) {
+                user = User(
+                    username = username,
+                    email = it.email ?: "",
+                    photoUrl = it.photoUrl?.toString() ?: "",
+                    arrPostId = mutableListOf(),
+                    userId = it.uid,
+                    phone = it.phoneNumber ?: "",
+                    photoBackground = "",
+                    birthDay = birthday,
+                    gender = gender,
+                    intro = ""
+                )
+                db.collection(FireStore.USER).document(it.uid).set(user).await()
+            }
+        }
+        return auth.currentUser ?: throw Exception("Firebase Auth exception")
+    }
 }

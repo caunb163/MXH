@@ -73,7 +73,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/bg1"
+            android:src="@drawable/image_default"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toTopOf="parent" />
 

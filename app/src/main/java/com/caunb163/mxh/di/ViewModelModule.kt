@@ -1,6 +1,7 @@
 package com.caunb163.mxh.di
 
 import com.caunb163.mxh.ui.login.LoginViewModel
+import com.caunb163.mxh.ui.login.phone.PhoneViewModel
 import com.caunb163.mxh.ui.main.MainViewModel
 import com.caunb163.mxh.ui.main.home.HomeViewModel
 import com.caunb163.mxh.ui.main.home.comment.CommentViewModel
@@ -32,4 +33,5 @@ val viewModelModule = module {
     viewModel<ChatViewModel> { ChatViewModel(get()) }
     viewModel<CreateGroupViewModel> { CreateGroupViewModel(get()) }
     viewModel<EditPostViewModel> { EditPostViewModel(get()) }
+    viewModel<PhoneViewModel> { PhoneViewModel(get()) }
 }

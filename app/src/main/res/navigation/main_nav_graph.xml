@@ -84,5 +84,12 @@
         android:id="@+id/phoneFragment"
         android:name="com.caunb163.mxh.ui.login.phone.PhoneFragment"
         android:label="fragment_phone"
-        tools:layout="@layout/fragment_phone" />
+        tools:layout="@layout/fragment_phone" >
+        <action
+            android:id="@+id/action_phoneFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_phoneFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

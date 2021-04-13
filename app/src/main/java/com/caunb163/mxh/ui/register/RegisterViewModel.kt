@@ -17,12 +17,12 @@ class RegisterViewModel(
 
     val state: LiveData<State> get() = _state
 
-    fun createAccount(username: String, email: String, password: String, phone: String) {
+    fun createAccount(username: String, email: String, password: String) {
         viewModelScope.launch {
             _state.value = State.Loading
             try {
                 val registerState = withContext(Dispatchers.IO) {
-                    return@withContext registerUseCase.register(username, email, password, phone)
+                    return@withContext registerUseCase.register(username, email, password)
                 }
 
                 _state.value = State.Success(registerState)
