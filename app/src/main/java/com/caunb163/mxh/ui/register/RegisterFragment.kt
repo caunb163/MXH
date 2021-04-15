@@ -36,8 +36,8 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
         signin = view.findViewById(R.id.register_tv_signin)
         progressBar = view.findViewById(R.id.register_progressbar)
 
-        usernameEdt.setText("test")
-        passwordEdt.setText("123456")
+//        usernameEdt.setText("test")
+//        passwordEdt.setText("123456")
 
     }
 
@@ -47,8 +47,19 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
             val email = emailEdt.text.toString().trim()
             val password = passwordEdt.text.toString().trim()
             //check empty show error
-
-            viewModel.createAccount(username, email, password)
+            if (username.isNotEmpty()) {
+                if (email.isNotEmpty()) {
+                    if (password.isNotEmpty()) {
+                        viewModel.createAccount(username, email, password)
+                    } else {
+                        passwordEdt.error = "Vui lòng điền mật khẩu"
+                    }
+                } else {
+                    emailEdt.error = "Vui lòng điền thông tin"
+                }
+            } else {
+                usernameEdt.error = "Vui lòng điền tên hiển thị"
+            }
         }
 
         signin.setOnClickListener {
@@ -75,7 +86,7 @@ class RegisterFragment : BaseFragment(R.layout.fragment_register) {
         progressBar.visibility = View.INVISIBLE
         signup.visibility = View.VISIBLE
         Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+        findNavController().navigate(R.id.action_registerFragment_to_mainFragment)
 
     }
 

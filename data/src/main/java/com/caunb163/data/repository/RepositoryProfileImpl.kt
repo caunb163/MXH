@@ -102,10 +102,15 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection(FireStore.USER).document(user.userId).update("photoBackground", stringPath)
+                db.collection(FireStore.USER).document(user.userId)
+                    .update("photoBackground", stringPath)
             }
         }.await()
 
         return stringPath
+    }
+
+    suspend fun updateProfile(user: User) {
+        db.collection(FireStore.USER).document(user.userId).set(user).await()
     }
 }

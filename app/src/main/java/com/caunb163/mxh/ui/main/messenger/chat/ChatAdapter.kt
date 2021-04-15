@@ -14,7 +14,6 @@ import com.caunb163.domain.model.MessageEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import de.hdodenhof.circleimageview.CircleImageView
-import java.lang.Double
 import java.lang.Double.parseDouble
 
 class ChatAdapter(

@@ -1,6 +1,7 @@
 package com.caunb163.mxh.ui.main.profile
 
 import androidx.lifecycle.*
+import com.caunb163.data.repository.RepositoryMainImpl
 import com.caunb163.data.repository.RepositoryProfileImpl
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +10,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ProfileViewModel(
-    private val repositoryProfileImpl: RepositoryProfileImpl
+    private val repositoryProfileImpl: RepositoryProfileImpl,
+    private val repositoryMainImpl: RepositoryMainImpl
 ) : ViewModel() {
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)
@@ -57,6 +59,17 @@ class ProfileViewModel(
                 e.printStackTrace()
                 _stateBackground.value = State.Failure("${e.message}")
             }
+        }
+    }
+
+    val user: LiveData<State> = liveData(Dispatchers.IO) {
+        emit(State.Loading)
+        try {
+            repositoryMainImpl.saveUser().collect {
+                emit(State.Success(it))
+            }
+        } catch (e: Exception) {
+            emit(State.Failure("${e.message}"))
         }
     }
 }

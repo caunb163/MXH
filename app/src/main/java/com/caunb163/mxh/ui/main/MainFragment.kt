@@ -1,6 +1,7 @@
 package com.caunb163.mxh.ui.main
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController

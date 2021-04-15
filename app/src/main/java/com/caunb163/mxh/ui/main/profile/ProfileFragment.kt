@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -90,12 +91,27 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
                 is State.Failure -> onFailure(state.message)
             }
         })
+
+        viewModel.user.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoading()
+                is State.Success<*> -> onSuccessUser(state.data as User)
+                is State.Failure -> onFailure(state.message)
+            }
+        })
     }
 
     private fun onLoading() {}
 
     private fun onLoadingAvatar() {
         customProgressBar.show()
+    }
+
+    private fun onSuccessUser(u: User) {
+        list.remove(user)
+        list.add(0, u)
+        user = u
+        profileAdapter.notifyDataSetChanged()
     }
 
     private fun onSuccessListener(post: PostEntity) {
@@ -122,7 +138,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
                     }
                 }
                 list.remove(user)
-                list.add(0,user)
+                list.add(0, user)
                 profileAdapter.notifyDataSetChanged()
             }
         }
@@ -178,6 +194,11 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
 
     override fun backgroundClick() {
         ensurePermission(REQUEST_BACKGROUND_CODE)
+    }
+
+    override fun editProfile() {
+        findNavController().navigate(R.id.action_profileFragment_to_updateProfileFragment)
+
     }
 
     private fun ensurePermission(requestCode: Int) {

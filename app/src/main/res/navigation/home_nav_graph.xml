@@ -40,7 +40,11 @@
         android:id="@+id/profileFragment"
         android:name="com.caunb163.mxh.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/videoFragment"
         android:name="com.caunb163.mxh.ui.main.video.VideoFragment"
@@ -136,5 +140,10 @@
             app:argType="com.caunb163.domain.model.GroupEntity" />
 
     </dialog>
+    <dialog
+        android:id="@+id/updateProfileFragment"
+        android:name="com.caunb163.mxh.ui.main.profile.UpdateProfileFragment"
+        android:label="fragment_update_profile"
+        tools:layout="@layout/fragment_update_profile" />
 
 </navigation>

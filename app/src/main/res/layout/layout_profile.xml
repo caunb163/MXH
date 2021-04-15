@@ -86,38 +86,47 @@
         app:layout_constraintTop_toBottomOf="@id/profile_user"
         app:layout_constraintWidth_percent="0.75" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/profile_updateprofile"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/colorButton"
+        android:text="@string/updateprofile"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/profile_intro" />
+
     <ImageView
-        android:id="@+id/profile_imv_map"
+        android:id="@+id/profile_imv_gender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="5dp"
         android:src="@drawable/ic_gender"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/profile_intro" />
+        app:layout_constraintTop_toBottomOf="@id/profile_updateprofile" />
 
-    <EditText
+    <TextView
         android:id="@+id/profile_edt_gender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/white"
         android:padding="5dp"
         android:text="@string/profile_gender"
-        app:layout_constraintBottom_toBottomOf="@id/profile_imv_map"
-        app:layout_constraintEnd_toStartOf="@id/profile_fix_address"
-        app:layout_constraintStart_toEndOf="@id/profile_imv_map"
-        app:layout_constraintTop_toTopOf="@id/profile_imv_map" />
-
-    <ImageView
-        android:id="@+id/profile_fix_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:src="@drawable/ic_pen"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/profile_imv_gender"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintTop_toTopOf="@id/profile_imv_map" />
+        app:layout_constraintStart_toEndOf="@id/profile_imv_gender"
+        app:layout_constraintTop_toTopOf="@id/profile_imv_gender" />
+
 
     <ImageView
         android:id="@+id/profile_imv_birthday"
@@ -127,29 +136,21 @@
         android:padding="5dp"
         android:src="@drawable/ic_cake"
         app:layout_constraintStart_toStartOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/profile_imv_map" />
+        app:layout_constraintTop_toBottomOf="@id/profile_imv_gender" />
 
-    <EditText
+    <TextView
         android:id="@+id/profile_edt_birthday"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/white"
         android:padding="5dp"
         android:text="@string/profile_birthday"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/profile_imv_birthday"
-        app:layout_constraintEnd_toStartOf="@id/profile_fix_birthday"
-        app:layout_constraintStart_toEndOf="@id/profile_imv_birthday"
-        app:layout_constraintTop_toTopOf="@id/profile_imv_birthday" />
-
-    <ImageView
-        android:id="@+id/profile_fix_birthday"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:src="@drawable/ic_pen"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toEndOf="@id/profile_imv_birthday"
         app:layout_constraintTop_toTopOf="@id/profile_imv_birthday" />
 
     <ImageView
@@ -162,27 +163,19 @@
         app:layout_constraintStart_toStartOf="@id/guideline_start"
         app:layout_constraintTop_toBottomOf="@id/profile_imv_birthday" />
 
-    <EditText
+    <TextView
         android:id="@+id/profile_edt_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/white"
         android:padding="5dp"
         android:text="@string/profile_phone"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/profile_imv_phone"
-        app:layout_constraintEnd_toStartOf="@id/profile_fix_phone"
-        app:layout_constraintStart_toEndOf="@id/profile_imv_phone"
-        app:layout_constraintTop_toTopOf="@id/profile_imv_phone" />
-
-    <ImageView
-        android:id="@+id/profile_fix_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:src="@drawable/ic_pen"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toEndOf="@id/profile_imv_phone"
         app:layout_constraintTop_toTopOf="@id/profile_imv_phone" />
 
     <TextView

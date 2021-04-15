@@ -1,9 +1,9 @@
 package com.caunb163.mxh.ui.main.profile
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -14,6 +14,7 @@ import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.HomeOnClick
 import com.caunb163.mxh.ui.main.home.PostViewHolder
+import com.google.android.material.button.MaterialButton
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileAdapter(
@@ -82,42 +83,37 @@ class ProfileAdapter(
         private var imvAvatar: CircleImageView = view.findViewById(R.id.profile_avatar)
         private var username: TextView = view.findViewById(R.id.profile_user)
         private var intro: TextView = view.findViewById(R.id.profile_intro)
-        private var gender: EditText = view.findViewById(R.id.profile_edt_gender)
-        private var birthday: EditText = view.findViewById(R.id.profile_edt_birthday)
-        private var phone: EditText = view.findViewById(R.id.profile_edt_phone)
-        private var imvAdress: ImageView = view.findViewById(R.id.profile_imv_map)
-        private var imvBirthday: ImageView = view.findViewById(R.id.profile_imv_birthday)
-        private var imvPhone: ImageView = view.findViewById(R.id.profile_imv_phone)
-        private var imvFixAddress: ImageView = view.findViewById(R.id.profile_fix_address)
-        private var imvFixBirthday: ImageView = view.findViewById(R.id.profile_fix_birthday)
-        private var imvFixPhone: ImageView = view.findViewById(R.id.profile_fix_phone)
+        private var gender: TextView = view.findViewById(R.id.profile_edt_gender)
+        private var birthday: TextView = view.findViewById(R.id.profile_edt_birthday)
+        private var phone: TextView = view.findViewById(R.id.profile_edt_phone)
+        private var edit: MaterialButton = view.findViewById(R.id.profile_updateprofile)
 
         private var imvCameraAvatar: CircleImageView = view.findViewById(R.id.profile_camera_avatar)
         private var imvCameraBackground: CircleImageView =
             view.findViewById(R.id.profile_camera_background)
 
+        @SuppressLint("SetTextI18n")
         fun bind(glide: RequestManager, user: User, profileOnClick: ProfileOnClick) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoBackground)
                 .into(imvBackground)
             glide.applyDefaultRequestOptions(RequestOptions()).load(user.photoUrl).into(imvAvatar)
             username.text = user.username
             intro.text = user.intro
-            gender.setText(user.gender)
-            birthday.setText(user.birthDay)
-            phone.setText(user.phone)
-            addListener(profileOnClick)
+            gender.text = "Giới tính: ${user.gender}"
+            birthday.text = user.birthDay
+            phone.text = user.phone
+
+            edit.setOnClickListener { profileOnClick.editProfile() }
+            imvCameraAvatar.setOnClickListener { profileOnClick.avatarClick() }
+            imvCameraBackground.setOnClickListener { profileOnClick.backgroundClick() }
         }
 
         fun unbind() {
             imvBackground.setImageDrawable(null)
             imvAvatar.setImageDrawable(null)
+            edit.setOnClickListener(null)
             imvCameraAvatar.setOnClickListener(null)
             imvCameraBackground.setOnClickListener(null)
-        }
-
-        private fun addListener(profileOnClick: ProfileOnClick) {
-            imvCameraAvatar.setOnClickListener { profileOnClick.avatarClick() }
-            imvCameraBackground.setOnClickListener { profileOnClick.backgroundClick() }
         }
     }
 }
@@ -128,4 +124,6 @@ interface ProfileOnClick {
     fun avatarClick()
 
     fun backgroundClick()
+
+    fun editProfile()
 }

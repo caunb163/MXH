@@ -150,23 +150,23 @@ class PhoneFragment : BaseFragment(R.layout.fragment_phone) {
             hideKeyboardFrom(requireContext(), username)
             birthday.error = null
             val c = Calendar.getInstance()
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
+            val mYear = c.get(Calendar.YEAR)
+            val mMonth = c.get(Calendar.MONTH)
+            val mDay = c.get(Calendar.DAY_OF_MONTH)
 
             val dpd = DatePickerDialog(
                 requireContext(),
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     birthday.text =
-                        "${"%02d".format(dayOfMonth)}/${"%02d".format(monthOfYear)}/${
+                        "${"%02d".format(dayOfMonth)}/${"%02d".format(monthOfYear + 1)}/${
                             "%04d".format(
                                 year
                             )
                         }"
                 },
-                year,
-                month,
-                day
+                mYear,
+                mMonth,
+                mDay
             )
             dpd.show()
         }
@@ -178,7 +178,7 @@ class PhoneFragment : BaseFragment(R.layout.fragment_phone) {
             val text1 = username.text.toString().trim()
             if (text1.isNotEmpty()) {
                 val text2 = birthday.text.toString().trim()
-                if (!TextUtils.equals(text2, "Ngày sinh")) {
+                if (!TextUtils.equals(text2, "Ngày sinh") && text2.isNotEmpty()) {
                     val text3 = gender.editableText.toString().trim()
                     if (text3.isNotEmpty()) {
                         viewModel.createUser(text1, text2, text3)
@@ -189,7 +189,7 @@ class PhoneFragment : BaseFragment(R.layout.fragment_phone) {
                     birthday.error = "Vui lòng chọn ngày sinh"
                 }
             } else {
-                username.error = "Vui lòng điền thông tin"
+                username.error = "Vui lòng điền tên hiển thị"
             }
         }
     }
@@ -225,12 +225,12 @@ class PhoneFragment : BaseFragment(R.layout.fragment_phone) {
         progressBar1.visibility = View.VISIBLE
     }
 
-    private fun onLoadingCreate(){
+    private fun onLoadingCreate() {
         btnSignUp.visibility = View.INVISIBLE
         progressBar2.visibility = View.VISIBLE
     }
 
-    private fun onSuccessCreate(){
+    private fun onSuccessCreate() {
         btnSignUp.visibility = View.VISIBLE
         progressBar2.visibility = View.INVISIBLE
         findNavController().navigate(R.id.action_phoneFragment_to_mainFragment)

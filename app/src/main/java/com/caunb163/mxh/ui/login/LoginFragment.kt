@@ -50,8 +50,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         btnGoogle = view.findViewById(R.id.login_google)
 
         customProgressBar = CustomProgressBar(requireContext())
-        emailEdt.setText("test@gmail.com")
-        passwordEdt.setText("123456")
+//        emailEdt.setText("test@gmail.com")
+//        passwordEdt.setText("123456")
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -65,7 +65,15 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             val email = emailEdt.text.toString().trim()
             val password = passwordEdt.text.toString().trim()
             //check empty
-            viewModel.loginWithEmailAndPassword(email, password)
+            if (email.isNotEmpty()) {
+                if (password.isNotEmpty()) {
+                    viewModel.loginWithEmailAndPassword(email, password)
+                } else {
+                    passwordEdt.error = "Vui lòng điền mật khẩu"
+                }
+            } else {
+                emailEdt.error = "Vui lòng điền thông tin"
+            }
         }
 
         signup.setOnClickListener {

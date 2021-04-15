@@ -24,7 +24,6 @@ class RegisterViewModel(
                 val registerState = withContext(Dispatchers.IO) {
                     return@withContext registerUseCase.register(username, email, password)
                 }
-
                 _state.value = State.Success(registerState)
 
             } catch (e: Exception) {

@@ -34,7 +34,7 @@
     <string name="register_email">Email</string>
     <string name="register_password">Mật khẩu</string>
     <string name="register_have_account">Bạn đã có tài khoản?</string>
-<!--    <string name="register_have_account">Already have an Account?</string>-->
+    <!--    <string name="register_have_account">Already have an Account?</string>-->
 
     <string name="phone_hello">Xin Chào!</string>
     <string name="phone_content1">Vui lòng nhập số điện thoại của bạn để đăng ký hoặc đăng nhập</string>
@@ -75,6 +75,15 @@
     <string name="profile_phone">0987654321</string>
     <string name="profile_post">Bài viết</string>
 
+    <string name="updateprofile">Chỉnh sửa thông tin</string>
+    <string name="updateprofile_save">Lưu</string>
+    <string name="updateprofile_person">Cá nhân</string>
+    <string name="updateprofile_username">Tên hiển thị</string>
+    <string name="updateprofile_birthday">Ngày sinh</string>
+    <string name="updateprofile_gender">Giới tính</string>
+    <string name="updateprofile_introduce">Giới thiệu</string>
+    <string name="updateprofile_intro">Vài dòng giới thiệu về bạn</string>
+    <string name="updateprofile_phone">Số điện thoại</string>
 
     <string-array name="gender">
         <item>Nam</item>
