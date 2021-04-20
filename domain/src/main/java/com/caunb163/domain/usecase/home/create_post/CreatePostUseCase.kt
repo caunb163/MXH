@@ -9,7 +9,8 @@ class CreatePostUseCase(
         images: List<String>,
         content: String,
         arrCmtId: MutableList<String>,
-        arrLike: MutableList<String>
+        arrLike: MutableList<String>,
+        video: String
     ) {
         repositotyCreatePost.createPost(
             userId,
@@ -17,7 +18,8 @@ class CreatePostUseCase(
             images,
             content,
             arrCmtId,
-            arrLike
+            arrLike,
+            video
         )
     }
 }

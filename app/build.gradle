@@ -65,7 +65,7 @@ dependencies {
     implementation Deps.countryCode
     implementation Deps.customTab
     implementation Deps.pinView
-
+    implementation Dependencies.linkPreview
 }
 
 apply plugin: 'com.google.gms.google-services'

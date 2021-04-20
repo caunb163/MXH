@@ -7,6 +7,7 @@ interface RepositoryCreatePost {
         images: List<String>,
         content: String,
         arrCmtId: MutableList<String>,
-        arrLike: MutableList<String>
+        arrLike: MutableList<String>,
+        video: String
     )
 }

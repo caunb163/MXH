@@ -19,7 +19,8 @@ class PostMapper {
             createDate = post.createDate,
             images = post.images,
             arrCmtId = post.arrCmtId,
-            arrLike = post.arrLike
+            arrLike = post.arrLike,
+            video = post.video
         )
     }
 
@@ -30,7 +31,8 @@ class PostMapper {
             createDate = postEntiy.createDate,
             images = postEntiy.images,
             arrCmtId = postEntiy.arrCmtId.toMutableList(),
-            arrLike = postEntiy.arrLike.toMutableList()
+            arrLike = postEntiy.arrLike.toMutableList(),
+            video = postEntiy.video
         )
     }
 

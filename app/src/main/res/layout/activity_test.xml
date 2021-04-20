@@ -6,13 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".TestActivity">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="wrap_content"
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/play_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toBottomOf="@id/videoView"
+        app:layout_constraintEnd_toEndOf="@id/videoView"
+        app:layout_constraintStart_toStartOf="@id/videoView"
+        app:layout_constraintTop_toTopOf="@id/videoView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,9 @@ object Versions {
     const val customTab = "28.0.0"
     const val countrycode = "2.5.1"
     const val pinView = "1.4.4"
+    const val linkPreview = "1.0.9"
+    const val jsoup = "1.11.3"
+    const val picasso = "2.71828"
 }
 
 object Deps {
@@ -83,6 +86,10 @@ object Deps {
     const val countryCode = "com.hbb20:ccp:${Versions.countrycode}"
     const val customTab = "com.android.support:customtabs:${Versions.customTab}"
     const val pinView = "com.chaos.view:pinview:${Versions.pinView}"
+
+    const val linkPreview = "io.github.ponnamkarthik:richlinkpreview:${Versions.linkPreview}"
+    const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
+    const val picasso = "com.squareup.picasso:picasso:${Versions.picasso}"
 }
 
 object TestDeps {
@@ -113,6 +120,12 @@ object Dependencies {
     val appDependencies = arrayOf(
         Deps.navigation,
         Deps.navigationFrag
+    )
+
+    val linkPreview = arrayOf(
+        Deps.linkPreview,
+        Deps.jsoup,
+        Deps.picasso
     )
 
     val firebaseDependencies = arrayOf(

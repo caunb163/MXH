@@ -21,7 +21,8 @@ class CreatePostViewModel(
         userId: String,
         createDate: Long,
         images: List<String>,
-        content: String
+        content: String,
+        video: String
     ) {
         viewModelScope.launch {
             _state.value = State.Loading
@@ -33,7 +34,8 @@ class CreatePostViewModel(
                         images,
                         content,
                         mutableListOf(),
-                        mutableListOf()
+                        mutableListOf(),
+                        video
                     )
                 }
                 _state.value = State.Success(createPostUseCase)

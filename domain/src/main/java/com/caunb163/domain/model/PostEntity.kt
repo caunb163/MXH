@@ -11,5 +11,6 @@ data class PostEntity(
     val createDate: Long = 1614164557887,
     val images: List<String> = mutableListOf(),
     var arrCmtId: List<String> = mutableListOf(),
-    var arrLike: List<String> = mutableListOf()
+    var arrLike: List<String> = mutableListOf(),
+    var video: String = ""
 ) : Serializable

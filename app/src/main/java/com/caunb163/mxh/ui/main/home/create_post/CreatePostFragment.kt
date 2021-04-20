@@ -1,17 +1,12 @@
 package com.caunb163.mxh.ui.main.home.create_post
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.ClipData
 import android.content.Intent
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -24,18 +19,14 @@ import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import org.koin.android.ext.android.inject
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class CreatePostFragment : BaseDialogFragment() {
     private val TAG = "CreatePostFragment"
     private val REQUEST_INTENT_CODE_MULTIPLE = 5678
+    private val REQUEST_PICK_VIDEO = 2354
 
     private lateinit var toolbar: Toolbar
     private lateinit var btnpost: Button
@@ -67,6 +58,7 @@ class CreatePostFragment : BaseDialogFragment() {
     private lateinit var img55: ImageView
     private lateinit var tvImgNumber: TextView
     private lateinit var imvAddImage: ImageView
+    private lateinit var imvAddVideo: ImageView
     private lateinit var progressBar: ProgressBar
 
     private val localStorage: LocalStorage by inject()
@@ -74,6 +66,7 @@ class CreatePostFragment : BaseDialogFragment() {
     private lateinit var user: User
     private val viewModel: CreatePostViewModel by inject()
     private val listImages = mutableListOf<String>()
+    private var videoPath = ""
     private var timenow: Long = 0
     override fun getLayoutId(): Int = R.layout.fragment_create_post
 
@@ -108,6 +101,7 @@ class CreatePostFragment : BaseDialogFragment() {
         img55 = view.findViewById(R.id.createpost_5_img5)
         tvImgNumber = view.findViewById(R.id.createpost_tv_img_number)
         imvAddImage = view.findViewById(R.id.createpost_addimage)
+        imvAddVideo = view.findViewById(R.id.createpost_addvideo)
         progressBar = view.findViewById(R.id.createpost_progressbar)
 
         timenow = System.currentTimeMillis()
@@ -152,13 +146,18 @@ class CreatePostFragment : BaseDialogFragment() {
                 user.userId,
                 timenow,
                 listImages,
-                content.text.toString()
+                content.text.toString(),
+                videoPath
             )
             hideKeyboardFrom(requireContext(), it)
         }
 
         imvAddImage.setOnClickListener {
             ensurePermission()
+        }
+
+        imvAddVideo.setOnClickListener {
+            selectVideo()
         }
     }
 
@@ -182,11 +181,22 @@ class CreatePostFragment : BaseDialogFragment() {
     private fun ensurePermission() {
         if (CheckPermission.checkPermission(requireContext())) {
             openLibraryMultiple()
-        } else
-            requestPermissions(
-                CheckPermission.listPermission.toTypedArray(),
-                REQUEST_INTENT_CODE_MULTIPLE
-            )
+        } else requestPermissions(
+            CheckPermission.listPermission.toTypedArray(),
+            REQUEST_INTENT_CODE_MULTIPLE
+        )
+    }
+
+    private fun selectVideo() {
+        if (CheckPermission.checkPermission(requireContext())) {
+            val intent = Intent()
+            intent.type = "video/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_PICK_VIDEO)
+        } else requestPermissions(
+            CheckPermission.listPermission.toTypedArray(),
+            REQUEST_PICK_VIDEO
+        )
     }
 
     private fun openLibraryMultiple() {
@@ -250,6 +260,12 @@ class CreatePostFragment : BaseDialogFragment() {
                         updateImage()
                         Log.e(TAG, "onActivityResult size: ${listImages.size} ")
                     }
+                }
+            }
+
+            REQUEST_PICK_VIDEO -> {
+                data?.let { intent ->
+                    videoPath = intent.data.toString()
                 }
             }
         }

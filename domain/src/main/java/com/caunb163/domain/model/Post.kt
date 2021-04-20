@@ -8,5 +8,6 @@ data class Post(
     val createDate: Long = 1614164557887,
     val images: List<String> = mutableListOf(),
     var arrCmtId: MutableList<String> = mutableListOf(),
-    var arrLike: MutableList<String> = mutableListOf()
+    var arrLike: MutableList<String> = mutableListOf(),
+    var video: String = ""
 ) : Serializable

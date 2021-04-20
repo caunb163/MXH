@@ -17,8 +17,6 @@
             android:layout_height="wrap_content"
             app:title="@string/app_name" >
 
-
-
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
