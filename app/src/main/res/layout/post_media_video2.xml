@@ -3,33 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/post_image2"
+    android:id="@+id/post_video2"
     android:layout_marginHorizontal="10dp">
 
-    <ImageView
-        android:id="@+id/media_2_image_1"
+    <VideoView
+        android:id="@+id/media_2_video_1"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_default"
+        android:layout_marginEnd="1dp"
         app:layout_constraintDimensionRatio="3:4"
-        app:layout_constraintEnd_toStartOf="@id/media_2_image_2"
+        app:layout_constraintEnd_toStartOf="@id/media_2_video_2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="1dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_marginStart="1dp"
-        android:id="@+id/media_2_image_2"
+        android:id="@+id/media_2_video_2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="1dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/image_default"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/media_2_image_1"
-        app:layout_constraintTop_toTopOf="@id/media_2_image_1" />
+        app:layout_constraintStart_toEndOf="@id/media_2_video_1"
+        app:layout_constraintTop_toTopOf="@id/media_2_video_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

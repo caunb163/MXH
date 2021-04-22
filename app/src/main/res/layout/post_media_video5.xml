@@ -2,27 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/post_image5"
+    android:id="@+id/post_video5"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp">
 
-    <ImageView
-        android:id="@+id/media_5_image_1"
+    <VideoView
+        android:id="@+id/media_5_video_1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        android:src="@drawable/image_default"
         app:layout_constraintDimensionRatio="3:4"
-        app:layout_constraintEnd_toStartOf="@id/media_5_image_2"
+        app:layout_constraintEnd_toStartOf="@+id/media_5_video_2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/media_5_image_2"
+        android:id="@+id/media_5_video_2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
@@ -32,11 +29,11 @@
         android:src="@drawable/image_default"
         app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/media_5_image_1"
+        app:layout_constraintStart_toEndOf="@+id/media_5_video_1"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/media_5_image_3"
+        android:id="@+id/media_5_video_3"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="1dp"
@@ -45,40 +42,40 @@
         android:scaleType="centerCrop"
         android:src="@drawable/image_default"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toStartOf="@id/media_5_image_4"
+        app:layout_constraintEnd_toStartOf="@+id/media_5_video_4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/media_5_image_1" />
+        app:layout_constraintTop_toBottomOf="@+id/media_5_video_1" />
 
     <ImageView
-        android:id="@+id/media_5_image_4"
+        android:id="@+id/media_5_video_4"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginHorizontal="1dp"
+        android:layout_marginTop="1dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/image_default"
         app:layout_constraintDimensionRatio="1"
-        app:layout_constraintEnd_toStartOf="@id/media_5_image_5"
-        app:layout_constraintStart_toEndOf="@id/media_5_image_3"
-        app:layout_constraintTop_toTopOf="@id/media_5_image_3" />
-
+        app:layout_constraintEnd_toStartOf="@+id/media_5_video_5"
+        app:layout_constraintStart_toEndOf="@+id/media_5_video_3"
+        app:layout_constraintTop_toBottomOf="@+id/media_5_video_1" />
 
     <ImageView
-        android:id="@+id/media_5_image_5"
+        android:id="@+id/media_5_video_5"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         android:src="@drawable/image_default"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/media_5_image_4"
-        app:layout_constraintTop_toTopOf="@id/media_5_image_3" />
+        app:layout_constraintStart_toEndOf="@+id/media_5_video_4"
+        app:layout_constraintTop_toBottomOf="@+id/media_5_video_1" />
 
     <TextView
-        android:id="@+id/media_5_load_more"
+        android:id="@+id/media_5_video_loadmore"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#70000000"
@@ -88,10 +85,11 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/media_5_image_5"
-        app:layout_constraintEnd_toEndOf="@+id/media_5_image_5"
-        app:layout_constraintStart_toStartOf="@+id/media_5_image_5"
-        app:layout_constraintTop_toTopOf="@+id/media_5_image_5"
+        app:layout_constraintBottom_toBottomOf="@+id/media_5_video_5"
+        app:layout_constraintEnd_toEndOf="@+id/media_5_video_5"
+        app:layout_constraintStart_toStartOf="@+id/media_5_video_5"
+        app:layout_constraintTop_toTopOf="@+id/media_5_video_5"
         tools:text="+3"
         tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,8 @@ import kotlinx.coroutines.tasks.await
 class RepositoryCreatePostImpl(
     private val localStorage: LocalStorage
 ) : RepositoryCreatePost {
+    private val TAG = "RepositoryCreatePostImp"
+
     override suspend fun createPost(
         userId: String,
         createDate: Long,
@@ -24,6 +26,7 @@ class RepositoryCreatePostImpl(
         arrLike: MutableList<String>,
         video: String
     ) {
+        Log.e(TAG, "createPost: $video" )
         val db = Firebase.firestore
         val listImage = mutableListOf<String>()
         val user = localStorage.getAccount()!!
@@ -62,7 +65,7 @@ class RepositoryCreatePostImpl(
                 if (task.isSuccessful) {
                     videoPath = task.result.toString()
                 }
-            }
+            }.await()
         }
 
         val post = Post(

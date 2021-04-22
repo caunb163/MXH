@@ -33,12 +33,16 @@ class PostImage2ViewHolder(view: View, private val glide: RequestManager) :
             .into(img21)
         glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[1])
             .into(img22)
+        img21.setOnClickListener { onHomeOnClick.onImageClick(post, 1) }
+        img22.setOnClickListener { onHomeOnClick.onImageClick(post, 2) }
     }
 
     override fun unbind() {
         unbindView()
         img21.setImageDrawable(null)
         img22.setImageDrawable(null)
+        img21.setOnClickListener(null)
+        img22.setOnClickListener(null)
         glide.clear(img21)
         glide.clear(img22)
     }
