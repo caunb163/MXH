@@ -1,11 +1,8 @@
 package com.caunb163.mxh.ui.main.home.view_image
 
-import android.content.Context
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -16,7 +13,6 @@ import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.ui.main.home.HomeOnClick
 import org.koin.android.ext.android.inject
-
 
 class ListImageFragment : BaseDialogFragment(), OnImageClick, HomeOnClick {
 
@@ -40,8 +36,7 @@ class ListImageFragment : BaseDialogFragment(), OnImageClick, HomeOnClick {
                 .error(R.drawable.image_default)
         )
 
-        listImageAdapter =
-            ListImageAdapter(glide, this, localStorage.getAccount()!!, this, postEntity)
+        listImageAdapter = ListImageAdapter(glide, this, localStorage.getAccount()!!, this, postEntity)
         recyclerView.apply {
             layoutManager = RecyclerViewManager(requireContext())
             adapter = listImageAdapter
@@ -67,12 +62,9 @@ class ListImageFragment : BaseDialogFragment(), OnImageClick, HomeOnClick {
 
     override fun onImageClick(post: PostEntity, position: Int) {}
 
-    override fun onViewClick(images: MutableList<String>, position: Int) {
-        val action =
-            ListImageFragmentDirections.actionListImageFragmentToImageViewFragment(
-                images.toTypedArray(),
-                position
-            )
+    override fun onViewClick(listMedia: MutableList<String>, position: Int, boolean: Boolean) {
+        val action = ListImageFragmentDirections.actionListImageFragmentToImageViewFragment(listMedia.toTypedArray(), position, boolean)
         findNavController().navigate(action)
     }
+
 }

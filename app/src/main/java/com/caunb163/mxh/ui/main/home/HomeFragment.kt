@@ -71,7 +71,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
                 .error(R.drawable.image_default)
         )
         user = localStorage.getAccount()!!
-        homeAdapter = HomeAdapter(glide, this, user)
+        homeAdapter = HomeAdapter(glide, this, user, requireContext())
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)

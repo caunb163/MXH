@@ -1,5 +1,6 @@
 package com.caunb163.mxh.ui.main.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,8 @@ import com.caunb163.mxh.ui.main.home.viewholder.*
 class HomeAdapter(
     private val glide: RequestManager,
     private val homeOnClick: HomeOnClick,
-    private val user: User
+    private val user: User,
+    private val context: Context
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_CREATE_POST = 0

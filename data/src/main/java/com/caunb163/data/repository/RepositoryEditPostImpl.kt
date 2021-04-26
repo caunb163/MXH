@@ -11,8 +11,9 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 
 class RepositoryEditPostImpl {
-    val db = Firebase.firestore
-    val listImage = mutableListOf<String>()
+    private val db = Firebase.firestore
+    private val listImage = mutableListOf<String>()
+    private var videoPath = ""
 
     suspend fun editPost(postEntity: PostEntity) {
         if (postEntity.images.isNotEmpty()) {
@@ -39,13 +40,34 @@ class RepositoryEditPostImpl {
             }
         }
 
+        if (postEntity.video.isNotEmpty()) {
+            if (postEntity.video.contains("firebasestorage")) {
+                videoPath = postEntity.video
+            } else {
+                val uriPath = Uri.parse(postEntity.video)
+                val storageRef = Firebase.storage.reference.child("video/" + uriPath.lastPathSegment)
+                val uploadTask: UploadTask = storageRef.putFile(uriPath)
+                uploadTask.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let { throw  it }
+                    }
+                    storageRef.downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        videoPath = task.result.toString()
+                    }
+                }.await()
+            }
+        }
+
         val post = Post(
             userId = postEntity.userId,
             content = postEntity.content,
             createDate = postEntity.createDate,
             images = listImage,
             arrCmtId = postEntity.arrCmtId.toMutableList(),
-            arrLike = postEntity.arrLike.toMutableList()
+            arrLike = postEntity.arrLike.toMutableList(),
+            video = videoPath
         )
 
         db.collection(FireStore.POST).document(postEntity.postId).set(post).await()

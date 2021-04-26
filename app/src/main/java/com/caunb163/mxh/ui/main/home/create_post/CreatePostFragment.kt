@@ -64,17 +64,17 @@ class CreatePostFragment : BaseDialogFragment() {
     private lateinit var imvAddVideo: ImageView
     private lateinit var progressBar: ProgressBar
 
-    private lateinit var videoView1: VideoView
-    private lateinit var videoView21: VideoView
+    private lateinit var videoView1: ImageView
+    private lateinit var videoView21: ImageView
     private lateinit var videoView22: ImageView
-    private lateinit var videoView31: VideoView
+    private lateinit var videoView31: ImageView
     private lateinit var videoView32: ImageView
     private lateinit var videoView33: ImageView
-    private lateinit var videoView41: VideoView
+    private lateinit var videoView41: ImageView
     private lateinit var videoView42: ImageView
     private lateinit var videoView43: ImageView
     private lateinit var videoView44: ImageView
-    private lateinit var videoView51: VideoView
+    private lateinit var videoView51: ImageView
     private lateinit var videoView52: ImageView
     private lateinit var videoView53: ImageView
     private lateinit var videoView54: ImageView
@@ -196,13 +196,9 @@ class CreatePostFragment : BaseDialogFragment() {
             hideKeyboardFrom(requireContext(), it)
         }
 
-        imvAddImage.setOnClickListener {
-            ensurePermission()
-        }
+        imvAddImage.setOnClickListener { ensurePermission() }
 
-        imvAddVideo.setOnClickListener {
-            selectVideo()
-        }
+        imvAddVideo.setOnClickListener { selectVideo() }
     }
 
     override fun initObserve() {
@@ -400,52 +396,37 @@ class CreatePostFragment : BaseDialogFragment() {
 
             6 -> {
                 ctl6.visibility = View.VISIBLE
-                videoView1.setVideoPath(videoPath)
-                videoView1.start()
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView1)
             }
 
             7 -> {
                 ctl7.visibility = View.VISIBLE
-                videoView21.setVideoPath(videoPath)
-                videoView21.start()
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
-                    .into(videoView22)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView21)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView22)
             }
 
             8 -> {
                 ctl8.visibility = View.VISIBLE
-                videoView31.setVideoPath(videoPath)
-                videoView31.start()
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
-                    .into(videoView32)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1])
-                    .into(videoView32)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView31)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView32)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView32)
             }
 
             9 -> {
                 ctl9.visibility = View.VISIBLE
-                videoView41.setVideoPath(videoPath)
-                videoView41.start()
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
-                    .into(videoView42)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1])
-                    .into(videoView43)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2])
-                    .into(videoView44)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView41)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView42)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView43)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(videoView44)
             }
 
             10 -> {
                 ctl10.visibility = View.VISIBLE
-                videoView51.setVideoPath(videoPath)
-                videoView51.start()
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
-                    .into(videoView52)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1])
-                    .into(videoView53)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2])
-                    .into(videoView54)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3])
-                    .into(videoView55)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView51)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView52)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView53)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(videoView54)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3]).into(videoView55)
 
                 if (listImages.size == 4) tvVideoLoadMore.visibility = View.INVISIBLE
                 else {
@@ -454,8 +435,7 @@ class CreatePostFragment : BaseDialogFragment() {
                 }
             }
 
-            else -> {
-            }
+            else -> { }
         }
     }
 

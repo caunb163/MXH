@@ -13,12 +13,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:src="@drawable/image_default"
         android:id="@+id/view_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:maxHeight="800dp"
         android:scaleType="centerCrop"
+        android:src="@drawable/image_default"
         app:layout_constraintTop_toBottomOf="@id/view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

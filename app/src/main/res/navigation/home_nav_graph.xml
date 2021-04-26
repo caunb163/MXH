@@ -122,11 +122,14 @@
         android:label="ImageViewFragment" >
 
         <argument
-            android:name="images"
+            android:name="list"
             app:argType="string[]" />
         <argument
             android:name="position"
             app:argType="integer" />
+        <argument
+            android:name="boolean"
+            app:argType="boolean" />
 
     </dialog>
     <dialog

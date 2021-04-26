@@ -68,6 +68,9 @@ abstract class PostBaseViewHolder(view: View, requestManager: RequestManager) :
 
         share.setOnClickListener { onHomeOnClick.onShareClick(post.content) }
 
+        if (user.userId == post.userId) imvMenu.visibility = View.VISIBLE
+        else imvMenu.visibility = View.INVISIBLE
+
         imvMenu.setOnClickListener {
             val popupMenu: PopupMenu = PopupMenu(context, imvMenu)
             popupMenu.inflate(R.menu.post_menu)

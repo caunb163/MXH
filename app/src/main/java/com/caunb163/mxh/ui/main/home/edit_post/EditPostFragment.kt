@@ -36,6 +36,7 @@ class EditPostFragment : BaseDialogFragment() {
     private val TAG = "EditPostFragment"
 
     private val REQUEST_INTENT_CODE_MULTIPLE = 1678
+    private val REQUEST_PICK_VIDEO = 3452
 
     private lateinit var toolbar: Toolbar
     private lateinit var btnSave: Button
@@ -49,6 +50,11 @@ class EditPostFragment : BaseDialogFragment() {
     private lateinit var ctl3: ConstraintLayout
     private lateinit var ctl4: ConstraintLayout
     private lateinit var ctl5: ConstraintLayout
+    private lateinit var ctl6: ConstraintLayout
+    private lateinit var ctl7: ConstraintLayout
+    private lateinit var ctl8: ConstraintLayout
+    private lateinit var ctl9: ConstraintLayout
+    private lateinit var ctl10: ConstraintLayout
 
     private lateinit var img1: ImageView
     private lateinit var img21: ImageView
@@ -65,15 +71,35 @@ class EditPostFragment : BaseDialogFragment() {
     private lateinit var img53: ImageView
     private lateinit var img54: ImageView
     private lateinit var img55: ImageView
-    private lateinit var tvImgNumber: TextView
+    private lateinit var tvImageLoadMore: TextView
     private lateinit var imvAddImage: ImageView
+    private lateinit var imvAddVideo: ImageView
     private lateinit var progressBar: ProgressBar
+
+    private lateinit var videoView1: ImageView
+    private lateinit var videoView21: ImageView
+    private lateinit var videoView22: ImageView
+    private lateinit var videoView31: ImageView
+    private lateinit var videoView32: ImageView
+    private lateinit var videoView33: ImageView
+    private lateinit var videoView41: ImageView
+    private lateinit var videoView42: ImageView
+    private lateinit var videoView43: ImageView
+    private lateinit var videoView44: ImageView
+    private lateinit var videoView51: ImageView
+    private lateinit var videoView52: ImageView
+    private lateinit var videoView53: ImageView
+    private lateinit var videoView54: ImageView
+    private lateinit var videoView55: ImageView
+    private lateinit var tvVideoLoadMore: TextView
 
     private lateinit var glide: RequestManager
     private val args: EditPostFragmentArgs by navArgs()
     private val viewModel: EditPostViewModel by inject()
     private lateinit var postEntity: PostEntity
     private val listImages = mutableListOf<String>()
+    private var videoPath = ""
+    private var isVideo: Boolean = false
     override fun getLayoutId(): Int = R.layout.fragment_edit_post
 
     override fun initView(view: View) {
@@ -84,36 +110,60 @@ class EditPostFragment : BaseDialogFragment() {
         createDate = view.findViewById(R.id.editpost_tv_date)
         content = view.findViewById(R.id.editpost_edt_content)
 
-        ctl1 = view.findViewById(R.id.editpost_ctl1)
-        ctl2 = view.findViewById(R.id.editpost_ctl2)
-        ctl3 = view.findViewById(R.id.editpost_ctl3)
-        ctl4 = view.findViewById(R.id.editpost_ctl4)
-        ctl5 = view.findViewById(R.id.editpost_ctl5)
+        ctl1 = view.findViewById(R.id.post_image1)
+        ctl2 = view.findViewById(R.id.post_image2)
+        ctl3 = view.findViewById(R.id.post_image3)
+        ctl4 = view.findViewById(R.id.post_image4)
+        ctl5 = view.findViewById(R.id.post_image5)
+        ctl6 = view.findViewById(R.id.post_video1)
+        ctl7 = view.findViewById(R.id.post_video2)
+        ctl8 = view.findViewById(R.id.post_video3)
+        ctl9 = view.findViewById(R.id.post_video4)
+        ctl10 = view.findViewById(R.id.post_video5)
 
-        img1 = view.findViewById(R.id.editpost_1_img)
-        img21 = view.findViewById(R.id.editpost_2_img1)
-        img22 = view.findViewById(R.id.editpost_2_img2)
-        img31 = view.findViewById(R.id.editpost_3_img1)
-        img32 = view.findViewById(R.id.editpost_3_img2)
-        img33 = view.findViewById(R.id.editpost_3_img3)
-        img41 = view.findViewById(R.id.editpost_4_img1)
-        img42 = view.findViewById(R.id.editpost_4_img2)
-        img43 = view.findViewById(R.id.editpost_4_img3)
-        img44 = view.findViewById(R.id.editpost_4_img4)
-        img51 = view.findViewById(R.id.editpost_5_img1)
-        img52 = view.findViewById(R.id.editpost_5_img2)
-        img53 = view.findViewById(R.id.editpost_5_img3)
-        img54 = view.findViewById(R.id.editpost_5_img4)
-        img55 = view.findViewById(R.id.editpost_5_img5)
-        tvImgNumber = view.findViewById(R.id.editpost_tv_img_number)
+        img1 = view.findViewById(R.id.media_1_image)
+        img21 = view.findViewById(R.id.media_2_image_1)
+        img22 = view.findViewById(R.id.media_2_image_2)
+        img31 = view.findViewById(R.id.media_3_image_1)
+        img32 = view.findViewById(R.id.media_3_image_2)
+        img33 = view.findViewById(R.id.media_3_image_3)
+        img41 = view.findViewById(R.id.media_4_image_1)
+        img42 = view.findViewById(R.id.media_4_image_2)
+        img43 = view.findViewById(R.id.media_4_image_3)
+        img44 = view.findViewById(R.id.media_4_image_4)
+        img51 = view.findViewById(R.id.media_5_image_1)
+        img52 = view.findViewById(R.id.media_5_image_2)
+        img53 = view.findViewById(R.id.media_5_image_3)
+        img54 = view.findViewById(R.id.media_5_image_4)
+        img55 = view.findViewById(R.id.media_5_image_5)
+        tvImageLoadMore = view.findViewById(R.id.media_5_load_more)
+
+        videoView1 = view.findViewById(R.id.media_1_video)
+        videoView21 = view.findViewById(R.id.media_2_video_1)
+        videoView22 = view.findViewById(R.id.media_2_video_2)
+        videoView31 = view.findViewById(R.id.media_3_video_1)
+        videoView32 = view.findViewById(R.id.media_3_video_2)
+        videoView33 = view.findViewById(R.id.media_3_video_3)
+        videoView41 = view.findViewById(R.id.media_4_video_1)
+        videoView42 = view.findViewById(R.id.media_4_video_2)
+        videoView43 = view.findViewById(R.id.media_4_video_3)
+        videoView44 = view.findViewById(R.id.media_4_video_4)
+        videoView51 = view.findViewById(R.id.media_5_video_1)
+        videoView52 = view.findViewById(R.id.media_5_video_2)
+        videoView53 = view.findViewById(R.id.media_5_video_3)
+        videoView54 = view.findViewById(R.id.media_5_video_4)
+        videoView55 = view.findViewById(R.id.media_5_video_5)
+        tvVideoLoadMore = view.findViewById(R.id.media_5_video_loadmore)
+
         imvAddImage = view.findViewById(R.id.editpost_addimage)
+        imvAddVideo = view.findViewById(R.id.editpost_addvideo)
         progressBar = view.findViewById(R.id.editpost_progressbar)
 
+        showImage(0)
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {
             dialog?.dismiss()
         }
-
         glide = Glide.with(this)
         glide.applyDefaultRequestOptions(
             RequestOptions()
@@ -153,13 +203,16 @@ class EditPostFragment : BaseDialogFragment() {
                 createDate = postEntity.createDate,
                 images = listImages,
                 arrCmtId = postEntity.arrCmtId,
-                arrLike = postEntity.arrLike
+                arrLike = postEntity.arrLike,
+                video = videoPath
             )
             viewModel.editPost(postE)
             hideKeyboardFrom(requireContext(), it)
         }
 
         imvAddImage.setOnClickListener { ensurePermission() }
+
+        imvAddVideo.setOnClickListener { selectVideo() }
     }
 
     override fun initObserve() {
@@ -173,13 +226,16 @@ class EditPostFragment : BaseDialogFragment() {
     }
 
     private fun fillInformation() {
-        glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
-            .into(imgAvatar)
+        glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar).into(imgAvatar)
         username.text = postEntity.userName
         createDate.text = getDate(postEntity.createDate)
         content.text = postEntity.content
+        if (postEntity.video.isNotEmpty()){
+            videoPath = postEntity.video
+            isVideo = true
+        }
         listImages.addAll(postEntity.images)
-        updateImage()
+        updateImageVideo()
     }
 
     private fun onLoading() {
@@ -200,111 +256,127 @@ class EditPostFragment : BaseDialogFragment() {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun updateImage() {
-        when (listImages.size) {
-            0 -> {
-                showImage(0)
+    private fun updateImageVideo() {
+        if (isVideo) {
+            when (listImages.size) {
+                0 -> showImage(6)
+                1 -> showImage(7)
+                2 -> showImage(8)
+                3 -> showImage(9)
+                else -> showImage(10)
             }
-
-            1 -> {
-                showImage(1)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[0])
-                    .into(img1)
-            }
-
-            2 -> {
-                showImage(2)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[0])
-                    .into(img21)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[1])
-                    .into(img22)
-            }
-
-            3 -> {
-                showImage(3)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[0])
-                    .into(img31)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[1])
-                    .into(img32)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[2])
-                    .into(img33)
-            }
-
-            4 -> {
-                showImage(4)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[0])
-                    .into(img41)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[1])
-                    .into(img42)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[2])
-                    .into(img43)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[3])
-                    .into(img44)
-            }
-
-            else -> {
-                showImage(5)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[0])
-                    .into(img51)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[1])
-                    .into(img52)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[2])
-                    .into(img53)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[3])
-                    .into(img54)
-                glide.applyDefaultRequestOptions(RequestOptions())
-                    .load(listImages[4])
-                    .into(img55)
-                if (listImages.size == 5) {
-                    tvImgNumber.visibility = View.INVISIBLE
-                } else {
-                    tvImgNumber.visibility = View.VISIBLE
-                    tvImgNumber.text = "+${listImages.size - 5}"
-                }
+        } else {
+            when (listImages.size) {
+                0 -> showImage(0)
+                1 -> showImage(1)
+                2 -> showImage(2)
+                3 -> showImage(3)
+                4 -> showImage(4)
+                else -> showImage(5)
             }
         }
+
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showImage(size: Int) {
         ctl1.visibility = View.GONE
         ctl2.visibility = View.GONE
         ctl3.visibility = View.GONE
         ctl4.visibility = View.GONE
         ctl5.visibility = View.GONE
+        ctl6.visibility = View.GONE
+        ctl7.visibility = View.GONE
+        ctl8.visibility = View.GONE
+        ctl9.visibility = View.GONE
+        ctl10.visibility = View.GONE
+        tvImageLoadMore.visibility = View.GONE
+        tvVideoLoadMore.visibility = View.GONE
 
         when (size) {
             1 -> {
                 ctl1.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(img1)
             }
+
             2 -> {
                 ctl2.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(img21)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(img22)
             }
+
             3 -> {
                 ctl3.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(img31)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(img32)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(img33)
             }
+
             4 -> {
                 ctl4.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(img41)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(img42)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(img43)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3]).into(img44)
             }
+
             5 -> {
                 ctl5.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(img51)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(img52)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(img53)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3]).into(img54)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[4]).into(img55)
+
+                if (listImages.size == 5) tvImageLoadMore.visibility = View.INVISIBLE
+                else {
+                    tvImageLoadMore.visibility = View.VISIBLE
+                    tvImageLoadMore.text = "+${listImages.size - 5}"
+                }
             }
-            else -> {
+
+            6 -> {
+                ctl6.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView1)
             }
+
+            7 -> {
+                ctl7.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView21)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView22)
+            }
+
+            8 -> {
+                ctl8.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView31)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView32)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView33)
+            }
+
+            9 -> {
+                ctl9.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView41)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView42)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView43)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(videoView44)
+            }
+
+            10 -> {
+                ctl10.visibility = View.VISIBLE
+                glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView51)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView52)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView53)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(videoView54)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3]).into(videoView55)
+
+                if (listImages.size == 4) tvVideoLoadMore.visibility = View.INVISIBLE
+                else {
+                    tvVideoLoadMore.visibility = View.VISIBLE
+                    tvVideoLoadMore.text = "+${listImages.size - 4}"
+                }
+            }
+
+            else -> { }
         }
     }
 
@@ -316,6 +388,18 @@ class EditPostFragment : BaseDialogFragment() {
                 CheckPermission.listPermission.toTypedArray(),
                 REQUEST_INTENT_CODE_MULTIPLE
             )
+    }
+
+    private fun selectVideo() {
+        if (CheckPermission.checkPermission(requireContext())) {
+            val intent = Intent()
+            intent.type = "video/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_PICK_VIDEO)
+        } else requestPermissions(
+            CheckPermission.listPermission.toTypedArray(),
+            REQUEST_PICK_VIDEO
+        )
     }
 
     private fun openLibraryMultiple() {
@@ -350,7 +434,7 @@ class EditPostFragment : BaseDialogFragment() {
                 data?.let { intent ->
                     intent.data?.let {
                         listImages.add(it.toString())
-                        updateImage()
+                        updateImageVideo()
                         btnSave.isEnabled = true
                         btnSave.setBackgroundColor(resources.getColor(R.color.colorPost, null))
                     }
@@ -361,9 +445,19 @@ class EditPostFragment : BaseDialogFragment() {
                         }
                         btnSave.isEnabled = true
                         btnSave.setBackgroundColor(resources.getColor(R.color.colorPost, null))
-                        updateImage()
+                        updateImageVideo()
                         Log.e(TAG, "onActivityResult size: ${listImages.size} ")
                     }
+                }
+            }
+
+            REQUEST_PICK_VIDEO -> {
+                data?.let { intent ->
+                    videoPath = intent.data.toString()
+                    isVideo = true
+                    updateImageVideo()
+                    btnSave.isEnabled = true
+                    btnSave.setBackgroundColor(resources.getColor(R.color.colorPost, null))
                 }
             }
         }

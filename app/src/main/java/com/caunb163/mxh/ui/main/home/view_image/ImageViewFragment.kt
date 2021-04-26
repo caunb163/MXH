@@ -1,5 +1,6 @@
 package com.caunb163.mxh.ui.main.home.view_image
 
+import android.content.Context
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -32,31 +33,31 @@ class ImageViewFragment : BaseDialogFragment() {
         viewPager.adapter = ImageViewPageAdapter(
             childFragmentManager,
             FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            args.images.toMutableList(),
-            glide
+            args.list.toMutableList(),
+            glide,
+            args.boolean,
+            requireContext()
         )
         viewPager.setCurrentItem(args.position, false)
     }
 
-    override fun initListener() {
+    override fun initListener() {}
 
-    }
-
-    override fun initObserve() {
-    }
-
+    override fun initObserve() {}
 }
 
 class ImageViewPageAdapter(
     fm: FragmentManager,
     behavior: Int,
     private val images: MutableList<String>,
-    private val glide: RequestManager
+    private val glide: RequestManager,
+    private val boolean: Boolean,
+    private val context: Context
 ) :
     FragmentStatePagerAdapter(fm, behavior) {
 
     override fun getCount(): Int = images.size
 
-    override fun getItem(position: Int): Fragment = ImageViewPageFragment(position, images, glide)
+    override fun getItem(position: Int): Fragment = ImageViewPageFragment(position, images, glide, boolean, context)
 
 }
