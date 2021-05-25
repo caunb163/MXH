@@ -9,11 +9,16 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
+import com.caunb163.data.datalocal.ProfanityDatabase
+import com.caunb163.data.datalocal.ProfanityWord
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.inject
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
 
 class OnBoardingFragment : BaseFragment(R.layout.fragment_on_boarding),
     ViewPager.OnPageChangeListener {
@@ -31,6 +36,26 @@ class OnBoardingFragment : BaseFragment(R.layout.fragment_on_boarding),
         backButton = view.findViewById(R.id.onboarding_btn_back)
         skipButton = view.findViewById(R.id.button_on_boarding_skip)
         indicator = view.findViewById(R.id.indicator)
+
+        ProfanityDatabase.Companion.databaseWriteExecutor.execute(Runnable {
+            val list = mutableListOf<ProfanityWord>()
+            val inputStream: InputStream = resources.openRawResource(R.raw.text)
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+            var eachline = bufferedReader.readLine()
+            while (eachline != null) {
+                val profanityWord = ProfanityWord(word = eachline)
+                list.add(profanityWord)
+                if (list.size == 2000) {
+                    viewModel.addAllWord(list)
+                    list.clear()
+                }
+
+                eachline = bufferedReader.readLine()
+            }
+            if (list.size > 0) {
+                viewModel.addAllWord(list)
+            }
+        })
     }
 
     override fun initListener() {

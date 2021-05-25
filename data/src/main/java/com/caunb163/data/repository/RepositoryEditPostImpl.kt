@@ -45,7 +45,8 @@ class RepositoryEditPostImpl {
                 videoPath = postEntity.video
             } else {
                 val uriPath = Uri.parse(postEntity.video)
-                val storageRef = Firebase.storage.reference.child("video/" + uriPath.lastPathSegment)
+                val storageRef =
+                    Firebase.storage.reference.child("video/" + uriPath.lastPathSegment)
                 val uploadTask: UploadTask = storageRef.putFile(uriPath)
                 uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
@@ -70,6 +71,10 @@ class RepositoryEditPostImpl {
             video = videoPath
         )
 
-        db.collection(FireStore.POST).document(postEntity.postId).set(post).await()
+        if (postEntity.isAds) {
+            db.collection(FireStore.ADS).document(postEntity.postId).set(post).await()
+        } else {
+            db.collection(FireStore.POST).document(postEntity.postId).set(post).await()
+        }
     }
 }

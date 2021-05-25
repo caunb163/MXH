@@ -31,9 +31,6 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
     private fun onLoading() {}
 
     private fun onSuccess(state: SplashUseCase.SplashState) {
-//        if (state) {
-//            findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)
-//        } else findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
         when (state) {
             is SplashUseCase.SplashState.OpenLogin -> findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
             is SplashUseCase.SplashState.OpenOnBoarding -> findNavController().navigate(R.id.action_splashFragment_to_onBoardingFragment)

@@ -19,6 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.PostEntity
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
@@ -96,6 +97,7 @@ class EditPostFragment : BaseDialogFragment() {
     private lateinit var glide: RequestManager
     private val args: EditPostFragmentArgs by navArgs()
     private val viewModel: EditPostViewModel by inject()
+    private val localStorage: LocalStorage by inject()
     private lateinit var postEntity: PostEntity
     private val listImages = mutableListOf<String>()
     private var videoPath = ""
@@ -206,6 +208,7 @@ class EditPostFragment : BaseDialogFragment() {
                 arrLike = postEntity.arrLike,
                 video = videoPath
             )
+            postE.isAds = localStorage.getAccount()!!.ads
             viewModel.editPost(postE)
             hideKeyboardFrom(requireContext(), it)
         }

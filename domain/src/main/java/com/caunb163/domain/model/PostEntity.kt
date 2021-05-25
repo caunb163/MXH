@@ -13,4 +13,6 @@ data class PostEntity(
     var arrCmtId: List<String> = mutableListOf(),
     var arrLike: List<String> = mutableListOf(),
     var video: String = ""
-) : Serializable
+) : Serializable {
+    var isAds = false
+}

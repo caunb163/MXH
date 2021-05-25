@@ -16,20 +16,37 @@ class HomeViewModel(
 ) : ViewModel() {
     private val TAG = "HomeViewModel"
 
-    private val _stateLike: MutableLiveData<State> = MutableLiveData()
-    val stateLike: LiveData<State> get() = _stateLike
-
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)
         try {
             repositoryHomeImpl.listenerPostChange().collect {
-                emit(State.Success(it))
+                val data = repositoryHomeImpl.getPostEntity(it)
+                emit(State.Success(data))
             }
         } catch (e: Exception) {
             emit(State.Failure("${e.message}"))
         }
     }
 
+    private val _stateAds: MutableLiveData<State> = MutableLiveData()
+    val stateAds: LiveData<State> get() = _stateAds
+    fun getAds() {
+        viewModelScope.launch {
+            _stateAds.value = State.Loading
+            try {
+                val adsPost = withContext(Dispatchers.Default) {
+                    val list = repositoryHomeImpl.getAds()
+                    return@withContext repositoryHomeImpl.getAdsEntity(list)
+                }
+                _stateAds.value = State.Success(adsPost)
+            } catch (e: Exception) {
+                _stateAds.value = State.Failure("${e.message}")
+            }
+        }
+    }
+
+    private val _stateLike: MutableLiveData<State> = MutableLiveData()
+    val stateLike: LiveData<State> get() = _stateLike
     fun likePost(postId: String) {
         viewModelScope.launch {
             _stateLike.value = State.Loading

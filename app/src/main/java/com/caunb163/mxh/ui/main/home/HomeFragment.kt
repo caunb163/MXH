@@ -40,6 +40,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var user: User
     private lateinit var toolbar: MaterialToolbar
+    private val listAds = mutableListOf<PostEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +95,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
 
         viewModel.stateLike.observe(this, Observer { state ->
             when (state) {
-                is State.Loading -> onLoadingLike()
+                is State.Loading -> onLoading()
                 is State.Success<*> -> onSuccessLike()
                 is State.Failure -> onFailure(state.message)
             }
@@ -102,8 +103,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
 
         viewModel.stateDelete.observe(this, Observer { state ->
             when (state) {
-                is State.Loading -> onLoadingLike()
+                is State.Loading -> onLoading()
                 is State.Success<*> -> onSuccessLike()
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+
+        viewModel.getAds()
+        viewModel.stateAds.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoading()
+                is State.Success<*> -> onSuccessAds(state.data as MutableList<PostEntity>)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -111,9 +121,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
 
     private fun onLoading() {}
 
-    private fun onLoadingLike() {}
-
     private fun onSuccessLike() {}
+
+    private fun onSuccessAds(list: MutableList<PostEntity>) {
+        listAds.addAll(list)
+    }
 
     private fun onSuccessListener(post: PostEntity) {
         if (post.userId.isEmpty()) {
@@ -130,17 +142,19 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
             }
         } else {
             if (!list.contains(post)) {
-                list.add(post)
-                list.sortByDescending {
-                    if (it is PostEntity) {
-                        it.createDate.inc()
-                    } else {
-                        null
-                    }
+                if (list.size % 8 == 0) {
+                    val index = (0 until listAds.size).random()
+                    Log.e(TAG, "onSuccessListener: $index" )
+                    list.add(listAds[index])
+                    homeAdapter.notifyItemInserted(list.size)
                 }
-                list.remove(user)
-                list.add(0,user)
-                homeAdapter.notifyDataSetChanged()
+                if (checkCreatePost(post)) {
+                    list.add(1, post)
+                    homeAdapter.notifyItemInserted(1)
+                } else {
+                    list.add(post)
+                    homeAdapter.notifyItemChanged(list.size)
+                }
             }
         }
     }
@@ -157,6 +171,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         list.forEach {
             if (it is PostEntity) {
                 if (it.postId == post.postId) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun checkCreatePost(post: PostEntity): Boolean {
+        list.forEach {
+            if (it is PostEntity) {
+                if (post.createDate > it.createDate) {
                     return true
                 }
             }

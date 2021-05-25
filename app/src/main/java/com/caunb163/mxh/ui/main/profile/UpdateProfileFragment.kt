@@ -2,12 +2,15 @@ package com.caunb163.mxh.ui.main.profile
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
+import android.icu.util.Calendar
+import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.User
@@ -20,6 +23,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class UpdateProfileFragment : BaseDialogFragment() {
     private val TAG = "UpdateProfileFragment"
@@ -38,6 +42,7 @@ class UpdateProfileFragment : BaseDialogFragment() {
 
     override fun getLayoutId(): Int = R.layout.fragment_update_profile
 
+    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressLint("SetTextI18n")
     override fun initView(view: View) {
         toolbar = view.findViewById(R.id.updateprofile_toolbar)
@@ -66,12 +71,16 @@ class UpdateProfileFragment : BaseDialogFragment() {
         tvBirthday.setOnClickListener {
             tvBirthday.error = null
             val c = user.birthDay
-            val arr = c.split("/")
-            Log.e(TAG, "initView: $c -- ${arr[0]} -- ${arr[1]} -- ${arr[2]}")
-            val mYear = arr[2].toInt()
-            val mMonth = arr[1].toInt() - 1
-            val mDay = arr[0].toInt()
-
+            val currentTime = Calendar.getInstance()
+            var mYear = currentTime[Calendar.YEAR]
+            var mMonth = currentTime[Calendar.MONTH]
+            var mDay = currentTime[Calendar.DAY_OF_MONTH]
+            if (c.isNotEmpty()) {
+                val arr = c.split("/")
+                mYear = arr[2].toInt()
+                mMonth = arr[1].toInt() - 1
+                mDay = arr[0].toInt()
+            }
             val dpd = DatePickerDialog(
                 requireContext(),
                 DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->

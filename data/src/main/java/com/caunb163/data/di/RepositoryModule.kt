@@ -25,4 +25,5 @@ val repositoryModule = module {
     factory<RepositoryCreateGroup> { RepositoryCreateGroupImpl() }
     factory<RepositoryChatImpl> { RepositoryChatImpl(get()) }
     factory<RepositoryEditPostImpl> { RepositoryEditPostImpl() }
+    factory<RepositoryVideoImpl> { RepositoryVideoImpl(get()) }
 }

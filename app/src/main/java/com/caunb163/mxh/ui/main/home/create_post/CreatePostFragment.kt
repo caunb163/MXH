@@ -9,10 +9,12 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
+import com.caunb163.data.datalocal.ProfanityWord
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
@@ -89,6 +91,7 @@ class CreatePostFragment : BaseDialogFragment() {
     private var videoPath = ""
     private var timenow: Long = 0
     private var isVideo: Boolean = false
+    private val listProfanity = mutableListOf<ProfanityWord>()
 
     override fun getLayoutId(): Int = R.layout.fragment_create_post
 
@@ -186,12 +189,16 @@ class CreatePostFragment : BaseDialogFragment() {
 
         btnpost.setOnClickListener {
             timenow = System.currentTimeMillis()
+            var temp = content.text.toString()
+            temp = checkProfanityContent(temp, listProfanity)
+
             viewModel.createPost(
                 user.userId,
                 timenow,
                 listImages,
-                content.text.toString(),
-                videoPath
+                temp,
+                videoPath,
+                user.ads
             )
             hideKeyboardFrom(requireContext(), it)
         }
@@ -202,11 +209,18 @@ class CreatePostFragment : BaseDialogFragment() {
     }
 
     override fun initObserve() {
+        viewModel.getAllWord()
         viewModel.state.observe(this, androidx.lifecycle.Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
                 is State.Success<*> -> onSuccess()
                 is State.Failure -> onFailure(state.message)
+            }
+        })
+
+        viewModel.listWord.observe(this, Observer {
+            it?.let { list ->
+                listProfanity.addAll(list)
             }
         })
     }
@@ -258,7 +272,6 @@ class CreatePostFragment : BaseDialogFragment() {
     private fun onSuccess() {
         btnpost.visibility = View.VISIBLE
         progressBar.visibility = View.INVISIBLE
-        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         dialog?.dismiss()
     }
 
@@ -402,31 +415,41 @@ class CreatePostFragment : BaseDialogFragment() {
             7 -> {
                 ctl7.visibility = View.VISIBLE
                 glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView21)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView22)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
+                    .into(videoView22)
             }
 
             8 -> {
                 ctl8.visibility = View.VISIBLE
                 glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView31)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView32)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView32)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
+                    .into(videoView32)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1])
+                    .into(videoView32)
             }
 
             9 -> {
                 ctl9.visibility = View.VISIBLE
                 glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView41)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView42)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView43)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(videoView44)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
+                    .into(videoView42)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1])
+                    .into(videoView43)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2])
+                    .into(videoView44)
             }
 
             10 -> {
                 ctl10.visibility = View.VISIBLE
                 glide.applyDefaultRequestOptions(RequestOptions()).load(videoPath).into(videoView51)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0]).into(videoView52)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1]).into(videoView53)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2]).into(videoView54)
-                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3]).into(videoView55)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[0])
+                    .into(videoView52)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[1])
+                    .into(videoView53)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[2])
+                    .into(videoView54)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(listImages[3])
+                    .into(videoView55)
 
                 if (listImages.size == 4) tvVideoLoadMore.visibility = View.INVISIBLE
                 else {
@@ -435,8 +458,55 @@ class CreatePostFragment : BaseDialogFragment() {
                 }
             }
 
-            else -> { }
+            else -> {
+            }
         }
+    }
+
+    private fun checkProfanityContent(
+        text: String,
+        profanityWords: MutableList<ProfanityWord>
+    ): String {
+        var result = text
+        for (j in profanityWords.indices) {
+            val temp = profanityWords[j].word
+            if (result.toLowerCase().contains(temp.toLowerCase())) {
+                result = result.replace(temp, applyDefaultFilter(temp), true)
+            }
+        }
+        return result
+    }
+
+    private fun applyDefaultFilter(text: String): String {
+        val filteredText = StringBuilder(text)
+        val textCharArray = text.toCharArray()
+        val word = StringBuilder()
+
+        for (i in textCharArray.indices) {
+            if (textCharArray[i].isLetter() && i != textCharArray.size - 1) {
+                word.append(textCharArray[i])
+            } else if (textCharArray[i].isLetter() && i == textCharArray.size - 1) {
+                word.append(textCharArray[i])
+                val substitute = StringBuilder()
+                for (k in word.indices - 1) {
+                    substitute.append("*")
+                }
+                filteredText.replace(i - word.length + 2, i + 1, substitute.toString())
+                word.clear()
+            } else {
+                if (word.isNotEmpty()) {
+                    val substitute = StringBuilder()
+                    for (k in word.indices - 1) {
+                        substitute.append("*")
+                    }
+                    filteredText.replace(i - word.length + 1, i, substitute.toString())
+                    word.clear()
+                } else {
+                    word.append(textCharArray[i])
+                }
+            }
+        }
+        return filteredText.toString()
     }
 
 }

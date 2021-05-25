@@ -12,6 +12,7 @@ import com.caunb163.mxh.ui.main.messenger.chat.ChatViewModel
 import com.caunb163.mxh.ui.main.messenger.create_group.CreateGroupViewModel
 import com.caunb163.mxh.ui.main.profile.ProfileViewModel
 import com.caunb163.mxh.ui.main.profile.UpdateProfileViewModel
+import com.caunb163.mxh.ui.main.video.VideoViewModel
 import com.caunb163.mxh.ui.onboarding.OnBoardingViewModel
 import com.caunb163.mxh.ui.register.RegisterViewModel
 import com.caunb163.mxh.ui.splash.SplashViewModel
@@ -22,11 +23,11 @@ import org.koin.dsl.module
 @InternalCoroutinesApi
 val viewModelModule = module {
     viewModel<SplashViewModel> { SplashViewModel(get()) }
-    viewModel<OnBoardingViewModel> { OnBoardingViewModel(get()) }
+    viewModel<OnBoardingViewModel> { OnBoardingViewModel(get(), get()) }
     viewModel<LoginViewModel> { LoginViewModel(get()) }
     viewModel<RegisterViewModel> { RegisterViewModel(get()) }
     viewModel<HomeViewModel> { HomeViewModel(get()) }
-    viewModel<CreatePostViewModel> { CreatePostViewModel(get()) }
+    viewModel<CreatePostViewModel> { CreatePostViewModel(get(), get()) }
     viewModel<ProfileViewModel> { ProfileViewModel(get(), get()) }
     viewModel<MainViewModel> { MainViewModel(get()) }
     viewModel<CommentViewModel> { CommentViewModel(get()) }
@@ -36,4 +37,5 @@ val viewModelModule = module {
     viewModel<EditPostViewModel> { EditPostViewModel(get()) }
     viewModel<PhoneViewModel> { PhoneViewModel(get()) }
     viewModel<UpdateProfileViewModel> { UpdateProfileViewModel(get()) }
+    viewModel<VideoViewModel> { VideoViewModel(get()) }
 }

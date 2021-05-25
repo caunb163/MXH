@@ -40,7 +40,7 @@ object Versions {
     const val linkPreview = "1.0.9"
     const val jsoup = "1.11.3"
     const val picasso = "2.71828"
-    const val exoplayer = "2.13.3"
+    const val exoplayer = "2.11.3"
 }
 
 object Deps {

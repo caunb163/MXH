@@ -50,7 +50,11 @@ abstract class PostBaseViewHolder(view: View, requestManager: RequestManager) :
     ) {
         username.text = post.userName
         glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
-        createDate.text = getDate(post.createDate)
+        if (post.isAds) {
+            createDate.text = "Được tài trợ"
+        } else {
+            createDate.text = getDate(post.createDate)
+        }
 
         likeNumber.text = post.arrLike.size.toString()
         if (post.arrLike.contains(user.userId)) {

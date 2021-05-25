@@ -7,5 +7,6 @@ class FireStore {
         const val COMMENT = "Comments"
         const val GROUP = "Groups"
         const val MESSAGE = "Messages"
+        const val ADS = "Ads"
     }
 }

@@ -2,10 +2,10 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.7">
-      <module name="MXH.app" target="1.8" />
-      <module name="MXH.buildSrc" target="1.8" />
-      <module name="MXH.data" target="1.8" />
-      <module name="MXH.ui" target="1.8" />
+      <module name="MXH.app" target="11" />
+      <module name="MXH.buildSrc" target="11" />
+      <module name="MXH.data" target="11" />
+      <module name="MXH.ui" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

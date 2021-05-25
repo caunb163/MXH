@@ -9,6 +9,7 @@ import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,46 +27,51 @@ class RepositoryHomeImpl(
     private val db = Firebase.firestore
     private val user = localStorage.getAccount()!!
 
-    suspend fun listenerPostChange(): Flow<PostEntity> = callbackFlow {
-        val data = db.collection(FireStore.POST)
-//            db.collection(FB.POST).orderBy("createDate", Query.Direction.DESCENDING)
+    suspend fun listenerPostChange(): Flow<Post> = callbackFlow {
+        val data = db.collection(FireStore.POST).orderBy("createDate", Query.Direction.DESCENDING)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
             value?.let { qs ->
-                val list =
-                    qs.documentChanges.sortedByDescending { it.document.toObject(Post::class.java).createDate }
-                for (dc in list) {
+                for (dc in qs.documentChanges) {
                     val post = dc.document.toObject(Post::class.java)
-                    db.collection(FireStore.USER).document(post.userId).get()
-                        .addOnCompleteListener { task ->
-                            val user = task.result?.toObject(User::class.java)
-                            user?.let { u ->
-                                val postEntity = postMapper.toEntity(
-                                    post,
-                                    dc.document.id,
-                                    u.username,
-                                    u.photoUrl
-                                )
-                                when (dc.type) {
-                                    DocumentChange.Type.ADDED -> {
-//                                        Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
-                                        offer(postEntity)
-                                    }
-                                    DocumentChange.Type.MODIFIED -> {
-//                                        Log.e(TAG, "listenerPostChange: MODIFIED ${dc.document.data}")
-                                        offer(postEntity)
-                                    }
-                                    DocumentChange.Type.REMOVED -> {
-//                                        Log.e(TAG, "listenerPostChange: REMOVED ${PostEntity(postId = postEntity.postId)}")
-                                        offer(PostEntity(postId = postEntity.postId))
-                                    }
-                                }
-                            }
+                    post.postId = dc.document.id
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
+                            offer(post)
                         }
+                        DocumentChange.Type.MODIFIED -> {
+                            Log.e(TAG, "listenerPostChange: MODIFIED ${dc.document.data}")
+                            offer(post)
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            Log.e(
+                                TAG,
+                                "listenerPostChange: REMOVED}"
+                            )
+                            post.remove = true
+                            offer(post)
+                        }
+                    }
                 }
             }
         }
         awaitClose { subscription.remove() }
+    }
+
+    suspend fun getPostEntity(post: Post): PostEntity {
+        var postEntity = PostEntity()
+        postEntity.postId = post.postId
+        if (!post.remove) {
+            db.collection(FireStore.USER).document(post.userId).get()
+                .addOnCompleteListener { task ->
+                    val user = task.result?.toObject(User::class.java)
+                    user?.let { u ->
+                        postEntity = postMapper.toEntity(post, post.postId, u.username, u.photoUrl)
+                    }
+                }.await()
+        }
+        return postEntity
     }
 
     suspend fun likePost(postId: String) {
@@ -100,6 +106,38 @@ class RepositoryHomeImpl(
     fun logout() {
         Firebase.auth.signOut()
         localStorage.saveAccount(null)
+    }
+
+    suspend fun getAds(): MutableList<Post> {
+        val list = mutableListOf<Post>()
+        db.collection(FireStore.ADS).get().addOnSuccessListener { task ->
+            for (item in task.documents) {
+                val post = item.toObject(Post::class.java)
+                post?.let {
+                    post.postId = item.id
+                    post.isAds = true
+                    list.add(post)
+                }
+            }
+        }.await()
+        return list
+    }
+
+    suspend fun getAdsEntity(list: MutableList<Post>): MutableList<PostEntity> {
+        val listEntity = mutableListOf<PostEntity>()
+        for (item in list) {
+            db.collection(FireStore.USER).document(item.userId).get()
+                .addOnCompleteListener { task ->
+                    val user = task.result?.toObject(User::class.java)
+                    user?.let { u ->
+                        val postEntity =
+                            postMapper.toEntity(item, item.postId, u.username, u.photoUrl)
+                        postEntity.isAds = item.isAds
+                        listEntity.add(postEntity)
+                    }
+                }.await()
+        }
+        return listEntity
     }
 }
 

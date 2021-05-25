@@ -15,7 +15,6 @@ import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.HomeOnClick
-import com.caunb163.mxh.ui.main.home.PostViewHolder
 import com.caunb163.mxh.ui.main.home.viewholder.PostNoMediaViewHolder
 
 class ListImageAdapter(
@@ -92,7 +91,7 @@ class ListImageAdapter(
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
         when (holder) {
-            is PostViewHolder -> holder.unbind()
+            is PostNoMediaViewHolder -> holder.unbind()
             is ListImageViewHolder -> holder.unbind()
         }
     }
@@ -123,16 +122,10 @@ class ListImageAdapter(
 
     class VideoViewHolder(view: View, private val glide: RequestManager) :
         RecyclerView.ViewHolder(view) {
-//        private var videoView: VideoView = view.findViewById(R.id.view_video)
         private var imageView: ImageView = view.findViewById(R.id.view_video)
 
         fun bind(postEntity: PostEntity, onClick: OnImageClick, position: Int) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.video).into(imageView)
-//            videoView.setVideoPath(postEntity.video)
-//            val mediaController = MediaController(context)
-//            mediaController.setAnchorView(videoView)
-//            videoView.setMediaController(mediaController)
-//            videoView.start()
             val list: MutableList<String> = mutableListOf()
             list.add(postEntity.video)
             list.addAll(postEntity.images)

@@ -24,9 +24,9 @@ class RepositoryCreatePostImpl(
         content: String,
         arrCmtId: MutableList<String>,
         arrLike: MutableList<String>,
-        video: String
+        video: String,
+        isAds: Boolean
     ) {
-        Log.e(TAG, "createPost: $video" )
         val db = Firebase.firestore
         val listImage = mutableListOf<String>()
         val user = localStorage.getAccount()!!
@@ -78,10 +78,17 @@ class RepositoryCreatePostImpl(
             video = videoPath
         )
 
-        db.collection(FireStore.POST).add(post).addOnSuccessListener { it ->
-            user.arrPostId.add(it.id)
-//            localStorage.saveAccount(user)
-            db.collection(FireStore.USER).document(userId).update("arrPostId", user.arrPostId)
-        }.await()
+        if (isAds) {
+            db.collection(FireStore.ADS).add(post).addOnSuccessListener {
+                user.arrPostId.add(it.id)
+                db.collection(FireStore.USER).document(userId).update("arrPostId", user.arrPostId)
+            }.await()
+        } else {
+            db.collection(FireStore.POST).add(post).addOnSuccessListener {
+                user.arrPostId.add(it.id)
+                db.collection(FireStore.USER).document(userId).update("arrPostId", user.arrPostId)
+            }.await()
+        }
+
     }
 }

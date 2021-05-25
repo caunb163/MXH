@@ -8,6 +8,7 @@ interface RepositoryCreatePost {
         content: String,
         arrCmtId: MutableList<String>,
         arrLike: MutableList<String>,
-        video: String
+        video: String,
+        isAds: Boolean
     )
 }

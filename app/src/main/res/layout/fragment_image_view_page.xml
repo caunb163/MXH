@@ -1,43 +1,45 @@
-<?xml version="1.0" encoding="utf-8"?><!--<com.github.chrisbanes.photoview.PhotoView xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    xmlns:tools="http://schemas.android.com/tools"-->
-<!--    android:id="@+id/imageview_view"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:background="@color/black"-->
-<!--    android:scaleType="fitCenter"-->
-<!--    android:src="@drawable/image_default"-->
-<!--    tools:context=".ui.main.home.view_image.ImageViewPageFragment" />-->
-
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/black"
     android:src="@drawable/image_default"
     tools:context=".ui.main.home.view_image.ImageViewPageFragment">
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/imageview_view"
-        android:src="@drawable/image_default"
-        android:scaleType="fitCenter"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:layout_height="match_parent">
 
-<!--    <VideoView-->
-<!--        android:id="@+id/videoview_view"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="300dp"/>-->
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/imageview_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/image_default"
+            android:visibility="gone" />
+    </FrameLayout>
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/videoview_view"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <FrameLayout
+        android:id="@+id/videoview_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
+
+        <VideoView
+            android:id="@+id/videoview_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/videoview_progressbar"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

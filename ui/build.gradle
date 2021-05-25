@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion Config.compileSdk
@@ -36,4 +37,9 @@ dependencies {
     implementation Dependencies.coreDependencies
     testImplementation Dependencies.testDependencies
     androidTestImplementation Dependencies.testAndroidDependencies
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
