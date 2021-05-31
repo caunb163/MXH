@@ -59,10 +59,10 @@ dependencies {
     implementation platform(Deps.firebaseBom)
     implementation Dependencies.firebaseDependencies
 
-    implementation Deps.blurview
+//    implementation Deps.blurview
     implementation Deps.circleImgView
     implementation Deps.glide
-    implementation Deps.glideCompiler
+    annotationProcessor Deps.glideCompiler
     implementation Deps.lifecycle
     implementation Deps.photoView
     implementation Deps.countryCode

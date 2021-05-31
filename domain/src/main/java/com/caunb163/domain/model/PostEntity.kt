@@ -12,7 +12,8 @@ data class PostEntity(
     val images: List<String> = mutableListOf(),
     var arrCmtId: List<String> = mutableListOf(),
     var arrLike: List<String> = mutableListOf(),
-    var video: String = ""
+    var video: String = "",
+    var active: Boolean = true
 ) : Serializable {
     var isAds = false
 }

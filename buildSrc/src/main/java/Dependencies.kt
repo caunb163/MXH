@@ -22,13 +22,13 @@ object Versions {
     const val constraintLayout = "2.0.4"
 
     const val koin = "2.2.2"
-    const val coroutines = "1.4.2"
-    const val navigation = "2.3.2"
-    const val glide = "4.11.0"
+    const val coroutines = "1.4.3"
+    const val navigation = "2.3.5"
+    const val glide = "4.12.0"
     const val paging = "3.0.0-alpha11"
     const val gson = "2.8.6"
 
-    const val firebase = "26.5.0"
+    const val firebase = "28.0.1"
     const val serviceAuth = "19.0.0"
     const val blurview = "1.6.5"
     const val circleImgView = "3.1.0"

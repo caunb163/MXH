@@ -68,7 +68,8 @@ class RepositoryEditPostImpl {
             images = listImage,
             arrCmtId = postEntity.arrCmtId.toMutableList(),
             arrLike = postEntity.arrLike.toMutableList(),
-            video = videoPath
+            video = videoPath,
+            active = postEntity.active
         )
 
         if (postEntity.isAds) {

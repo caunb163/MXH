@@ -13,7 +13,8 @@ data class User(
     var birthDay: String = "",
     var gender: String = "",
     var intro: String = "",
-    var ads: Boolean = false
+    var ads: Boolean = false,
+    var admin: Boolean = false
 ) : Serializable {
     var ischeck: Boolean = false
 }

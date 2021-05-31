@@ -7,7 +7,9 @@
     tools:context=".ui.splash.SplashFragment">
 
     <ImageView
-        android:layout_width="wrap_content"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintWidth_percent="0.5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"

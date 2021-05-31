@@ -75,7 +75,8 @@ class RepositoryCreatePostImpl(
             images = listImage,
             arrCmtId = arrCmtId,
             arrLike = arrLike,
-            video = videoPath
+            video = videoPath,
+            active = true
         )
 
         if (isAds) {

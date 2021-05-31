@@ -9,7 +9,8 @@ data class Post(
     val images: List<String> = mutableListOf(),
     var arrCmtId: MutableList<String> = mutableListOf(),
     var arrLike: MutableList<String> = mutableListOf(),
-    var video: String = ""
+    var video: String = "",
+    var active: Boolean = true
 ) : Serializable {
     var postId: String = ""
     var remove: Boolean = false

@@ -20,20 +20,8 @@ class PostMapper {
             images = post.images,
             arrCmtId = post.arrCmtId,
             arrLike = post.arrLike,
-            video = post.video
+            video = post.video,
+            active = post.active
         )
     }
-
-    fun toModel(postEntiy: PostEntity): Post {
-        return Post(
-            userId = postEntiy.userId,
-            content = postEntiy.content,
-            createDate = postEntiy.createDate,
-            images = postEntiy.images,
-            arrCmtId = postEntiy.arrCmtId.toMutableList(),
-            arrLike = postEntiy.arrLike.toMutableList(),
-            video = postEntiy.video
-        )
-    }
-
 }

@@ -3,7 +3,6 @@ package com.caunb163.mxh.ui.main.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -137,23 +136,29 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         } else if (checkListAdd(post)) {
             val index = checkPostIndex(post)
             if (index != -1) {
-                list[index] = post
-                homeAdapter.notifyItemChanged(index)
+                if (post.active) {
+                    list[index] = post
+                    homeAdapter.notifyItemChanged(index)
+                } else {
+                    list.removeAt(index)
+                    homeAdapter.notifyItemRemoved(index)
+                }
             }
         } else {
             if (!list.contains(post)) {
-                if (list.size % 8 == 0) {
-                    val index = (0 until listAds.size).random()
-                    Log.e(TAG, "onSuccessListener: $index" )
-                    list.add(listAds[index])
-                    homeAdapter.notifyItemInserted(list.size)
-                }
-                if (checkCreatePost(post)) {
-                    list.add(1, post)
-                    homeAdapter.notifyItemInserted(1)
-                } else {
-                    list.add(post)
-                    homeAdapter.notifyItemChanged(list.size)
+                if (post.active) {
+                    if (list.size % 8 == 0) {
+                        val index = (0 until listAds.size).random()
+                        list.add(listAds[index])
+                        homeAdapter.notifyItemInserted(list.size)
+                    }
+                    if (checkCreatePost(post)) {
+                        list.add(1, post)
+                        homeAdapter.notifyItemInserted(1)
+                    } else {
+                        list.add(post)
+                        homeAdapter.notifyItemChanged(list.size)
+                    }
                 }
             }
         }
@@ -190,8 +195,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     private fun onFailure(message: String) {
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
+//        progressBar.visibility = View.INVISIBLE
+//        recyclerView.visibility = View.VISIBLE
         showToast(message)
     }
 

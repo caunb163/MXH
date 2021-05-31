@@ -37,18 +37,15 @@ class RepositoryHomeImpl(
                     post.postId = dc.document.id
                     when (dc.type) {
                         DocumentChange.Type.ADDED -> {
-                            Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
+//                            Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
                             offer(post)
                         }
                         DocumentChange.Type.MODIFIED -> {
-                            Log.e(TAG, "listenerPostChange: MODIFIED ${dc.document.data}")
+//                            Log.e(TAG, "listenerPostChange: MODIFIED ${dc.document.data}")
                             offer(post)
                         }
                         DocumentChange.Type.REMOVED -> {
-                            Log.e(
-                                TAG,
-                                "listenerPostChange: REMOVED}"
-                            )
+//                            Log.e(TAG, "listenerPostChange: REMOVED}")
                             post.remove = true
                             offer(post)
                         }

@@ -1,17 +1,12 @@
 package com.caunb163.mxh.ui.main.home.edit_post
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.ClipData
 import android.content.Intent
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -25,13 +20,8 @@ import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import de.hdodenhof.circleimageview.CircleImageView
 import org.koin.android.ext.android.inject
-import java.text.SimpleDateFormat
-import java.util.*
 
 class EditPostFragment : BaseDialogFragment() {
     private val TAG = "EditPostFragment"
