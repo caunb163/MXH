@@ -6,6 +6,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.caunb163.data.repository.RepositoryUser
 import com.caunb163.domain.model.Post
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
@@ -18,6 +19,7 @@ import org.koin.android.ext.android.inject
 class VideoFragment : BaseFragment(R.layout.fragment_video), HomeOnClick {
 
     private val viewModel: VideoViewModel by inject()
+    private val repositoryUser: RepositoryUser by inject()
     private val list = mutableListOf<Post>()
     private lateinit var videoAdapter: VideoAdapter
     private lateinit var glide: RequestManager
@@ -37,7 +39,7 @@ class VideoFragment : BaseFragment(R.layout.fragment_video), HomeOnClick {
                 .error(R.drawable.image_default)
         )
 
-        videoAdapter = VideoAdapter(kohii, glide)
+        videoAdapter = VideoAdapter(kohii, glide, repositoryUser)
         pager.adapter = videoAdapter
         pager.offscreenPageLimit = 1
         videoAdapter.updateData(list)
@@ -72,8 +74,7 @@ class VideoFragment : BaseFragment(R.layout.fragment_video), HomeOnClick {
             }
         } else {
             list.add(post)
-            list.sortByDescending { it.createDate.inc() }
-            videoAdapter.notifyDataSetChanged()
+            videoAdapter.notifyItemInserted(list.size - 1)
         }
     }
 

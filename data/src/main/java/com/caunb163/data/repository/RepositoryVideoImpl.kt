@@ -18,13 +18,12 @@ class RepositoryVideoImpl {
     @ExperimentalCoroutinesApi
     suspend fun getAllVideo(): Flow<Post> = callbackFlow {
         val data = db.collection(FireStore.POST).whereNotEqualTo("video", "")
-//            .orderBy("createDate", Query.Direction.DESCENDING)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) return@addSnapshotListener
             value?.let { qs ->
-//                val list =
-//                    qs.documentChanges.sortedByDescending { it.document.toObject(Post::class.java).createDate }
-                for (dc in qs.documentChanges) {
+                val list =
+                    qs.documentChanges.sortedByDescending { it.document.toObject(Post::class.java).createDate.inc() }
+                for (dc in list) {
                     val post = dc.document.toObject(Post::class.java)
                     post.postId = dc.document.id
                     when (dc.type) {

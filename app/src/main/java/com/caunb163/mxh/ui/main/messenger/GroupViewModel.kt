@@ -1,22 +1,22 @@
 package com.caunb163.mxh.ui.main.messenger
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.data.repository.RepositoryMessengerImpl
+import com.caunb163.data.repository.RepositoryGroupImpl
 import com.caunb163.mxh.state.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MessengerViewModel(
-    private val repositoryMessengerImpl: RepositoryMessengerImpl,
+class GroupViewModel(
+    private val repositoryGroupImpl: RepositoryGroupImpl,
     private val localStorage: LocalStorage
 ) : ViewModel() {
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)
         try {
-            repositoryMessengerImpl.listenerGroupChange(localStorage.getAccount()!!.userId)
+            repositoryGroupImpl.listenerGroupChange(localStorage.getAccount()!!.userId)
                 .collect {
                     emit(State.Success(it))
                 }

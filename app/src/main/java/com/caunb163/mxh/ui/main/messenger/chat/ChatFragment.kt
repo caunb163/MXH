@@ -181,7 +181,6 @@ class ChatFragment : BaseDialogFragment() {
             }
         } else {
             list.add(message)
-//            list.sortBy { it.createDate.inc() }
             chatAdapter.notifyItemInserted(list.size - 1)
         }
         recyclerView.smoothScrollToPosition(list.size)

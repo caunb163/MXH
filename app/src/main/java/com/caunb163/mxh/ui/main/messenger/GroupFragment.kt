@@ -16,16 +16,15 @@ import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 
 @InternalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
-class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClickListener {
+class GroupFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClickListener {
     private val TAG = "MessengerFragment"
 
-    private val viewModel: MessengerViewModel by inject()
+    private val viewModel: GroupViewModel by inject()
     private val localStorage: LocalStorage by inject()
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
@@ -92,8 +91,6 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
             groupAdapter.notifyItemInserted(list.size - 1)
         }
 
-//        list.sortByDescending { it.createDate }
-//        groupAdapter.notifyDataSetChanged()
     }
 
     private fun checkGroupIndex(group: Group): Int {
@@ -120,7 +117,7 @@ class MessengerFragment : BaseFragment(R.layout.fragment_messenger), OnGroupClic
     }
 
     override fun onGroupClick(group: Group) {
-        val action = MessengerFragmentDirections.actionMessengerFragmentToChatFragment(group)
+        val action = GroupFragmentDirections.actionMessengerFragmentToChatFragment(group)
         findNavController().navigate(action)
     }
 }

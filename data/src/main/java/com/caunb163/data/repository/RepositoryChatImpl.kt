@@ -4,7 +4,6 @@ import android.net.Uri
 import com.caunb163.data.firebase.FireStore
 import com.caunb163.domain.model.*
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
@@ -22,15 +21,15 @@ class RepositoryChatImpl {
     private val db = Firebase.firestore
 
     suspend fun listenerMessageChange(groupId: String): Flow<Message> = callbackFlow {
-        val data =
-            db.collection(FireStore.MESSAGE).whereEqualTo("groupId", groupId)
-                .orderBy("createDate", Query.Direction.ASCENDING)
+        val data = db.collection(FireStore.MESSAGE).whereEqualTo("groupId", groupId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
             }
             value?.let { qs ->
-                for (dc in qs.documentChanges) {
+                val list =
+                    qs.documentChanges.sortedWith(compareBy { it.document.toObject(Message::class.java).createDate.inc() })
+                for (dc in list) {
                     val message = dc.document.toObject(Message::class.java)
                     message.messageId = dc.document.id
                     when (dc.type) {
@@ -41,7 +40,7 @@ class RepositoryChatImpl {
                             offer(message)
                         }
                         DocumentChange.Type.REMOVED -> {
-                            var m = Message()
+                            val m = Message()
                             message.messageId = dc.document.id
                             offer(m)
                         }

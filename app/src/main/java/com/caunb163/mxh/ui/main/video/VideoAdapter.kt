@@ -9,16 +9,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
+import com.caunb163.data.repository.RepositoryUser
 import com.caunb163.domain.model.Post
 import com.caunb163.mxh.R
+import com.github.satoshun.coroutine.autodispose.view.autoDisposeScope
 import de.hdodenhof.circleimageview.CircleImageView
 import kohii.v1.core.Common
 import kohii.v1.core.Playback
 import kohii.v1.exoplayer.Kohii
+import kotlinx.coroutines.launch
 
 class VideoAdapter(
     private val kohii: Kohii,
-    private val glide: RequestManager
+    private val glide: RequestManager,
+    private val repositoryUser: RepositoryUser
 ) : Adapter<VideoAdapter.VideoViewHolder>() {
     private var list: MutableList<Post> = mutableListOf()
 
@@ -59,7 +64,7 @@ class VideoAdapter(
                 }
             }
         }.bind(holder.playerView)
-        holder.bind(videoItem)
+        holder.bind(videoItem, repositoryUser)
     }
 
     override fun onViewRecycled(holder: VideoViewHolder) {
@@ -81,13 +86,16 @@ class VideoAdapter(
         private var content: TextView = view.findViewById(R.id.video_content)
 
         @SuppressLint("SetTextI18n")
-        fun bind(postEntity: Post) {
-//            glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
-//                .into(avatar)
-//            username.text = postEntity.userName
-            like.text = "${postEntity.arrLike.size}M"
-            comment.text = "${postEntity.arrCmtId.size}k"
-            content.text = postEntity.content
+        fun bind(post: Post, repositoryUser: RepositoryUser) {
+            itemView.autoDisposeScope.launch {
+                val mUser = repositoryUser.getUser(post.userId)
+                username.text = mUser.username
+                glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl)
+                .into(avatar)
+            }
+            like.text = "${post.arrLike.size}M"
+            comment.text = "${post.arrCmtId.size}k"
+            content.text = post.content
         }
 
         fun unbind() {
