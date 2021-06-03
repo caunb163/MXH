@@ -12,7 +12,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
@@ -33,6 +34,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
 
     private val viewModel: ProfileViewModel by inject()
     private val localStorage: LocalStorage by inject()
+    private val repositoryUser: RepositoryUser by inject()
     private val list = mutableListOf<Any>()
     private lateinit var glide: RequestManager
     private lateinit var profileAdapter: ProfileAdapter
@@ -54,7 +56,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         )
 
         user = localStorage.getAccount()!!
-        profileAdapter = ProfileAdapter(glide, user, this, this)
+        profileAdapter = ProfileAdapter(glide, user, this, this, repositoryUser)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -71,7 +73,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccessListener(state.data as PostEntity)
+                is State.Success<*> -> onSuccessListener(state.data as Post)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -114,7 +116,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         profileAdapter.notifyDataSetChanged()
     }
 
-    private fun onSuccessListener(post: PostEntity) {
+    private fun onSuccessListener(post: Post) {
         if (post.userId.isEmpty()) {
             val index = checkPostIndex(post)
             if (index != -1) {
@@ -131,7 +133,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
             if (!list.contains(post)) {
                 list.add(post)
                 list.sortByDescending {
-                    if (it is PostEntity) {
+                    if (it is Post) {
                         it.createDate.inc()
                     } else {
                         null
@@ -147,8 +149,9 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
     private fun onSuccess(uri: String) {
         customProgressBar.dismiss()
         for (obj in list) {
-            if (obj is PostEntity) {
-                obj.userAvatar = uri
+            if (obj is Post) {
+//                profileAdapter.notifyDataSetChanged()
+//                obj.userAvatar = uri
             } else if (obj is User) {
                 obj.photoUrl = uri
             }
@@ -169,17 +172,17 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         showToast(message)
     }
 
-    private fun checkPostIndex(post: PostEntity): Int {
+    private fun checkPostIndex(post: Post): Int {
         for (index in 1 until list.size)
-            if ((list[index] as PostEntity).postId == post.postId) {
+            if ((list[index] as Post).postId == post.postId) {
                 return index
             }
         return -1
     }
 
-    private fun checkListAdd(post: PostEntity): Boolean {
+    private fun checkListAdd(post: Post): Boolean {
         list.forEach {
-            if (it is PostEntity) {
+            if (it is Post) {
                 if (it.postId == post.postId) {
                     return true
                 }
@@ -257,7 +260,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
 
     override fun createPostClick() {}
 
-    override fun onCommentClick(post: PostEntity) {}
+    override fun onCommentClick(post: Post) {}
 
     override fun onLikeClick(postId: String) {}
 
@@ -268,10 +271,10 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
     }
 
-    override fun onEditClick(post: PostEntity) {}
+    override fun onEditClick(post: Post) {}
 
-    override fun onDeleteClick(post: PostEntity) {}
+    override fun onDeleteClick(post: Post) {}
 
-    override fun onImageClick(post: PostEntity, position: Int) {}
+    override fun onImageClick(post: Post, position: Int) {}
 
 }

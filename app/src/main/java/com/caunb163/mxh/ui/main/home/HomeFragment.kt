@@ -3,6 +3,7 @@ package com.caunb163.mxh.ui.main.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -15,7 +16,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
@@ -34,12 +36,13 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     private lateinit var progressBar: ProgressBar
     private val viewModel: HomeViewModel by inject()
     private val localStorage: LocalStorage by inject()
+    private val repositoryUser: RepositoryUser by inject()
     private val list = mutableListOf<Any>()
     private lateinit var glide: RequestManager
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var user: User
     private lateinit var toolbar: MaterialToolbar
-    private val listAds = mutableListOf<PostEntity>()
+    private val listAds = mutableListOf<Post>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +74,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
                 .error(R.drawable.image_default)
         )
         user = localStorage.getAccount()!!
-        homeAdapter = HomeAdapter(glide, this, user)
+        homeAdapter = HomeAdapter(glide, this, user, repositoryUser)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -87,7 +90,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccessListener(state.data as PostEntity)
+                is State.Success<*> -> onSuccessListener(state.data as Post)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -108,11 +111,10 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
             }
         })
 
-        viewModel.getAds()
-        viewModel.stateAds.observe(this, Observer { state ->
+        viewModel.listenerAds.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccessAds(state.data as MutableList<PostEntity>)
+                is State.Success<*> -> onSuccessAds(state.data as Post)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -122,11 +124,11 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
 
     private fun onSuccessLike() {}
 
-    private fun onSuccessAds(list: MutableList<PostEntity>) {
-        listAds.addAll(list)
+    private fun onSuccessAds(postEntity: Post) {
+        listAds.add(postEntity)
     }
 
-    private fun onSuccessListener(post: PostEntity) {
+    private fun onSuccessListener(post: Post) {
         if (post.userId.isEmpty()) {
             val index = checkPostIndex(post)
             if (index != -1) {
@@ -149,6 +151,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
                 if (post.active) {
                     if (list.size % 8 == 0) {
                         val index = (0 until listAds.size).random()
+                        Log.e(TAG, "random: $index")
                         list.add(listAds[index])
                         homeAdapter.notifyItemInserted(list.size)
                     }
@@ -164,17 +167,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         }
     }
 
-    private fun checkPostIndex(post: PostEntity): Int {
+    private fun checkPostIndex(post: Post): Int {
         for (index in 1 until list.size)
-            if ((list[index] as PostEntity).postId == post.postId) {
+            if ((list[index] as Post).postId == post.postId) {
                 return index
             }
         return -1
     }
 
-    private fun checkListAdd(post: PostEntity): Boolean {
+    private fun checkListAdd(post: Post): Boolean {
         list.forEach {
-            if (it is PostEntity) {
+            if (it is Post) {
                 if (it.postId == post.postId) {
                     return true
                 }
@@ -183,9 +186,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         return false
     }
 
-    private fun checkCreatePost(post: PostEntity): Boolean {
+    private fun checkCreatePost(post: Post): Boolean {
         list.forEach {
-            if (it is PostEntity) {
+            if (it is Post) {
                 if (post.createDate > it.createDate) {
                     return true
                 }
@@ -195,8 +198,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     }
 
     private fun onFailure(message: String) {
-//        progressBar.visibility = View.INVISIBLE
-//        recyclerView.visibility = View.VISIBLE
         showToast(message)
     }
 
@@ -204,7 +205,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
     }
 
-    override fun onCommentClick(post: PostEntity) {
+    override fun onCommentClick(post: Post) {
         val action = HomeFragmentDirections.actionHomeFragmentToCommentFragment(post)
         findNavController().navigate(action)
     }
@@ -220,12 +221,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
     }
 
-    override fun onEditClick(post: PostEntity) {
+    override fun onEditClick(post: Post) {
         val action = HomeFragmentDirections.actionHomeFragmentToEditPostFragment(post)
         findNavController().navigate(action)
     }
 
-    override fun onDeleteClick(post: PostEntity) {
+    override fun onDeleteClick(post: Post) {
         val alertDialog = AlertDialog.Builder(requireContext())
         alertDialog.setTitle("Xóa bài viết")
         alertDialog.setMessage("Bạn có chắc muốn xóa bài viết này không?")
@@ -236,7 +237,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         alertDialog.show()
     }
 
-    override fun onImageClick(post: PostEntity, position: Int) {
+    override fun onImageClick(post: Post, position: Int) {
         val action = HomeFragmentDirections.actionHomeFragmentToListImageFragment(post, position)
         findNavController().navigate(action)
     }

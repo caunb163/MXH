@@ -13,6 +13,5 @@ data class Post(
     var active: Boolean = true
 ) : Serializable {
     var postId: String = ""
-    var remove: Boolean = false
     var isAds: Boolean = false
 }

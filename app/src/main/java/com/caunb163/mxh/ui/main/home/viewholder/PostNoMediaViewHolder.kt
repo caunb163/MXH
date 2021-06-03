@@ -3,25 +3,21 @@ package com.caunb163.mxh.ui.main.home.viewholder
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import com.bumptech.glide.RequestManager
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.HomeOnClick
 import io.github.ponnamkarthik.richlinkpreview.RichLinkView
 import io.github.ponnamkarthik.richlinkpreview.ViewListener
-import java.lang.Exception
 import java.util.regex.Pattern
 
 class PostNoMediaViewHolder(view: View, glide: RequestManager) : PostBaseViewHolder(view, glide) {
     private var content: AppCompatTextView = view.findViewById(R.id.post_tv_content)
     private var richLinkView: RichLinkView = view.findViewById(R.id.post_richlinkview)
 
-    override fun bind(
-        post: PostEntity,
-        user: User,
-        onHomeOnClick: HomeOnClick
-    ) {
-        bindView(post, user, onHomeOnClick)
+    override fun bind(post: Post, user: User, onHomeOnClick: HomeOnClick, repositoryUser: RepositoryUser) {
+        bindView(post, user, onHomeOnClick, repositoryUser)
         content.text = post.content
         val temp = findExtractUrls(post.content)
         if (temp.isNotEmpty()) {

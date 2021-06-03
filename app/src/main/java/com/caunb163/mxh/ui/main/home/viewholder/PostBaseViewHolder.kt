@@ -10,11 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.HomeOnClick
+import com.github.satoshun.coroutine.autodispose.view.autoDisposeScope
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,21 +38,29 @@ abstract class PostBaseViewHolder(view: View, requestManager: RequestManager) :
     private var glide = requestManager
 
     abstract fun bind(
-        post: PostEntity,
+        post: Post,
         user: User,
-        onHomeOnClick: HomeOnClick
+        onHomeOnClick: HomeOnClick,
+        repositoryUser: RepositoryUser
     )
 
     abstract fun unbind()
 
     @SuppressLint("SetTextI18n")
     fun bindView(
-        post: PostEntity,
+        post: Post,
         user: User,
-        onHomeOnClick: HomeOnClick
+        onHomeOnClick: HomeOnClick,
+        repositoryUser: RepositoryUser
     ) {
-        username.text = post.userName
-        glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
+        itemView.autoDisposeScope.launch {
+            val mUser = repositoryUser.getUser(post.userId)
+            username.text = mUser.username
+            glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl).into(imgAvatar)
+
+        }
+//        username.text = post.userName
+//        glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
         if (post.isAds) {
             createDate.text = "Được tài trợ"
         } else {

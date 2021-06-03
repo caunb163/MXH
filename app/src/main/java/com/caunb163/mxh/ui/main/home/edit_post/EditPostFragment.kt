@@ -15,12 +15,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 
 class EditPostFragment : BaseDialogFragment() {
@@ -88,10 +90,13 @@ class EditPostFragment : BaseDialogFragment() {
     private val args: EditPostFragmentArgs by navArgs()
     private val viewModel: EditPostViewModel by inject()
     private val localStorage: LocalStorage by inject()
-    private lateinit var postEntity: PostEntity
+    private val repositoryUser: RepositoryUser by inject()
+    private lateinit var post: Post
     private val listImages = mutableListOf<String>()
     private var videoPath = ""
     private var isVideo: Boolean = false
+    private val job = Job()
+
     override fun getLayoutId(): Int = R.layout.fragment_edit_post
 
     override fun initView(view: View) {
@@ -162,7 +167,7 @@ class EditPostFragment : BaseDialogFragment() {
                 .placeholder(R.drawable.image_default)
                 .error(R.drawable.image_default)
         )
-        postEntity = args.post
+        post = args.post
         fillInformation()
     }
 
@@ -186,20 +191,30 @@ class EditPostFragment : BaseDialogFragment() {
         })
 
         btnSave.setOnClickListener {
-            val postE = PostEntity(
-                postId = postEntity.postId,
-                userId = postEntity.userId,
-                userName = postEntity.userName,
-                userAvatar = postEntity.userAvatar,
+//            val postE = PostEntity(
+//                postId = postEntity.postId,
+//                userId = postEntity.userId,
+//                userName = postEntity.userName,
+//                userAvatar = postEntity.userAvatar,
+//                content = content.text.toString(),
+//                createDate = postEntity.createDate,
+//                images = listImages,
+//                arrCmtId = postEntity.arrCmtId,
+//                arrLike = postEntity.arrLike,
+//                video = videoPath
+//            )
+            val mPost = Post(
+                userId = post.userId,
                 content = content.text.toString(),
-                createDate = postEntity.createDate,
+                createDate = post.createDate,
                 images = listImages,
-                arrCmtId = postEntity.arrCmtId,
-                arrLike = postEntity.arrLike,
-                video = videoPath
+                arrCmtId = post.arrCmtId,
+                arrLike = post.arrLike,
+                video = videoPath,
+                active = post.active
             )
-            postE.isAds = localStorage.getAccount()!!.ads
-            viewModel.editPost(postE)
+            post.isAds = localStorage.getAccount()!!.ads
+            viewModel.editPost(mPost)
             hideKeyboardFrom(requireContext(), it)
         }
 
@@ -219,15 +234,22 @@ class EditPostFragment : BaseDialogFragment() {
     }
 
     private fun fillInformation() {
-        glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar).into(imgAvatar)
-        username.text = postEntity.userName
-        createDate.text = getDate(postEntity.createDate)
-        content.text = postEntity.content
-        if (postEntity.video.isNotEmpty()){
-            videoPath = postEntity.video
+        val uiScope = CoroutineScope(Dispatchers.Main + job)
+        uiScope.launch(Dispatchers.IO){
+            withContext(Dispatchers.Main){
+                val mUser = repositoryUser.getUser(post.userId)
+                username.text = mUser.username
+                glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl).into(imgAvatar)
+            }
+        }
+
+        createDate.text = getDate(post.createDate)
+        content.text = post.content
+        if (post.video.isNotEmpty()){
+            videoPath = post.video
             isVideo = true
         }
-        listImages.addAll(postEntity.images)
+        listImages.addAll(post.images)
         updateImageVideo()
     }
 
@@ -454,5 +476,10 @@ class EditPostFragment : BaseDialogFragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        job.cancel()
+        super.onDestroy()
     }
 }

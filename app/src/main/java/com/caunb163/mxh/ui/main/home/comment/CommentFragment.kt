@@ -1,12 +1,7 @@
 package com.caunb163.mxh.ui.main.home.comment
 
-import android.app.Dialog
 import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -17,15 +12,12 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.domain.model.CommentEntity
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseDialogFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ultis.CheckPermission
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.InternalCoroutinesApi
 import org.koin.android.ext.android.inject
 
@@ -53,7 +45,7 @@ class CommentFragment : BaseDialogFragment() {
 
     private val list = mutableListOf<CommentEntity>()
     private val args: CommentFragmentArgs by navArgs()
-    private lateinit var post: PostEntity
+    private lateinit var post: Post
     private var timenow: Long = 0
     private var image: String = ""
     override fun getLayoutId(): Int = R.layout.fragment_comment

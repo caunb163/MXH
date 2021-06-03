@@ -4,17 +4,13 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.VideoView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.domain.model.Post
 import com.caunb163.mxh.R
-import com.google.android.exoplayer2.ui.PlayerView
 import de.hdodenhof.circleimageview.CircleImageView
 import kohii.v1.core.Common
 import kohii.v1.core.Playback
@@ -24,9 +20,9 @@ class VideoAdapter(
     private val kohii: Kohii,
     private val glide: RequestManager
 ) : Adapter<VideoAdapter.VideoViewHolder>() {
-    private var list: MutableList<PostEntity> = mutableListOf()
+    private var list: MutableList<Post> = mutableListOf()
 
-    fun updateData(data: MutableList<PostEntity>) {
+    fun updateData(data: MutableList<Post>) {
         list = data
         notifyDataSetChanged()
     }
@@ -85,12 +81,12 @@ class VideoAdapter(
         private var content: TextView = view.findViewById(R.id.video_content)
 
         @SuppressLint("SetTextI18n")
-        fun bind(postEntity: PostEntity) {
-            glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
-                .into(avatar)
+        fun bind(postEntity: Post) {
+//            glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.userAvatar)
+//                .into(avatar)
+//            username.text = postEntity.userName
             like.text = "${postEntity.arrLike.size}M"
             comment.text = "${postEntity.arrCmtId.size}k"
-            username.text = postEntity.userName
             content.text = postEntity.content
         }
 

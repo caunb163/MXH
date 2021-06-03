@@ -16,15 +16,15 @@ val repositoryModule = module {
     factory<RepositoryOnBoarding> { RepositoryOnBoardingImpl(get()) }
     factory<RepositoryLogin> { RepositoryLoginImpl(get(), get()) }
     factory<RepositoryRegister> { RepositoryRegisterImpl(get(), get()) }
-    factory<RepositoryHomeImpl> { RepositoryHomeImpl(get(), get()) }
+    factory<RepositoryHomeImpl> { RepositoryHomeImpl(get()) }
     factory<RepositoryCreatePost> { RepositoryCreatePostImpl(get()) }
-    factory<RepositoryProfileImpl> { RepositoryProfileImpl(get(), get()) }
+    factory<RepositoryProfileImpl> { RepositoryProfileImpl(get()) }
     factory<RepositoryMainImpl> { RepositoryMainImpl(get()) }
     factory<RepositoryCommentImpl> { (RepositoryCommentImpl(get())) }
     factory<RepositoryMessengerImpl> { RepositoryMessengerImpl() }
     factory<RepositoryCreateGroup> { RepositoryCreateGroupImpl() }
-    factory<RepositoryChatImpl> { RepositoryChatImpl(get()) }
+    factory<RepositoryChatImpl> { RepositoryChatImpl() }
     factory<RepositoryEditPostImpl> { RepositoryEditPostImpl() }
-    factory<RepositoryVideoImpl> { RepositoryVideoImpl(get()) }
+    factory<RepositoryVideoImpl> { RepositoryVideoImpl() }
     factory<RepositoryUser> { RepositoryUser() }
 }

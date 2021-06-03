@@ -7,7 +7,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.HomeOnClick
@@ -18,7 +19,8 @@ class ListImageAdapter(
     private val onClick: OnImageClick,
     private val user: User,
     private val homeOnClick: HomeOnClick,
-    private val postEntity: PostEntity
+    private val postEntity: Post,
+    private val repositoryUser: RepositoryUser
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val TYPE_POST = 0
     private val TYPE_IMAGE = 1
@@ -40,19 +42,19 @@ class ListImageAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             TYPE_POST -> {
-                val post = PostEntity(
-                    postId = postEntity.postId,
-                    userId = postEntity.userId,
-                    userName = postEntity.userName,
-                    userAvatar = postEntity.userAvatar,
-                    content = postEntity.content,
-                    createDate = postEntity.createDate,
-                    images = mutableListOf(),
-                    arrCmtId = postEntity.arrCmtId,
-                    arrLike = postEntity.arrLike,
-                    video = ""
-                )
-                (holder as PostNoMediaViewHolder).bind(post, user, homeOnClick)
+//                val post = PostEntity(
+//                    postId = postEntity.postId,
+//                    userId = postEntity.userId,
+//                    userName = postEntity.userName,
+//                    userAvatar = postEntity.userAvatar,
+//                    content = postEntity.content,
+//                    createDate = postEntity.createDate,
+//                    images = mutableListOf(),
+//                    arrCmtId = postEntity.arrCmtId,
+//                    arrLike = postEntity.arrLike,
+//                    video = ""
+//                )
+                (holder as PostNoMediaViewHolder).bind(postEntity, user, homeOnClick, repositoryUser)
             }
 
             TYPE_VIDEO -> (holder as VideoViewHolder).bind(postEntity, onClick, position - 1)
@@ -96,7 +98,7 @@ class ListImageAdapter(
         RecyclerView.ViewHolder(view) {
         private var image: ImageView = view.findViewById(R.id.view_image)
 
-        fun bind(postEntity: PostEntity, onClick: OnImageClick, position: Int, boolean: Boolean) {
+        fun bind(postEntity: Post, onClick: OnImageClick, position: Int, boolean: Boolean) {
             val list: MutableList<String> = mutableListOf()
             if (boolean){
                 glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.images[position - 1]).into(image)
@@ -120,7 +122,7 @@ class ListImageAdapter(
         RecyclerView.ViewHolder(view) {
         private var imageView: ImageView = view.findViewById(R.id.view_video)
 
-        fun bind(postEntity: PostEntity, onClick: OnImageClick, position: Int) {
+        fun bind(postEntity: Post, onClick: OnImageClick, position: Int) {
             glide.applyDefaultRequestOptions(RequestOptions()).load(postEntity.video).into(imageView)
             val list: MutableList<String> = mutableListOf()
             list.add(postEntity.video)

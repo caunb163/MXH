@@ -5,7 +5,6 @@ import android.preference.PreferenceManager
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.data.firebase.Auth
 import com.caunb163.data.mapper.CommentMapper
-import com.caunb163.data.mapper.PostMapper
 import org.koin.dsl.module
 
 val localModule = module {
@@ -15,6 +14,5 @@ val localModule = module {
 
     single<Auth> { Auth() }
 
-    single<PostMapper> { PostMapper() }
     single<CommentMapper> { CommentMapper() }
 }

@@ -1,6 +1,5 @@
 package com.caunb163.mxh.ui.main.home.view_image
 
-//import com.google.android.exoplayer2.MediaItem
 import android.content.Context
 import android.net.Uri
 import android.view.View
@@ -43,7 +42,6 @@ class ImageViewPageFragment(
         videoView = view.findViewById(R.id.videoview_view)
         videoView.visibility = View.GONE
         imageView.visibility = View.GONE
-
     }
 
     override fun onStart() {

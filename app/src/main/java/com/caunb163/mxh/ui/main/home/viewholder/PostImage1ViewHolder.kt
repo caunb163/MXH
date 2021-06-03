@@ -5,7 +5,8 @@ import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.HomeOnClick
@@ -18,11 +19,12 @@ class PostImage1ViewHolder(view: View, private val glide: RequestManager) :
     private var img1: ImageView = view.findViewById(R.id.media_1_image)
 
     override fun bind(
-        post: PostEntity,
+        post: Post,
         user: User,
-        onHomeOnClick: HomeOnClick
+        onHomeOnClick: HomeOnClick,
+        repositoryUser: RepositoryUser
     ) {
-        bindView(post, user, onHomeOnClick)
+        bindView(post, user, onHomeOnClick, repositoryUser)
         richLinkView.visibility = View.GONE
 
         if (post.content.isNotEmpty()) {

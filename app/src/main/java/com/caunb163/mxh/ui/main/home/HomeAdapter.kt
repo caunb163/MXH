@@ -4,7 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
-import com.caunb163.domain.model.PostEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
 import com.caunb163.mxh.ui.main.home.viewholder.*
@@ -12,7 +13,8 @@ import com.caunb163.mxh.ui.main.home.viewholder.*
 class HomeAdapter(
     private val glide: RequestManager,
     private val homeOnClick: HomeOnClick,
-    private val user: User
+    private val user: User,
+    private val repositoryUser: RepositoryUser
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val TYPE_CREATE_POST = 0
@@ -78,26 +80,26 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             TYPE_CREATE_POST -> (holder as CreatePostViewHolder).bind(list[position] as User, homeOnClick)
-            TYPE_POST_NO_MEDIA -> (holder as PostNoMediaViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
+            TYPE_POST_NO_MEDIA -> (holder as PostNoMediaViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
 
-            TYPE_POST_IMAGE_1 -> (holder as PostImage1ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_IMAGE_2 -> (holder as PostImage2ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_IMAGE_3 -> (holder as PostImage3ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_IMAGE_4 -> (holder as PostImage4ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_IMAGE_5 -> (holder as PostImage5ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
+            TYPE_POST_IMAGE_1 -> (holder as PostImage1ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_IMAGE_2 -> (holder as PostImage2ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_IMAGE_3 -> (holder as PostImage3ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_IMAGE_4 -> (holder as PostImage4ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_IMAGE_5 -> (holder as PostImage5ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
 
-            TYPE_POST_VIDEO_1 -> (holder as PostVideo1ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_VIDEO_2 -> (holder as PostVideo2ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_VIDEO_3 -> (holder as PostVideo3ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_VIDEO_4 -> (holder as PostVideo4ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
-            TYPE_POST_VIDEO_5 -> (holder as PostVideo5ViewHolder).bind(list[position] as PostEntity, user, homeOnClick)
+            TYPE_POST_VIDEO_1 -> (holder as PostVideo1ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_VIDEO_2 -> (holder as PostVideo2ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_VIDEO_3 -> (holder as PostVideo3ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_VIDEO_4 -> (holder as PostVideo4ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
+            TYPE_POST_VIDEO_5 -> (holder as PostVideo5ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when {
-            list[position] is PostEntity -> {
-                val post = list[position] as PostEntity
+            list[position] is Post -> {
+                val post = list[position] as Post
                 if (post.video.isNotEmpty()) {
                     when (post.images.size) {
                         0 -> TYPE_POST_VIDEO_1
@@ -145,15 +147,15 @@ class HomeAdapter(
 interface HomeOnClick {
     fun createPostClick()
 
-    fun onCommentClick(post: PostEntity)
+    fun onCommentClick(post: Post)
 
     fun onLikeClick(postId: String)
 
     fun onShareClick(content: String)
 
-    fun onEditClick(post: PostEntity)
+    fun onEditClick(post: Post)
 
-    fun onDeleteClick(post: PostEntity)
+    fun onDeleteClick(post: Post)
 
-    fun onImageClick(post: PostEntity, position: Int)
+    fun onImageClick(post: Post, position: Int)
 }

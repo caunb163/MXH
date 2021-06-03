@@ -22,21 +22,4 @@ class VideoViewModel(
             emit(State.Failure("${e.message}"))
         }
     }
-
-    private val _stateVideo: MutableLiveData<State> = MutableLiveData()
-    val stateVideo: LiveData<State> get() = _stateVideo
-    fun getVideoTest() {
-        viewModelScope.launch {
-            _stateVideo.value = State.Loading
-            try {
-                val state = withContext(Dispatchers.IO) {
-                    return@withContext repositoryVideoImpl.getVideoTest()
-                }
-                _stateVideo.value = State.Success(state)
-            } catch (e: Exception) {
-                _stateVideo.value = State.Failure("${e.message}")
-            }
-        }
-    }
-
 }

@@ -3,11 +3,10 @@ package com.caunb163.data.repository
 import android.net.Uri
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.data.firebase.FireStore
-import com.caunb163.data.mapper.PostMapper
 import com.caunb163.domain.model.Post
-import com.caunb163.domain.model.PostEntity
 import com.caunb163.domain.model.User
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
@@ -21,15 +20,14 @@ import kotlinx.coroutines.tasks.await
 @ExperimentalCoroutinesApi
 class RepositoryProfileImpl(
     private val localStorage: LocalStorage,
-    private val postMapper: PostMapper
 ) {
     private val TAG = "RepositoryProfileImpl"
     private val db = Firebase.firestore
     val user = localStorage.getAccount()!!
 
-    suspend fun listenerPostChange(): Flow<PostEntity> = callbackFlow {
+    suspend fun listenerPostChange(): Flow<Post> = callbackFlow {
         val data =
-            db.collection(FireStore.POST).whereEqualTo("userId", user.userId)
+            db.collection(FireStore.POST).whereEqualTo("userId", user.userId).orderBy("createDate", Query.Direction.DESCENDING)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -37,32 +35,20 @@ class RepositoryProfileImpl(
             value?.let { qs ->
                 for (dc in qs.documentChanges) {
                     val post = dc.document.toObject(Post::class.java)
-                    db.collection(FireStore.USER).document(post.userId).get()
-                        .addOnCompleteListener { task ->
-                            val user = task.result?.toObject(User::class.java)
-                            user?.let { u ->
-                                val postEntity = postMapper.toEntity(
-                                    post,
-                                    dc.document.id,
-                                    u.username,
-                                    u.photoUrl
-                                )
-                                when (dc.type) {
-                                    DocumentChange.Type.ADDED -> {
-//                                        Log.e(TAG, "listenerPostChange: ADD ${dc.document.data}")
-                                        offer(postEntity)
-                                    }
-                                    DocumentChange.Type.MODIFIED -> {
-//                                        Log.e(TAG, "listenerPostChange: MODIFIED ${dc.document.data}")
-                                        offer(postEntity)
-                                    }
-                                    DocumentChange.Type.REMOVED -> {
-//                                        Log.e(TAG, "listenerPostChange: REMOVED ${PostEntity(postId = postEntity.postId)}")
-                                        offer(PostEntity(postId = postEntity.postId))
-                                    }
-                                }
-                            }
+                    post.postId = dc.document.id
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            offer(post)
                         }
+                        DocumentChange.Type.MODIFIED -> {
+                            offer(post)
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            val p = Post()
+                            p.postId = dc.document.id
+                            offer(p)
+                        }
+                    }
                 }
             }
         }
