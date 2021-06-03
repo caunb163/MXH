@@ -10,20 +10,24 @@ import android.widget.ViewFlipper
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.MessageEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Message
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.github.satoshun.coroutine.autodispose.view.autoDisposeScope
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.launch
 import java.lang.Double.parseDouble
 
 class ChatAdapter(
     private val glide: RequestManager,
-    private val user: User
+    private val user: User,
+    private val repositoryUser: RepositoryUser
 ) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
-    private var list: MutableList<MessageEntity> = mutableListOf()
+    private var list: MutableList<Message> = mutableListOf()
 
-    fun updateData(datas: MutableList<MessageEntity>) {
+    fun updateData(datas: MutableList<Message>) {
         list = datas
         notifyDataSetChanged()
     }
@@ -35,7 +39,7 @@ class ChatAdapter(
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        holder.bind(list[position], user, glide)
+        holder.bind(list[position], user, glide, repositoryUser)
     }
 
     override fun getItemCount(): Int = list.size
@@ -53,7 +57,7 @@ class ChatAdapter(
         private val imageview1: ImageView = view.findViewById(R.id.chat_image1)
         private val imageview2: ImageView = view.findViewById(R.id.chat_image2)
 
-        fun bind(messageEntity: MessageEntity, user: User, glide: RequestManager) {
+        fun bind(messageEntity: Message, user: User, glide: RequestManager, repositoryUser: RepositoryUser) {
             var boolean = true
             var imageInt = 0
             try {
@@ -88,8 +92,14 @@ class ChatAdapter(
                 }
             } else {
                 viewFlipper.displayedChild = 0
-                glide.applyDefaultRequestOptions(RequestOptions()).load(messageEntity.userAvatar)
-                    .into(avatar1)
+//                glide.applyDefaultRequestOptions(RequestOptions()).load(messageEntity.userAvatar)
+//                    .into(avatar1)
+                itemView.autoDisposeScope.launch {
+                    val mUser = repositoryUser.getUser(messageEntity.userId)
+                    glide.applyDefaultRequestOptions(RequestOptions())
+                        .load(mUser.photoUrl)
+                        .into(avatar1)
+                }
                 if (messageEntity.content.isEmpty()) {
                     message1.visibility = View.GONE
                 } else {

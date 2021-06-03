@@ -3,7 +3,6 @@ package com.caunb163.mxh.ui.main.messenger.chat
 import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -20,7 +19,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.data.repository.RepositoryUser
 import com.caunb163.domain.model.Message
-import com.caunb163.domain.model.MessageEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
@@ -48,11 +46,12 @@ class ChatFragment : BaseDialogFragment() {
     private val viewModel: ChatViewModel by inject()
     private val args: ChatFragmentArgs by navArgs()
     private val localStorage: LocalStorage by inject()
+    private val repositoryUser: RepositoryUser by inject()
 
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var glide: RequestManager
     private lateinit var user: User
-    private val list = mutableListOf<MessageEntity>()
+    private val list = mutableListOf<Message>()
     private var timenow: Long = 0
     private var image: String = ""
 
@@ -82,7 +81,7 @@ class ChatFragment : BaseDialogFragment() {
         )
         user = localStorage.getAccount()!!
 
-        chatAdapter = ChatAdapter(glide, user)
+        chatAdapter = ChatAdapter(glide, user, repositoryUser)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = chatAdapter
@@ -139,7 +138,7 @@ class ChatFragment : BaseDialogFragment() {
         viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoadingListener()
-                is State.Success<*> -> onSuccessListener(state.data as MessageEntity)
+                is State.Success<*> -> onSuccessListener(state.data as Message)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -167,7 +166,7 @@ class ChatFragment : BaseDialogFragment() {
         btnSend.visibility = View.INVISIBLE
     }
 
-    private fun onSuccessListener(message: MessageEntity) {
+    private fun onSuccessListener(message: Message) {
         if (message.groupId.isEmpty()) {
             val index = checkMessageIndex(message)
             if (index != -1) {
@@ -182,13 +181,13 @@ class ChatFragment : BaseDialogFragment() {
             }
         } else {
             list.add(message)
-                list.sortBy { it.createDate.inc() }
-            chatAdapter.notifyDataSetChanged()
+//            list.sortBy { it.createDate.inc() }
+            chatAdapter.notifyItemInserted(list.size - 1)
         }
         recyclerView.smoothScrollToPosition(list.size)
     }
 
-    private fun checkMessageIndex(message: MessageEntity): Int {
+    private fun checkMessageIndex(message: Message): Int {
         for (index in 0 until list.size)
             if (list[index].messageId == message.messageId) {
                 return index
@@ -196,7 +195,7 @@ class ChatFragment : BaseDialogFragment() {
         return -1
     }
 
-    private fun checkListAdd(message: MessageEntity): Boolean {
+    private fun checkListAdd(message: Message): Boolean {
         list.forEach {
             if (it.messageId == message.messageId) {
                 return true

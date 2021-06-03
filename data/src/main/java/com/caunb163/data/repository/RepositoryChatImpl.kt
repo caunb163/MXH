@@ -1,11 +1,10 @@
 package com.caunb163.data.repository
 
 import android.net.Uri
-import android.util.Log
 import com.caunb163.data.firebase.FireStore
-import com.caunb163.data.mapper.MessageMapper
 import com.caunb163.domain.model.*
 import com.google.firebase.firestore.DocumentChange
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
@@ -18,15 +17,14 @@ import kotlinx.coroutines.tasks.await
 import java.lang.Double.parseDouble
 
 @ExperimentalCoroutinesApi
-class RepositoryChatImpl(
-    private val messageMapper: MessageMapper
-) {
+class RepositoryChatImpl {
     private val TAG = "RepositoryChatImpl"
     private val db = Firebase.firestore
 
-    suspend fun listenerMessageChange(groupId: String): Flow<MessageEntity> = callbackFlow {
+    suspend fun listenerMessageChange(groupId: String): Flow<Message> = callbackFlow {
         val data =
             db.collection(FireStore.MESSAGE).whereEqualTo("groupId", groupId)
+                .orderBy("createDate", Query.Direction.ASCENDING)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -34,32 +32,20 @@ class RepositoryChatImpl(
             value?.let { qs ->
                 for (dc in qs.documentChanges) {
                     val message = dc.document.toObject(Message::class.java)
-                    db.collection(FireStore.USER).document(message.userId).get()
-                        .addOnCompleteListener { task ->
-                            val user = task.result?.toObject(User::class.java)
-                            user?.let { u ->
-                                val messageEntity = messageMapper.toEntity(
-                                    message,
-                                    u.username,
-                                    u.photoUrl,
-                                    dc.document.id
-                                )
-                                when (dc.type) {
-                                    DocumentChange.Type.ADDED -> {
-//                                        Log.e(TAG, "listenerMessageChange: ADD ${dc.document.data}")
-                                        offer(messageEntity)
-                                    }
-                                    DocumentChange.Type.MODIFIED -> {
-//                                        Log.e(TAG, "listenerMessageChange: MODIFIED ${dc.document.data}")
-                                        offer(messageEntity)
-                                    }
-                                    DocumentChange.Type.REMOVED -> {
-//                                        Log.e(TAG, "listenerMessageChange: REMOVED ${dc.document.data}")
-                                        offer(MessageEntity(messageId = messageEntity.messageId))
-                                    }
-                                }
-                            }
+                    message.messageId = dc.document.id
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            offer(message)
                         }
+                        DocumentChange.Type.MODIFIED -> {
+                            offer(message)
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            var m = Message()
+                            message.messageId = dc.document.id
+                            offer(m)
+                        }
+                    }
                 }
             }
         }
