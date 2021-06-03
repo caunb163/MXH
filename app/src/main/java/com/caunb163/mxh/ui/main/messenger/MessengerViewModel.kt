@@ -18,8 +18,7 @@ class MessengerViewModel(
         try {
             repositoryMessengerImpl.listenerGroupChange(localStorage.getAccount()!!.userId)
                 .collect {
-                    val data = repositoryMessengerImpl.getUserGroup(it)
-                    emit(State.Success(data))
+                    emit(State.Success(it))
                 }
         } catch (e: Exception) {
             emit(State.Failure("${e.message}"))

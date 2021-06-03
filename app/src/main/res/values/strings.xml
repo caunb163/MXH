@@ -9,14 +9,14 @@
     <string name="button_next">Tiếp tục</string>
     <string name="button_back">Quay lại</string>
     <string-array name="onboarding_text">
-        <item name="onboarding_text_1">Website Design</item>
-        <item name="onboarding_text_2">Design Searching</item>
-        <item name="onboarding_text_3">Time Managed</item>
+        <item name="onboarding_text_1">Mạng xã hội</item>
+        <item name="onboarding_text_2">Kết nối</item>
+        <item name="onboarding_text_3">Chia sẻ</item>
     </string-array>
     <string-array name="onboarding_description">
-        <item name="onboarding_text_1">We are here to help with any website or any service</item>
-        <item name="onboarding_text_2">We are always here to support you no matter what</item>
-        <item name="onboarding_text_3">Our app will help you to stay energized all the time</item>
+        <item name="onboarding_text_1">Hỏi đáp, tâm sự, riêng tư, review trải nghiệm mọi thứ theo sở thích và mối quan tâm</item>
+        <item name="onboarding_text_2">Kết nối với mọi người xung quanh</item>
+        <item name="onboarding_text_3">Chia sẻ đam mê, sở thích</item>
     </string-array>
 
     <string name="login_email">Email</string>
@@ -97,6 +97,7 @@
     <string name="chat_name">Group Name</string>
     <string name="chat_group">Nhóm mới</string>
     <string name="chat_chat">Nhập tin nhắn…</string>
+    <string name="chat_create">Tạo</string>
 
     <string name="create_group_btn">Tạo</string>
     <string name="create_group_name">Đặt tên cho đoạn chat mới</string>

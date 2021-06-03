@@ -41,6 +41,8 @@ object Versions {
     const val jsoup = "1.11.3"
     const val picasso = "2.71828"
     const val exoplayer = "2.11.3"
+    const val kohii = "1.1.0.2011003-RC2"
+    const val autodispose = "0.3.1"
 }
 
 object Deps {
@@ -51,6 +53,7 @@ object Deps {
         "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     const val kotlinCoroutinePlayServices =
         "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines}"
+    const val coroutineAutodispose = "com.github.satoshun.coroutine.autodispose:autodispose:${Versions.autodispose}"
 
     const val koin = "org.koin:koin-android:${Versions.koin}"
     const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
@@ -92,6 +95,8 @@ object Deps {
     const val jsoup = "org.jsoup:jsoup:${Versions.jsoup}"
     const val picasso = "com.squareup.picasso:picasso:${Versions.picasso}"
     const val exoPlayer = "com.google.android.exoplayer:exoplayer:${Versions.exoplayer}"
+    const val kohiiCore = "im.ene.kohii:kohii-core:${Versions.kohii}"
+    const val kohiiExoPlayer = "im.ene.kohii:kohii-exoplayer:${Versions.kohii}"
 }
 
 object TestDeps {
@@ -116,7 +121,8 @@ object Dependencies {
 
         Deps.kotlinCoroutineCore,
         Deps.kotlinCoroutineAndroid,
-        Deps.kotlinCoroutinePlayServices
+        Deps.kotlinCoroutinePlayServices,
+        Deps.coroutineAutodispose
     )
 
     val appDependencies = arrayOf(
@@ -138,9 +144,13 @@ object Dependencies {
         Deps.serviceAuth
     )
 
-    val testDependencies = arrayOf(
-        TestDeps.junit
+    val kohii = arrayOf(
+        Deps.kohiiCore,
+        Deps.kohiiExoPlayer,
+        Deps.exoPlayer
     )
+
+    val testDependencies = arrayOf(TestDeps.junit)
 
     val testAndroidDependencies = arrayOf(
         TestDeps.junitAndroid,

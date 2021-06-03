@@ -10,20 +10,24 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.GroupEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Group
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.github.satoshun.coroutine.autodispose.view.autoDisposeScope
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.launch
 
 class GroupAdapter(
     private val glide: RequestManager,
     private val user: User,
-    private val listener: OnGroupClickListener
+    private val listener: OnGroupClickListener,
+    private val repositoryUser: RepositoryUser
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var list: MutableList<GroupEntity> = mutableListOf()
+    private var list: MutableList<Group> = mutableListOf()
 
-    fun updateData(datas: MutableList<GroupEntity>) {
+    fun updateData(datas: MutableList<Group>) {
         list = datas
         notifyDataSetChanged()
     }
@@ -35,7 +39,7 @@ class GroupAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as GroupViewHolder).bind(glide, list[position], user, listener)
+        (holder as GroupViewHolder).bind(glide, list[position], user, listener, repositoryUser)
     }
 
     override fun getItemCount(): Int = list.size
@@ -58,30 +62,33 @@ class GroupAdapter(
 
         fun bind(
             glide: RequestManager,
-            groupEntity: GroupEntity,
+            group: Group,
             user: User,
-            listener: OnGroupClickListener
+            listener: OnGroupClickListener,
+            repositoryUser: RepositoryUser
         ) {
-            if (groupEntity.arrUser.isNotEmpty()) {
-                if (groupEntity.arrUser.size == 2) {
+            itemView.autoDisposeScope.launch {
+                val user1 = repositoryUser.getUser(group.arrUserId[0])
+                val user2 = repositoryUser.getUser(group.arrUserId[1])
+                if (group.arrUserId.size == 2) {
                     viewFlipper.displayedChild = 1
-                    if (TextUtils.equals(groupEntity.arrUser[0].userId, user.userId)) {
+                    if (TextUtils.equals(user1.userId, user.userId)) {
                         glide.applyDefaultRequestOptions(RequestOptions())
-                            .load(groupEntity.arrUser[1].photoUrl).into(civAvatar3)
+                            .load(user2.photoUrl).into(civAvatar3)
                     } else glide.applyDefaultRequestOptions(RequestOptions())
-                        .load(groupEntity.arrUser[0].photoUrl).into(civAvatar3)
+                        .load(user1.photoUrl).into(civAvatar3)
                 } else {
                     viewFlipper.displayedChild = 0
                     glide.applyDefaultRequestOptions(RequestOptions())
-                        .load(groupEntity.arrUser[0].photoUrl).into(civAvatar1)
+                        .load(user1.photoUrl).into(civAvatar1)
                     glide.applyDefaultRequestOptions(RequestOptions())
-                        .load(groupEntity.arrUser[1].photoUrl).into(civAvatar2)
+                        .load(user2.photoUrl).into(civAvatar2)
                 }
             }
-            groupName.text = groupEntity.name
-            groupLastMessage.text = groupEntity.lastMessage
 
-            groupview.setOnClickListener { listener.onGroupClick(groupEntity) }
+            groupName.text = group.name
+            groupLastMessage.text = group.lastMessage
+            groupview.setOnClickListener { listener.onGroupClick(group) }
         }
 
         fun unbind() {
@@ -94,5 +101,5 @@ class GroupAdapter(
 }
 
 interface OnGroupClickListener {
-    fun onGroupClick(groupEntity: GroupEntity)
+    fun onGroupClick(group: Group)
 }

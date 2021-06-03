@@ -73,7 +73,7 @@
 
         <argument
             android:name="group"
-            app:argType="com.caunb163.domain.model.GroupEntity" />
+            app:argType="com.caunb163.domain.model.Group" />
         <action
             android:id="@+id/action_chatFragment_to_emojiFragment"
             app:destination="@id/emojiFragment" />
@@ -140,7 +140,7 @@
 
         <argument
             android:name="group"
-            app:argType="com.caunb163.domain.model.GroupEntity" />
+            app:argType="com.caunb163.domain.model.Group" />
 
     </dialog>
     <dialog

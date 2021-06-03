@@ -1,28 +1,25 @@
 package com.caunb163.mxh.ui.main.messenger.chat.emoji
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.GroupEntity
+import com.caunb163.domain.model.Group
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.caunb163.mxh.state.State
 import com.caunb163.mxh.ui.main.messenger.chat.ChatViewModel
-import com.caunb163.mxh.ultis.CustomProgressBar
 import org.koin.android.ext.android.inject
 
 class EmojiPageFragment(
     private val position: Int,
-    private val groupEntity: GroupEntity
+    private val group: Group
 ) : BaseFragment(R.layout.fragment_emoji_page), OnEmojiClick {
     private val TAG = "EmojiPageFragment"
 
@@ -34,7 +31,6 @@ class EmojiPageFragment(
     private val localStorage: LocalStorage by inject()
     private var timenow: Long = 0
     private lateinit var user: User
-//    private lateinit var customProgressBar: CustomProgressBar
 
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.emoji_recyclerview)
@@ -44,11 +40,9 @@ class EmojiPageFragment(
                 .placeholder(R.drawable.image_default)
                 .error(R.drawable.image_default)
         )
-        viewModel.setGroupId(groupEntity.groupId)
+        viewModel.setGroupId(group.groupId)
         user = localStorage.getAccount()!!
         selectList(position)
-//        customProgressBar = CustomProgressBar(requireContext())
-
         emojiAdapter = EmojiAdapter(list, glide, this)
         recyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), 4)
@@ -57,8 +51,7 @@ class EmojiPageFragment(
 
     }
 
-    override fun initListener() {
-    }
+    override fun initListener() {}
 
     override fun initObserve() {
         viewModel.stateCreateMessage.observe(this, Observer { state ->
@@ -71,7 +64,6 @@ class EmojiPageFragment(
     }
 
     override fun onGifClick(url: Int) {
-        Log.e(TAG, "onGifClick: $url")
         timenow = System.currentTimeMillis()
         viewModel.createMessage(
             "", timenow, user.userId, url.toString()
@@ -133,40 +125,12 @@ class EmojiPageFragment(
         }
     }
 
-    private fun onLoadingSend() {
-//        customProgressBar.show()
-    }
+    private fun onLoadingSend() {}
 
     private fun onSuccessCreateMessage() {
-//        customProgressBar.dismiss()
-//        (activity as MainActivity).onBackPressed()
     }
 
-    private fun onFailure(message: String) {
-//        customProgressBar.dismiss()
-        showToast(message)
-    }
+    private fun onFailure(message: String) { showToast(message) }
 
 }
-
-//class GridSpacingItemDecoration(spacing: Int, spanCount: Int) : RecyclerView.ItemDecoration() {
-//    private val spacing = spacing
-//    private val spanCout = spanCount
-//
-//    override fun getItemOffsets(
-//        outRect: Rect,
-//        view: View,
-//        parent: RecyclerView,
-//        state: RecyclerView.State
-//    ) {
-//        outRect.top = spacing
-//        outRect.bottom = spacing
-//        outRect.right = spacing
-//
-//        if (parent.getChildAdapterPosition(view) < spanCout){
-//            outRect.left = spacing
-//        } else outRect.left = 0
-//
-//    }
-//}
 

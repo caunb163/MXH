@@ -69,12 +69,7 @@ dependencies {
     implementation Deps.customTab
     implementation Deps.pinView
     implementation Dependencies.linkPreview
-//    implementation Deps.exoPlayer
-
-    def kohii_version = "1.1.0.2011003-RC2"
-    implementation "im.ene.kohii:kohii-core:${kohii_version}"
-    implementation "im.ene.kohii:kohii-exoplayer:${kohii_version}"
-    implementation "com.google.android.exoplayer:exoplayer:2.11.3"
+    implementation Dependencies.kohii
 
 }
 

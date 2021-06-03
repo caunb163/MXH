@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Message
 import com.caunb163.domain.model.MessageEntity
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.MainActivity
@@ -167,32 +169,27 @@ class ChatFragment : BaseDialogFragment() {
 
     private fun onSuccessListener(message: MessageEntity) {
         if (message.groupId.isEmpty()) {
-//            Log.e(TAG, "onSuccessListener: remove")
             val index = checkMessageIndex(message)
             if (index != -1) {
                 list.removeAt(index)
                 chatAdapter.notifyItemRemoved(index)
             }
         } else if (checkListAdd(message)) {
-//            Log.e(TAG, "onSuccessListener: update")
             val index = checkMessageIndex(message)
             if (index != -1) {
                 list[index] = message
                 chatAdapter.notifyItemChanged(index)
             }
         } else {
-            if (!list.contains(message)) {
-//                Log.e(TAG, "onSuccessListener: add")
-                list.add(message)
+            list.add(message)
                 list.sortBy { it.createDate.inc() }
-                chatAdapter.notifyDataSetChanged()
-            }
+            chatAdapter.notifyDataSetChanged()
         }
-        recyclerView.smoothScrollToPosition(list.size - 1)
+        recyclerView.smoothScrollToPosition(list.size)
     }
 
     private fun checkMessageIndex(message: MessageEntity): Int {
-        for (index in 1 until list.size)
+        for (index in 0 until list.size)
             if (list[index].messageId == message.messageId) {
                 return index
             }

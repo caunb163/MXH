@@ -15,7 +15,22 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/chat_messenger" />
+            app:title="@string/chat_messenger" >
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/message_createbtn"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="@color/colorPost"
+                android:text="@string/chat_create"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                app:cornerRadius="10dp" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
         <View
             android:layout_width="match_parent"
@@ -39,15 +54,15 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/message_create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/fab_content"
-        android:tint="@color/white"
-        app:backgroundTint="@color/teal_200"
-        app:srcCompat="@drawable/ic_add"/>
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        android:id="@+id/message_create"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:contentDescription="@string/fab_content"-->
+<!--        android:tint="@color/white"-->
+<!--        app:backgroundTint="@color/teal_200"-->
+<!--        app:srcCompat="@drawable/ic_add"/>-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

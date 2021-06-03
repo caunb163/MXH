@@ -10,7 +10,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 class RepositoryCreateGroupImpl : RepositoryCreateGroup {
-    private val TAG = "RepositoryCreateGroupIm"
+    private val TAG = "RepositoryCreateGroupImpl"
     val db = Firebase.firestore
 
     override suspend fun createGroup(arrUserId: List<String>, groupName: String, createDate: Long) {
@@ -37,7 +37,6 @@ class RepositoryCreateGroupImpl : RepositoryCreateGroup {
                 }
             }
         }.await()
-        Log.e(TAG, "getAllUser: ${list.size}")
         return list
     }
 }

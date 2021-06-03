@@ -1,22 +1,16 @@
 package com.caunb163.mxh.ui.main.home.view_image
 
+//import com.google.android.exoplayer2.MediaItem
 import android.content.Context
-import android.media.MediaParser
-import android.media.MediaPlayer
 import android.net.Uri
-import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.MediaController
-import android.widget.ProgressBar
-import android.widget.VideoView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.mxh.R
 import com.caunb163.mxh.base.BaseFragment
 import com.github.chrisbanes.photoview.PhotoView
 import com.google.android.exoplayer2.Player
-//import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import com.google.android.exoplayer2.ui.PlayerView

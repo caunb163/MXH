@@ -1,6 +1,5 @@
 package com.caunb163.mxh.ui.main.home.viewholder
 
-import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatTextView

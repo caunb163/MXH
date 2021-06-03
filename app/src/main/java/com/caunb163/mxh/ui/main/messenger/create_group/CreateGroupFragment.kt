@@ -130,7 +130,11 @@ class CreateGroupFragment : BaseDialogFragment(), UserOnClick {
         progress.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
         list.clear()
-        list.addAll(users)
+        users.forEach {
+            if (!(it.admin || it.ads)) {
+                list.add(it)
+            }
+        }
         list.remove(user)
         userAdapter.updateData(list)
 
