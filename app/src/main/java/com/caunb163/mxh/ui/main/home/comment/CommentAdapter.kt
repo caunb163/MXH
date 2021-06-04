@@ -8,17 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
-import com.caunb163.domain.model.CommentEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Comment
 import com.caunb163.mxh.R
+import com.github.satoshun.coroutine.autodispose.view.autoDisposeScope
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.launch
 
 class CommentAdapter(
-    private val glide: RequestManager
+    private val glide: RequestManager,
+    private val repositoryUser: RepositoryUser
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var list: MutableList<CommentEntity> = mutableListOf()
+    private var list: MutableList<Comment> = mutableListOf()
 
-    fun updateData(data: MutableList<CommentEntity>) {
+    fun updateData(data: MutableList<Comment>) {
         list = data
         notifyDataSetChanged()
     }
@@ -30,7 +34,7 @@ class CommentAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as CommentViewHolder).bind(glide, list[position])
+        (holder as CommentViewHolder).bind(glide, list[position], repositoryUser)
     }
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
@@ -41,14 +45,19 @@ class CommentAdapter(
     override fun getItemCount(): Int = list.size
 
     class CommentViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         private var imgAvatar: CircleImageView = view.findViewById(R.id.cmt_user_avatar)
         private var tvUserName: TextView = view.findViewById(R.id.cmt_tv_username)
         private var tvContent: TextView = view.findViewById(R.id.cmt_tv_content)
         private var imageview: ImageView = view.findViewById(R.id.cmt_image)
 
-        fun bind(glide: RequestManager, comment: CommentEntity) {
-            glide.applyDefaultRequestOptions(RequestOptions()).load(comment.userAvatar)
-                .into(imgAvatar)
+        fun bind(glide: RequestManager, comment: Comment, repositoryUser: RepositoryUser) {
+            itemView.autoDisposeScope.launch {
+                val mUser = repositoryUser.getUser(comment.userId)
+                glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl)
+                    .into(imgAvatar)
+                tvUserName.text = mUser.username
+            }
             if (comment.image.isNotEmpty()) {
                 imageview.visibility = View.VISIBLE
                 glide.applyDefaultRequestOptions(RequestOptions()).load(comment.image)
@@ -56,7 +65,6 @@ class CommentAdapter(
             } else {
                 imageview.visibility = View.GONE
             }
-            tvUserName.text = comment.username
             if (comment.content.isNotEmpty()) {
                 tvContent.visibility = View.VISIBLE
                 tvContent.text = comment.content

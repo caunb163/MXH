@@ -23,8 +23,8 @@ class CommentViewModel(
         emit(State.Loading)
         try {
             _postId.value?.let {
-                repositoryCommentImpl.getAllComment(it).collect { list ->
-                    emit(State.Success(list))
+                repositoryCommentImpl.listenerComment(it).collect { comment ->
+                    emit(State.Success(comment))
                 }
             }
         } catch (e: Exception) {

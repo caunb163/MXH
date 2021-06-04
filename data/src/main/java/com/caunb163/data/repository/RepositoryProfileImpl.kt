@@ -27,13 +27,15 @@ class RepositoryProfileImpl(
 
     suspend fun listenerPostChange(): Flow<Post> = callbackFlow {
         val data =
-            db.collection(FireStore.POST).whereEqualTo("userId", user.userId).orderBy("createDate", Query.Direction.DESCENDING)
+            db.collection(FireStore.POST).whereEqualTo("userId", user.userId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
             }
             value?.let { qs ->
-                for (dc in qs.documentChanges) {
+                val list =
+                    qs.documentChanges.sortedByDescending { it.document.toObject(Post::class.java).createDate.inc() }
+                for (dc in list) {
                     val post = dc.document.toObject(Post::class.java)
                     post.postId = dc.document.id
                     when (dc.type) {
@@ -55,7 +57,7 @@ class RepositoryProfileImpl(
         awaitClose { subscription.remove() }
     }
 
-    suspend fun updateAvatar(uri: String): String {
+    suspend fun updateAvatar(uri: String) {
         val uriPath = Uri.parse(uri)
         val storageRef = Firebase.storage.reference.child("avatar/" + uriPath.lastPathSegment)
         val uploadTask: UploadTask = storageRef.putFile(uriPath)
@@ -71,11 +73,10 @@ class RepositoryProfileImpl(
                 db.collection(FireStore.USER).document(user.userId).update("photoUrl", stringPath)
             }
         }.await()
-
-        return stringPath
+//        return stringPath
     }
 
-    suspend fun updateBackground(uri: String): String {
+    suspend fun updateBackground(uri: String) {
         val uriPath = Uri.parse(uri)
         val storageRef = Firebase.storage.reference.child("background/" + uriPath.lastPathSegment)
         val uploadTask: UploadTask = storageRef.putFile(uriPath)
@@ -92,8 +93,7 @@ class RepositoryProfileImpl(
                     .update("photoBackground", stringPath)
             }
         }.await()
-
-        return stringPath
+//        return stringPath
     }
 
     suspend fun updateProfile(user: User) {

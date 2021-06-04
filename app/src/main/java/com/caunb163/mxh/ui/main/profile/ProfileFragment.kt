@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.View
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,8 +67,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         profileAdapter.updateData(list)
     }
 
-    override fun initListener() {
-    }
+    override fun initListener() {}
 
     override fun initObserve() {
         viewModel.listener.observe(this, Observer { state ->
@@ -81,7 +81,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         viewModel.stateAvatar.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoadingAvatar()
-                is State.Success<*> -> onSuccess(state.data as String)
+                is State.Success<*> -> onSuccessAvatar()
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -89,7 +89,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         viewModel.stateBackground.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoadingAvatar()
-                is State.Success<*> -> onSuccessBackground(state.data as String)
+                is State.Success<*> -> onSuccessAvatar()
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -101,13 +101,27 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
                 is State.Failure -> onFailure(state.message)
             }
         })
+
+        viewModel.stateLike.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoading()
+                is State.Success<*> -> onSuccessLike()
+                is State.Failure -> onFailure(state.message)
+            }
+        })
+
+        viewModel.stateDelete.observe(this, Observer { state ->
+            when (state) {
+                is State.Loading -> onLoading()
+                is State.Success<*> -> onSuccessLike()
+                is State.Failure -> onFailure(state.message)
+            }
+        })
     }
 
     private fun onLoading() {}
 
-    private fun onLoadingAvatar() {
-        customProgressBar.show()
-    }
+    private fun onLoadingAvatar() { customProgressBar.show() }
 
     private fun onSuccessUser(u: User) {
         list.remove(user)
@@ -115,6 +129,8 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         user = u
         profileAdapter.notifyDataSetChanged()
     }
+
+    private fun onSuccessLike() {}
 
     private fun onSuccessListener(post: Post) {
         if (post.userId.isEmpty()) {
@@ -130,39 +146,14 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
                 profileAdapter.notifyItemChanged(index)
             }
         } else {
-            if (!list.contains(post)) {
-                list.add(post)
-                list.sortByDescending {
-                    if (it is Post) {
-                        it.createDate.inc()
-                    } else {
-                        null
-                    }
-                }
-                list.remove(user)
-                list.add(0, user)
-                profileAdapter.notifyDataSetChanged()
-            }
+            list.add(post)
+            profileAdapter.notifyItemInserted(list.size - 1)
         }
     }
 
-    private fun onSuccess(uri: String) {
+    private fun onSuccessAvatar() {
         customProgressBar.dismiss()
-        for (obj in list) {
-            if (obj is Post) {
-//                profileAdapter.notifyDataSetChanged()
-//                obj.userAvatar = uri
-            } else if (obj is User) {
-                obj.photoUrl = uri
-            }
-        }
         profileAdapter.notifyDataSetChanged()
-    }
-
-    private fun onSuccessBackground(uri: String) {
-        customProgressBar.dismiss()
-        (list[0] as User).photoBackground = uri
-        profileAdapter.notifyItemChanged(0)
     }
 
     private fun onFailure(message: String) {
@@ -191,18 +182,11 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         return false
     }
 
-    override fun avatarClick() {
-        ensurePermission(REQUEST_AVATAR_CODE)
-    }
+    override fun avatarClick() { ensurePermission(REQUEST_AVATAR_CODE) }
 
-    override fun backgroundClick() {
-        ensurePermission(REQUEST_BACKGROUND_CODE)
-    }
+    override fun backgroundClick() { ensurePermission(REQUEST_BACKGROUND_CODE) }
 
-    override fun editProfile() {
-        findNavController().navigate(R.id.action_profileFragment_to_updateProfileFragment)
-
-    }
+    override fun editProfile() { findNavController().navigate(R.id.action_profileFragment_to_updateProfileFragment) }
 
     private fun ensurePermission(requestCode: Int) {
         if (CheckPermission.checkPermission(requireContext())) {
@@ -250,19 +234,18 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         }
     }
 
-    private fun uploadAvatar(uri: String) {
-        viewModel.uploadAvatar(uri)
-    }
+    private fun uploadAvatar(uri: String) { viewModel.uploadAvatar(uri) }
 
-    private fun uploadBackground(uri: String) {
-        viewModel.uploadBackground(uri)
-    }
+    private fun uploadBackground(uri: String) { viewModel.uploadBackground(uri) }
 
     override fun createPostClick() {}
 
-    override fun onCommentClick(post: Post) {}
+    override fun onCommentClick(post: Post) {
+        val action = ProfileFragmentDirections.actionProfileFragmentToCommentFragment(post)
+        findNavController().navigate(action)
+    }
 
-    override fun onLikeClick(postId: String) {}
+    override fun onLikeClick(postId: String) { viewModel.likePost(postId) }
 
     override fun onShareClick(content: String) {
         val sharingIntent = Intent(Intent.ACTION_SEND)
@@ -271,10 +254,25 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         startActivity(Intent.createChooser(sharingIntent, "Chia sẻ nội dung"))
     }
 
-    override fun onEditClick(post: Post) {}
+    override fun onEditClick(post: Post) {
+        val action = ProfileFragmentDirections.actionProfileFragmentToEditPostFragment(post)
+        findNavController().navigate(action)
+    }
 
-    override fun onDeleteClick(post: Post) {}
+    override fun onDeleteClick(post: Post) {
+        val alertDialog = AlertDialog.Builder(requireContext())
+        alertDialog.setTitle("Xóa bài viết")
+        alertDialog.setMessage("Bạn có chắc muốn xóa bài viết này không?")
+        alertDialog.setPositiveButton("Có") { _, _ ->
+            viewModel.deletePost(post)
+        }
+        alertDialog.setNegativeButton("Không") { dialog, _ -> dialog.dismiss() }
+        alertDialog.show()
+    }
 
-    override fun onImageClick(post: Post, position: Int) {}
+    override fun onImageClick(post: Post, position: Int) {
+        val action = ProfileFragmentDirections.actionProfileFragmentToListImageFragment(post, position)
+        findNavController().navigate(action)
+    }
 
 }

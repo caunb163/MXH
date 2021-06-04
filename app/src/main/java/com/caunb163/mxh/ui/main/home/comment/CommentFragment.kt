@@ -11,7 +11,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.caunb163.data.datalocal.LocalStorage
-import com.caunb163.domain.model.CommentEntity
+import com.caunb163.data.repository.RepositoryUser
+import com.caunb163.domain.model.Comment
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
@@ -39,11 +40,12 @@ class CommentFragment : BaseDialogFragment() {
 
     private val viewModel: CommentViewModel by inject()
     private val localStorage: LocalStorage by inject()
+    private val repositoryUser: RepositoryUser by inject()
     private lateinit var glide: RequestManager
     private lateinit var commentAdapter: CommentAdapter
     private lateinit var user: User
 
-    private val list = mutableListOf<CommentEntity>()
+    private val list = mutableListOf<Comment>()
     private val args: CommentFragmentArgs by navArgs()
     private lateinit var post: Post
     private var timenow: Long = 0
@@ -68,13 +70,13 @@ class CommentFragment : BaseDialogFragment() {
                 .error(R.drawable.image_default)
         )
         user = localStorage.getAccount()!!
-        commentAdapter = CommentAdapter(glide)
+        commentAdapter = CommentAdapter(glide, repositoryUser)
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = commentAdapter
         }
-
+        commentAdapter.updateData(list)
         post = args.post
         tvLike.text = "${post.arrLike.size}"
     }
@@ -94,7 +96,7 @@ class CommentFragment : BaseDialogFragment() {
                 imvImage.visibility = View.GONE
                 edtComment.setText("")
             }
-            hideKeyboardFrom(requireContext(),it)
+            hideKeyboardFrom(requireContext(), it)
         }
 
         imvCamera.setOnClickListener {
@@ -107,7 +109,7 @@ class CommentFragment : BaseDialogFragment() {
         viewModel.state.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
-                is State.Success<*> -> onSuccess(state.data as MutableList<CommentEntity>)
+                is State.Success<*> -> onSuccessListener(state.data as Comment)
                 is State.Failure -> onFailure(state.message)
             }
         })
@@ -137,13 +139,43 @@ class CommentFragment : BaseDialogFragment() {
         progressBarCmt.visibility = View.INVISIBLE
     }
 
-    private fun onSuccess(comment: MutableList<CommentEntity>) {
+    private fun onSuccessListener(comment: Comment) {
         recyclerView.visibility = View.VISIBLE
         progressBar.visibility = View.INVISIBLE
-        list.clear()
-        list.addAll(comment)
-        commentAdapter.updateData(list)
+        if (comment.postId.isEmpty()) {
+            val index = checkCommentIndex(comment)
+            if (index != -1) {
+                list.removeAt(index)
+                commentAdapter.notifyItemRemoved(index)
+            }
+        } else if (checkListAdd(comment)) {
+            val index = checkCommentIndex(comment)
+            if (index != -1) {
+                list[index] = comment
+                commentAdapter.notifyItemChanged(index)
+            }
+        } else {
+            list.add(comment)
+            commentAdapter.notifyItemInserted(list.size - 1)
+        }
         recyclerView.scrollToPosition(list.size - 1)
+    }
+
+    private fun checkCommentIndex(comment: Comment): Int {
+        for (index in 0 until list.size)
+            if (list[index].commentId == comment.commentId) {
+                return index
+            }
+        return -1
+    }
+
+    private fun checkListAdd(comment: Comment): Boolean {
+        list.forEach {
+            if (it.commentId == comment.commentId) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun onFailure(message: String) {

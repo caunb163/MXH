@@ -2,11 +2,9 @@ package com.caunb163.data.repository
 
 import android.net.Uri
 import com.caunb163.data.firebase.FireStore
-import com.caunb163.data.mapper.CommentMapper
 import com.caunb163.domain.model.Comment
-import com.caunb163.domain.model.CommentEntity
 import com.caunb163.domain.model.Post
-import com.caunb163.domain.model.User
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.UploadTask
@@ -18,53 +16,40 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class RepositoryCommentImpl(
-    private val commentMapper: CommentMapper
-) {
-    private val TAG = "RepositoryCommentImpl"
+class RepositoryCommentImpl {
     val db = Firebase.firestore
 
-    suspend fun getAllComment(postId: String): Flow<List<CommentEntity>> = callbackFlow {
-        val data = db.collection(FireStore.POST).document(postId)
+    suspend fun listenerComment(postId: String): Flow<Comment> = callbackFlow {
+        val data =
+            db.collection(FireStore.COMMENT).whereEqualTo("postId", postId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
             }
-
-            val commentEntityList = mutableListOf<CommentEntity>()
-
-            value?.let {
-                val post = it.toObject(Post::class.java)
-                post?.let { p ->
-                    for (cmtId in p.arrCmtId) {
-                        db.collection(FireStore.COMMENT).document(cmtId).get()
-                            .addOnCompleteListener { task ->
-                                val cmt = task.result?.toObject(Comment::class.java)
-                                cmt?.let { comment ->
-                                    db.collection(FireStore.USER).document(comment.userId).get()
-                                        .addOnCompleteListener { t ->
-                                            val user = t.result?.toObject(User::class.java)
-                                            val cmtEntity = commentMapper.toEntity(
-                                                comment,
-                                                user?.username ?: "",
-                                                user?.photoUrl ?: ""
-                                            )
-
-                                            commentEntityList.add(cmtEntity)
-                                            commentEntityList.sortBy { it.time.inc() }
-                                            offer(commentEntityList)
-                                        }
-                                }
-                            }
+            value?.let { qs ->
+                val list =
+                    qs.documentChanges.sortedWith(compareBy { it.document.toObject(Comment::class.java).time.inc() })
+                for (dc in list) {
+                    val comment = dc.document.toObject(Comment::class.java)
+                    comment.commentId = dc.document.id
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {
+                            offer(comment)
+                        }
+                        DocumentChange.Type.MODIFIED -> {
+                            offer(comment)
+                        }
+                        DocumentChange.Type.REMOVED -> {
+                            val cmt = Comment()
+                            cmt.commentId = dc.document.id
+                            offer(cmt)
+                        }
                     }
                 }
             }
         }
-
         awaitClose { subscription.remove() }
     }
-
-
 
     suspend fun createComment(
         userId: String,

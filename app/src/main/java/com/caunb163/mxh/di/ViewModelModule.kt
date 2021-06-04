@@ -28,7 +28,7 @@ val viewModelModule = module {
     viewModel<RegisterViewModel> { RegisterViewModel(get()) }
     viewModel<HomeViewModel> { HomeViewModel(get()) }
     viewModel<CreatePostViewModel> { CreatePostViewModel(get(), get()) }
-    viewModel<ProfileViewModel> { ProfileViewModel(get(), get()) }
+    viewModel<ProfileViewModel> { ProfileViewModel(get(), get(), get()) }
     viewModel<MainViewModel> { MainViewModel(get()) }
     viewModel<CommentViewModel> { CommentViewModel(get()) }
     viewModel<GroupViewModel> { GroupViewModel(get(), get()) }

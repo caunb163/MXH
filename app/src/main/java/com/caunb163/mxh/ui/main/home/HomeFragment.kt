@@ -124,9 +124,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
 
     private fun onSuccessLike() {}
 
-    private fun onSuccessAds(postEntity: Post) {
-        listAds.add(postEntity)
-    }
+    private fun onSuccessAds(postEntity: Post) { listAds.add(postEntity) }
 
     private fun onSuccessListener(post: Post) {
         if (post.userId.isEmpty()) {
@@ -197,22 +195,16 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
         return false
     }
 
-    private fun onFailure(message: String) {
-        showToast(message)
-    }
+    private fun onFailure(message: String) { showToast(message) }
 
-    override fun createPostClick() {
-        findNavController().navigate(R.id.action_homeFragment_to_createPostFragment)
-    }
+    override fun createPostClick() { findNavController().navigate(R.id.action_homeFragment_to_createPostFragment) }
 
     override fun onCommentClick(post: Post) {
         val action = HomeFragmentDirections.actionHomeFragmentToCommentFragment(post)
         findNavController().navigate(action)
     }
 
-    override fun onLikeClick(postId: String) {
-        viewModel.likePost(postId)
-    }
+    override fun onLikeClick(postId: String) { viewModel.likePost(postId) }
 
     override fun onShareClick(content: String) {
         val sharingIntent = Intent(Intent.ACTION_SEND)

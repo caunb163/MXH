@@ -213,7 +213,8 @@ class EditPostFragment : BaseDialogFragment() {
                 video = videoPath,
                 active = post.active
             )
-            post.isAds = localStorage.getAccount()!!.ads
+            mPost.isAds = localStorage.getAccount()!!.ads
+            mPost.postId = post.postId
             viewModel.editPost(mPost)
             hideKeyboardFrom(requireContext(), it)
         }

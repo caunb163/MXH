@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -57,10 +58,7 @@ abstract class PostBaseViewHolder(view: View, requestManager: RequestManager) :
             val mUser = repositoryUser.getUser(post.userId)
             username.text = mUser.username
             glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl).into(imgAvatar)
-
         }
-//        username.text = post.userName
-//        glide.applyDefaultRequestOptions(RequestOptions()).load(post.userAvatar).into(imgAvatar)
         if (post.isAds) {
             createDate.text = "Được tài trợ"
         } else {

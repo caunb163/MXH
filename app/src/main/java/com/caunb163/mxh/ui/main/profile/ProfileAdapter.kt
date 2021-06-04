@@ -33,17 +33,17 @@ class ProfileAdapter(
     private val TYPE_POST_VIDEO_5 = 11
 
     private var list: MutableList<Any> = mutableListOf()
-    private var userLocal = user
+//    private var userLocal = user
 
     fun updateData(datas: MutableList<Any>) {
         list = datas
         notifyDataSetChanged()
     }
 
-    fun updateUser(userChange: User) {
-        userLocal = userChange
-        notifyDataSetChanged()
-    }
+//    fun updateUser(userChange: User) {
+//        userLocal = userChange
+//        notifyDataSetChanged()
+//    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {

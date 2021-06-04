@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_homeFragment_to_listImageFragment"
             app:destination="@id/listImageFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -41,9 +44,20 @@
         android:name="com.caunb163.mxh.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
+
         <action
             android:id="@+id/action_profileFragment_to_updateProfileFragment"
             app:destination="@id/updateProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_listImageFragment"
+            app:destination="@id/listImageFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/videoFragment"
