@@ -112,4 +112,6 @@ class VideoFragment : BaseFragment(R.layout.fragment_video), HomeOnClick {
     override fun onDeleteClick(post: Post) {}
 
     override fun onImageClick(post: Post, position: Int) {}
+
+    override fun onAvatarClick(userId: String) {}
 }

@@ -16,12 +16,20 @@ class ProfileViewModel(
     private val repositoryMainImpl: RepositoryMainImpl,
     private val repositoryHomeImpl: RepositoryHomeImpl
 ) : ViewModel() {
+    private val _userId: MutableLiveData<String> = MutableLiveData()
+    fun setUserId(userId: String) {
+        _userId.value = userId
+    }
+
     val listener: LiveData<State> = liveData(Dispatchers.IO) {
         emit(State.Loading)
         try {
-            repositoryProfileImpl.listenerPostChange().collect {
-                emit(State.Success(it))
+            _userId.value?.let { uId ->
+                repositoryProfileImpl.listenerPostChange(uId).collect {
+                    emit(State.Success(it))
+                }
             }
+
         } catch (e: Exception) {
             emit(State.Failure("${e.message}"))
         }
@@ -33,11 +41,12 @@ class ProfileViewModel(
         viewModelScope.launch {
             _stateAvatar.value = State.Loading
             try {
-                val avatarState = withContext(Dispatchers.IO) {
-                    return@withContext repositoryProfileImpl.updateAvatar(uri)
+                _userId.value?.let { uId ->
+                    val avatarState = withContext(Dispatchers.IO) {
+                        return@withContext repositoryProfileImpl.updateAvatar(uri, uId)
+                    }
+                    _stateAvatar.value = State.Success(avatarState)
                 }
-
-                _stateAvatar.value = State.Success(avatarState)
 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -52,12 +61,13 @@ class ProfileViewModel(
         viewModelScope.launch {
             _stateBackground.value = State.Loading
             try {
-                val avatarState = withContext(Dispatchers.IO) {
-                    return@withContext repositoryProfileImpl.updateBackground(uri)
+                _userId.value?.let { uId ->
+                    val avatarState = withContext(Dispatchers.IO) {
+                        return@withContext repositoryProfileImpl.updateBackground(uri, uId)
+                    }
+
+                    _stateBackground.value = State.Success(avatarState)
                 }
-
-                _stateBackground.value = State.Success(avatarState)
-
             } catch (e: Exception) {
                 e.printStackTrace()
                 _stateBackground.value = State.Failure("${e.message}")

@@ -22,6 +22,10 @@
         <action
             android:id="@+id/action_homeFragment_to_listImageFragment"
             app:destination="@id/listImageFragment" />
+
+        <action
+            android:id="@+id/action_homeFragment_to_userFragment"
+            app:destination="@id/userFragment" />
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
@@ -58,6 +62,9 @@
             android:id="@+id/action_profileFragment_to_listImageFragment"
             app:destination="@id/listImageFragment" />
 
+        <argument
+            android:name="userId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/videoFragment"
@@ -128,6 +135,9 @@
         <action
             android:id="@+id/action_listImageFragment_to_imageViewFragment"
             app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_listImageFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </dialog>
 
     <dialog
@@ -159,8 +169,27 @@
     </dialog>
     <dialog
         android:id="@+id/updateProfileFragment"
-        android:name="com.caunb163.mxh.ui.main.profile.UpdateProfileFragment"
+        android:name="com.caunb163.mxh.ui.main.profile.updateProfile.UpdateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" />
+
+    <dialog
+        android:id="@+id/userFragment"
+        android:name="com.caunb163.mxh.ui.main.profile.user.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" >
+
+
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_userFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_listImageFragment"
+            app:destination="@id/listImageFragment" />
+    </dialog>
+
 
 </navigation>

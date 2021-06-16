@@ -18,16 +18,13 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 @ExperimentalCoroutinesApi
-class RepositoryProfileImpl(
-    private val localStorage: LocalStorage,
-) {
+class RepositoryProfileImpl {
     private val TAG = "RepositoryProfileImpl"
     private val db = Firebase.firestore
-    val user = localStorage.getAccount()!!
 
-    suspend fun listenerPostChange(): Flow<Post> = callbackFlow {
+    suspend fun listenerPostChange(userId: String): Flow<Post> = callbackFlow {
         val data =
-            db.collection(FireStore.POST).whereEqualTo("userId", user.userId)
+            db.collection(FireStore.POST).whereEqualTo("userId", userId)
         val subscription = data.addSnapshotListener { value, error ->
             if (error != null) {
                 return@addSnapshotListener
@@ -57,7 +54,7 @@ class RepositoryProfileImpl(
         awaitClose { subscription.remove() }
     }
 
-    suspend fun updateAvatar(uri: String) {
+    suspend fun updateAvatar(uri: String, userId: String) {
         val uriPath = Uri.parse(uri)
         val storageRef = Firebase.storage.reference.child("avatar/" + uriPath.lastPathSegment)
         val uploadTask: UploadTask = storageRef.putFile(uriPath)
@@ -70,13 +67,13 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection(FireStore.USER).document(user.userId).update("photoUrl", stringPath)
+                db.collection(FireStore.USER).document(userId).update("photoUrl", stringPath)
             }
         }.await()
 //        return stringPath
     }
 
-    suspend fun updateBackground(uri: String) {
+    suspend fun updateBackground(uri: String, userId: String) {
         val uriPath = Uri.parse(uri)
         val storageRef = Firebase.storage.reference.child("background/" + uriPath.lastPathSegment)
         val uploadTask: UploadTask = storageRef.putFile(uriPath)
@@ -89,7 +86,7 @@ class RepositoryProfileImpl(
         }.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 stringPath = task.result.toString()
-                db.collection(FireStore.USER).document(user.userId)
+                db.collection(FireStore.USER).document(userId)
                     .update("photoBackground", stringPath)
             }
         }.await()

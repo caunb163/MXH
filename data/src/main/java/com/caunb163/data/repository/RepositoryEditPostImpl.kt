@@ -70,6 +70,7 @@ class RepositoryEditPostImpl {
             video = videoPath,
             active = post.active
         )
+        mPost.isAds = post.isAds
 
         if (post.isAds) {
             db.collection(FireStore.ADS).document(post.postId).set(mPost).await()

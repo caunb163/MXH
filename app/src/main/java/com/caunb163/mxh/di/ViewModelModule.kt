@@ -11,7 +11,8 @@ import com.caunb163.mxh.ui.main.messenger.GroupViewModel
 import com.caunb163.mxh.ui.main.messenger.chat.ChatViewModel
 import com.caunb163.mxh.ui.main.messenger.create_group.CreateGroupViewModel
 import com.caunb163.mxh.ui.main.profile.ProfileViewModel
-import com.caunb163.mxh.ui.main.profile.UpdateProfileViewModel
+import com.caunb163.mxh.ui.main.profile.updateProfile.UpdateProfileViewModel
+import com.caunb163.mxh.ui.main.profile.user.UserViewModel
 import com.caunb163.mxh.ui.main.video.VideoViewModel
 import com.caunb163.mxh.ui.onboarding.OnBoardingViewModel
 import com.caunb163.mxh.ui.register.RegisterViewModel
@@ -38,4 +39,5 @@ val viewModelModule = module {
     viewModel<PhoneViewModel> { PhoneViewModel(get()) }
     viewModel<UpdateProfileViewModel> { UpdateProfileViewModel(get()) }
     viewModel<VideoViewModel> { VideoViewModel(get()) }
+    viewModel<UserViewModel> { UserViewModel(get(), get()) }
 }

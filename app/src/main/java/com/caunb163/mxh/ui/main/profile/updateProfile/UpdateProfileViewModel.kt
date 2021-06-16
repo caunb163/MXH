@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.main.profile
+package com.caunb163.mxh.ui.main.profile.updateProfile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package com.caunb163.mxh.ui.main.home
+package com.caunb163.mxh.ui.main.profile.user
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,16 +8,19 @@ import com.caunb163.data.repository.RepositoryUser
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.caunb163.mxh.ui.main.home.HomeOnClick
 import com.caunb163.mxh.ui.main.home.viewholder.*
+import com.caunb163.mxh.ui.main.profile.ProfileOnClick
+import com.caunb163.mxh.ui.main.profile.ProfileViewHolder
 
-class HomeAdapter(
+class UserAdapter(
     private val glide: RequestManager,
-    private val homeOnClick: HomeOnClick,
     private val user: User,
+    private val homeOnClick: HomeOnClick,
     private val repositoryUser: RepositoryUser
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val TYPE_CREATE_POST = 0
+    private val TYPE_PROFILE = 0
     private val TYPE_POST_NO_MEDIA = 1
     private val TYPE_POST_IMAGE_1 = 2
     private val TYPE_POST_IMAGE_2 = 3
@@ -72,14 +75,14 @@ class HomeAdapter(
             TYPE_POST_VIDEO_5 -> return PostVideo5ViewHolder(
                 LayoutInflater.from(parent.context).inflate(R.layout.layout_post_5_video, parent, false), glide)
 
-            else -> return CreatePostViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.layout_create_post, parent, false), glide)
+            else -> return ProfileViewHolder(
+                LayoutInflater.from(parent.context).inflate(R.layout.layout_profile, parent, false), glide)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            TYPE_CREATE_POST -> (holder as CreatePostViewHolder).bind(list[position] as User, homeOnClick)
+            TYPE_PROFILE -> (holder as ProfileViewHolder).bind(list[position] as String, repositoryUser)
             TYPE_POST_NO_MEDIA -> (holder as PostNoMediaViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
 
             TYPE_POST_IMAGE_1 -> (holder as PostImage1ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
@@ -95,6 +98,8 @@ class HomeAdapter(
             TYPE_POST_VIDEO_5 -> (holder as PostVideo5ViewHolder).bind(list[position] as Post, user, homeOnClick, repositoryUser)
         }
     }
+
+    override fun getItemCount(): Int = list.size
 
     override fun getItemViewType(position: Int): Int {
         return when {
@@ -119,16 +124,14 @@ class HomeAdapter(
                     }
                 }
             }
-            else -> TYPE_CREATE_POST
+            else -> TYPE_PROFILE
         }
     }
-
-    override fun getItemCount(): Int = list.size
 
     override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
         super.onViewRecycled(holder)
         when (holder) {
-            is CreatePostViewHolder -> holder.unbind()
+            is ProfileViewHolder -> holder.unbind()
             is PostNoMediaViewHolder -> holder.unbind()
             is PostImage1ViewHolder -> holder.unbind()
             is PostImage2ViewHolder -> holder.unbind()
@@ -142,22 +145,4 @@ class HomeAdapter(
             is PostVideo5ViewHolder -> holder.unbind()
         }
     }
-}
-
-interface HomeOnClick {
-    fun createPostClick()
-
-    fun onCommentClick(post: Post)
-
-    fun onLikeClick(postId: String)
-
-    fun onShareClick(content: String)
-
-    fun onEditClick(post: Post)
-
-    fun onDeleteClick(post: Post)
-
-    fun onImageClick(post: Post, position: Int)
-
-    fun onAvatarClick(userId: String)
 }

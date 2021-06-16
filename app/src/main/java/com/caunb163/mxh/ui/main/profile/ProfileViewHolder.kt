@@ -7,10 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.caunb163.data.repository.RepositoryUser
 import com.caunb163.domain.model.User
 import com.caunb163.mxh.R
+import com.github.satoshun.coroutine.autodispose.view.autoDisposeScope
 import com.google.android.material.button.MaterialButton
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.launch
 
 class ProfileViewHolder(view: View, private val requestManager: RequestManager) :
     RecyclerView.ViewHolder(view) {
@@ -42,6 +45,25 @@ class ProfileViewHolder(view: View, private val requestManager: RequestManager) 
         edit.setOnClickListener { profileOnClick.editProfile() }
         imvCameraAvatar.setOnClickListener { profileOnClick.avatarClick() }
         imvCameraBackground.setOnClickListener { profileOnClick.backgroundClick() }
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun bind(userId: String, repositoryUser: RepositoryUser) {
+        itemView.autoDisposeScope.launch {
+            val mUser = repositoryUser.getUser(userId)
+            glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoBackground)
+                .into(imvBackground)
+            glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl).into(imvAvatar)
+            username.text = mUser.username
+            intro.text = mUser.intro
+            gender.text = "Giới tính: ${mUser.gender}"
+            birthday.text = mUser.birthDay
+            phone.text = mUser.phone
+        }
+
+        edit.visibility = View.GONE
+        imvCameraAvatar.visibility = View.GONE
+        imvCameraBackground.visibility = View.GONE
     }
 
     fun unbind() {

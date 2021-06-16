@@ -31,7 +31,6 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
     private val REQUEST_BACKGROUND_CODE = 333
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var progressBar: ProgressBar
 
     private val viewModel: ProfileViewModel by inject()
     private val localStorage: LocalStorage by inject()
@@ -46,7 +45,6 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
 
     override fun initView(view: View) {
         recyclerView = view.findViewById(R.id.profile_recyclerview)
-        progressBar = view.findViewById(R.id.profile_progressbar)
         customProgressBar = CustomProgressBar(requireContext())
 
         glide = Glide.with(this)
@@ -70,6 +68,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
     override fun initListener() {}
 
     override fun initObserve() {
+        viewModel.setUserId(user.userId)
         viewModel.listener.observe(this, Observer { state ->
             when (state) {
                 is State.Loading -> onLoading()
@@ -158,8 +157,6 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
 
     private fun onFailure(message: String) {
         customProgressBar.dismiss()
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
         showToast(message)
     }
 
@@ -274,5 +271,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ProfileOnClick,
         val action = ProfileFragmentDirections.actionProfileFragmentToListImageFragment(post, position)
         findNavController().navigate(action)
     }
+
+    override fun onAvatarClick(userId: String) {}
 
 }

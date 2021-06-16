@@ -41,9 +41,9 @@ class PostVideo5ViewHolder(
 
         glide.applyDefaultRequestOptions(RequestOptions()).load(post.video).into(img51)
         glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[0]).into(img52)
-        glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[0]).into(img53)
-        glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[0]).into(img54)
-        glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[0]).into(img55)
+        glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[1]).into(img53)
+        glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[2]).into(img54)
+        glide.applyDefaultRequestOptions(RequestOptions()).load(post.images[3]).into(img55)
 
         img51.setOnClickListener { onHomeOnClick.onImageClick(post, 1) }
         img52.setOnClickListener { onHomeOnClick.onImageClick(post, 2) }

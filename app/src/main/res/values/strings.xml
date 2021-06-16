@@ -75,7 +75,7 @@
     <string name="profile_phone">0987654321</string>
     <string name="profile_post">Bài viết</string>
 
-    <string name="updateprofile">Chỉnh sửa thông tin</string>
+    <string name="updateprofile">Chỉnh sửa</string>
     <string name="updateprofile_save">Lưu</string>
     <string name="updateprofile_person">Cá nhân</string>
     <string name="updateprofile_username">Tên hiển thị</string>

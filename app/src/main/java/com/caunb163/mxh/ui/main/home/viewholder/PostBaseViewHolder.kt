@@ -11,6 +11,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.caunb163.data.datalocal.LocalStorage
 import com.caunb163.data.repository.RepositoryUser
 import com.caunb163.domain.model.Post
 import com.caunb163.domain.model.User
@@ -35,6 +36,7 @@ abstract class PostBaseViewHolder(view: View, requestManager: RequestManager) :
     private var share: LinearLayout = view.findViewById(R.id.post_ll_share)
     private var imvlike: ImageView = view.findViewById(R.id.post_ll_imv_like)
     private var tvlike: TextView = view.findViewById(R.id.post_ll_tv_like)
+    private var header: ConstraintLayout = view.findViewById(R.id.post_header)
     private var context = view.context
     private var glide = requestManager
 
@@ -59,6 +61,7 @@ abstract class PostBaseViewHolder(view: View, requestManager: RequestManager) :
             username.text = mUser.username
             glide.applyDefaultRequestOptions(RequestOptions()).load(mUser.photoUrl).into(imgAvatar)
         }
+        header.setOnClickListener { onHomeOnClick.onAvatarClick(post.userId) }
         if (post.isAds) {
             createDate.text = "Được tài trợ"
         } else {

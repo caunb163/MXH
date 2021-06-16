@@ -3,6 +3,7 @@ package com.caunb163.mxh.ui.main.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
@@ -232,5 +233,14 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), HomeOnClick {
     override fun onImageClick(post: Post, position: Int) {
         val action = HomeFragmentDirections.actionHomeFragmentToListImageFragment(post, position)
         findNavController().navigate(action)
+    }
+
+    override fun onAvatarClick(userId: String) {
+        if (TextUtils.equals(userId, user.userId)) {
+            findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+        } else {
+            val action = HomeFragmentDirections.actionHomeFragmentToUserFragment(userId)
+            findNavController().navigate(action)
+        }
     }
 }

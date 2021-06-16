@@ -78,6 +78,7 @@ class RepositoryCreatePostImpl(
             video = videoPath,
             active = true
         )
+        post.isAds = isAds
 
         if (isAds) {
             db.collection(FireStore.ADS).add(post).addOnSuccessListener {

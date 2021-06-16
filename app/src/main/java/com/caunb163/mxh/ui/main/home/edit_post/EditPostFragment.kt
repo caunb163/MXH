@@ -191,18 +191,6 @@ class EditPostFragment : BaseDialogFragment() {
         })
 
         btnSave.setOnClickListener {
-//            val postE = PostEntity(
-//                postId = postEntity.postId,
-//                userId = postEntity.userId,
-//                userName = postEntity.userName,
-//                userAvatar = postEntity.userAvatar,
-//                content = content.text.toString(),
-//                createDate = postEntity.createDate,
-//                images = listImages,
-//                arrCmtId = postEntity.arrCmtId,
-//                arrLike = postEntity.arrLike,
-//                video = videoPath
-//            )
             val mPost = Post(
                 userId = post.userId,
                 content = content.text.toString(),

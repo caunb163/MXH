@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@InternalCoroutinesApi
 class HomeViewModel(
     private val repositoryHomeImpl: RepositoryHomeImpl
 ) : ViewModel() {

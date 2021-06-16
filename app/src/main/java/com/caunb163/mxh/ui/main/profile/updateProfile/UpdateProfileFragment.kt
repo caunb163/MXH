@@ -1,11 +1,10 @@
-package com.caunb163.mxh.ui.main.profile
+package com.caunb163.mxh.ui.main.profile.updateProfile
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.os.Build
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
@@ -23,7 +22,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import org.koin.android.ext.android.inject
-import java.util.*
 
 class UpdateProfileFragment : BaseDialogFragment() {
     private val TAG = "UpdateProfileFragment"
